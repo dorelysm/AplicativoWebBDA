@@ -126,6 +126,72 @@
         });
     }
 
+    
+    function actualizar(id){
+        url = '/entradas';
+        var request = $.ajax({
+            contentType:"application/json",
+            dataType: "json", //Expected data format from server  
+            method: "GET",
+            data: { id},
+            url: url      
+        });
+        request.done(function( data ) {
+            const formulario = `
+                <form action="/actualizar" method="POST">
+                    <input type="hidden" class="form-control" name="id"  value="${data.id}">
+                  <div class="form-group">
+                    <label for="recipient-name" class="col-form-label">Id del benefactor:</label>
+                    <input type="text" class="form-control" name="id_benefactor"  value="${data.id_benefactor}">
+                  </div>
+                  <div class="form-group">
+                    <label for="message-text" class="col-form-label">Id_categoria:</label>
+                    <input type="text" class="form-control" name="id_categoria"  value="${data.id_categoria}">
+                  </div>
+                  <div class="form-group">
+                    <label for="message-text" class="col-form-label">Fecha:</label>
+                    <input type="text" class="form-control" name="fecha"  value="${data.fecha}">
+                  </div>
+                  <div class="form-group">
+                    <label for="message-text" class="col-form-label">Cantidad (peso):</label>
+                    <input type="text" class="form-control" name="cantidad_peso"  value="${data.cantidad_peso}">
+                  </div>
+                  <div class="form-group">
+                    <label for="message-text" class="col-form-label">Cantidad (unidades):</label>
+                    <input type="text" class="form-control" name="cantidad_unidades"  value="${data.cantidad_unidades}">
+                  </div>
+                  <div class="form-group">
+                    <label for="message-text" class="col-form-label">Unidad de medida:</label>
+                    <input type="text" class="form-control" name="unidad_de_medida"  value="${data.unidad_de_medida}">
+                  </div>
+                  <div class="form-group">
+                    <label for="message-text" class="col-form-label">Estibas:</label>
+                    <input type="text" class="form-control" name="estibas"  value="${data.estibas}">
+                  </div>
+                  <div class="form-group">
+                    <label for="message-text" class="col-form-label">Ubicación:</label>
+                    <input type="text" class="form-control" name="ubicacion"  value="${data.ubicacion}">
+                  </div>
+                  <div class="form-group">
+                    <label for="message-text" class="col-form-label">Bodega:</label>
+                    <input type="text" class="form-control" name="bodega"  value="${data.bodega}">
+                  </div>
+                  <div class="form-group">
+                    <label for="message-text" class="col-form-label">Observaciones:</label>
+                    <input type="text" class="form-control" name="observaciones"  value="${data.observaciones}">
+                  </div>
+                  <div class="modal-footer">
+                    <button  type="submit" class="btn btn-primary">Guardar</button>
+                  </div>
+                </form> 
+        `;
+        $("#fromartc").html(formulario);             
+        });
+        request.fail(function( jqXHR, textStatus ) {
+            alert( "Error" + textStatus );
+        });
+    }
+
  </script>
 
 {% endblock %}

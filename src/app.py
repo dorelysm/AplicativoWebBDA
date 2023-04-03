@@ -61,7 +61,7 @@ def cerrar():
 
 @app.route('/guardar', methods=['POST'] )
 def guardar_cultivo():
-    id_benefactor = request.form['id_benefactos']
+    id_benefactor = request.form['id_benefactor']
     id_categoria = request.form['id_categoria']
     fecha = request.form['fecha']
     cantidad_peso = request.form['cantidad_peso']
@@ -85,21 +85,44 @@ def eliminar():
     db.session.delete(entradas)
     db.session.commit()
     return Entrada_schema.dump(entradas)
-"""
+
+@app.route('/entradas', methods=['GET'] )
+def entradas():
+    id = request.args.get('id')
+    entradas = Entrada.query.get(id)
+    restul_entradas = Entrada_schema.dump(entradas)
+    return jsonify(restul_entradas)
+
 @app.route('/actualizar', methods=['POST'] )
 def actualizar():
     id = request.form['id']
     #print('id: ', id)
-    N_lote = request.form['N_lote']
-    Fruta = request.form['Fruta']
-    Existencias = request.form['Existencias']
-    cultivo = Cultivo.query.get(id)
-    cultivo.N_lote = N_lote
-    cultivo.Fruta = Fruta
-    cultivo.Existencias = Existencias
+    id_benefactor = request.form['id_benefactor']
+    id_categoria = request.form['id_categoria']
+    fecha = request.form['fecha']
+    cantidad_peso = request.form['cantidad_peso']
+    cantidad_unidades = request.form['cantidad_unidades']
+    unidad_de_medida = request.form['unidad_de_medida']
+    estibas = request.form['estibas']
+    ubicacion = request.form['ubicacion']
+    bodega = request.form['bodega']
+    observaciones = request.form['observaciones']
+
+    entrada = Entrada.query.get(id)
+    entrada.id_benefactor = id_benefactor
+    entrada.id_categoria = id_categoria
+    entrada.fecha = fecha
+    entrada.cantidad_peso = cantidad_peso
+    entrada.cantidad_unidades = cantidad_unidades
+    entrada.unidad_de_medida = unidad_de_medida
+    entrada.estibas = estibas
+    entrada.ubicacion = ubicacion
+    entrada.bodega = bodega
+    entrada.observaciones = observaciones
+
     db.session.commit()
-    return redirect('/lcultivos')
-"""
+    return redirect('/pagina_entradas')
+
 if __name__ == "__main__":
     app.run(debug=True)
 
