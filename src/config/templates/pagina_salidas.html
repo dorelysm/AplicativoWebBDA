@@ -33,7 +33,7 @@
       </tr>
     </thead>
     <tbody>
-            {% for item in entradas %}
+            {% for item in salidas %}
             <tr>
                 <th scope="row">{{item.id}}</th>
                 <td>{{item.id_beneficiario}}</td>
@@ -55,7 +55,7 @@
   <script>
     function cargar_formulario(){
         const formulario = `
-                <form action="/guardar" method="POST">
+                <form action="/guardar_salida" method="POST">
                   <div class="form-group">
                     <label for="recipient-name" class="col-form-label">Id del beneficiario:</label>
                     <input type="text" class="form-control" name="id_beneficiario"  value="">
@@ -101,7 +101,7 @@
     }   
     
     function eliminar(id){
-        url = '/eliminar';
+        url = '/eliminar_salida';
         var request = $.ajax({
             contentType:"application/json",
             dataType: "json", //Expected data format from server  
@@ -120,7 +120,7 @@
 
     
     function actualizar(id){
-        url = '/entradas';
+        url = '/salidas';
         var request = $.ajax({
             contentType:"application/json",
             dataType: "json", //Expected data format from server  
@@ -130,7 +130,7 @@
         });
         request.done(function( data ) {
             const formulario = `
-                <form action="/actualizar" method="POST">
+                <form action="/actualizar_salida" method="POST">
                     <input type="hidden" class="form-control" name="id"  value="${data.id}">
                   <div class="form-group">
                     <label for="recipient-name" class="col-form-label">Id del beneficiario:</label>

@@ -31,5 +31,5 @@ with app.app_context():
 
 class SalidaSchema(ma.Schema):
     class Meta:
-        fields = ('id', 'id_benefactor', 'id_categoria', 'fecha', 'bodega', 'cantidad_peso', 'cantidad_unidades', 'unidad_de_medida', 'aporte_solidario', 'observaciones')
+        fields = ('id', 'id_beneficiario', 'id_entrada', 'fecha', 'bodega', 'cantidad_peso', 'cantidad_unidades', 'unidad_de_medida', 'aporte_solidario', 'observaciones')
         

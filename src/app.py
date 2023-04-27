@@ -179,21 +179,19 @@ def actualizar_salida():
     aporte_solidario = request.form['aporte_solidario']
     observaciones = request.form['observaciones']
 
-    entrada = Entrada.query.get(id)
-    entrada.id_beneficiario = id_beneficiario
-    entrada.id_entrada = id_entrada
-    entrada.fecha = fecha
-    entrada.bodega = bodega
-    entrada.cantidad_peso = cantidad_peso
-    entrada.cantidad_unidades = cantidad_unidades
-    entrada.unidad_de_medida = unidad_de_medida
-    entrada.aporte_solidario = aporte_solidario
-    entrada.observaciones = observaciones
+    salida = Salida.query.get(id)
+    salida.id_beneficiario = id_beneficiario
+    salida.id_entrada = id_entrada
+    salida.fecha = fecha
+    salida.bodega = bodega
+    salida.cantidad_peso = cantidad_peso
+    salida.cantidad_unidades = cantidad_unidades
+    salida.unidad_de_medida = unidad_de_medida
+    salida.aporte_solidario = aporte_solidario
+    salida.observaciones = observaciones
 
     db.session.commit()
     return redirect('/pagina_salidas')
-
-
 
 if __name__ == "__main__":
     app.run(debug=True)
