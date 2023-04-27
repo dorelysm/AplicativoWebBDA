@@ -12,25 +12,22 @@
 
 <a href="\pagina_entradas" class="btn btn-primary">Entradas</a>
 <a href="\pagina_salidas" class="btn btn-primary">Salidas</a>
+<a onclick="cargar_formulario()" class="btn btn-success"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">Nueva salida</a>
 
-
-<a onclick="cargar_formulario()" class="btn btn-success"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">Nueva entrada</a>
-
-<h2>Entradas</h2>
+<h2>Salidas</h2>
 
 <table class="table table-striped">
     <thead>
       <tr>
+        <th scope="col">Id salida</th>
+        <th scope="col">Id beneficiario</th>
         <th scope="col">Id entrada</th>
-        <th scope="col">Id benefactor</th>
-        <th scope="col">Id categoria</th>
         <th scope="col">Fecha</th>
+        <th scope="col">Bodega</th>
         <th scope="col">Cantidad (peso)</th>
         <th scope="col">Cantidad (unidades)</th>
         <th scope="col">Unidad de medidas</th>
-        <th scope="col">Estibas</th>
-        <th scope="col">Ubicación</th>
-        <th scope="col">Bodega</th>
+        <th scope="col">Aporte solidario</th>
         <th scope="col">Observaciones</th>
         <th scope="col" colspan="2"><center>Opciones</center></th>
       </tr>
@@ -39,15 +36,14 @@
             {% for item in entradas %}
             <tr>
                 <th scope="row">{{item.id}}</th>
-                <td>{{item.id_benefactor}}</td>
-                <td>{{item.id_categoria}}</td>
+                <td>{{item.id_beneficiario}}</td>
+                <td>{{item.id_entrada}}</td>
                 <td>{{item.fecha}}</td>
+                <td>{{item.bodega}}</td>
                 <td>{{item.cantidad_peso}}</td>
                 <td>{{item.cantidad_unidades}}</td>
                 <td>{{item.unidad_de_medida}}</td>
-                <td>{{item.estibas}}</td>
-                <td>{{item.ubicacion}}</td>
-                <td>{{item.bodega}}</td>
+                <td>{{item.aporte_solidario}}</td>
                 <td>{{item.observaciones}}</td>
                 <td><a onclick="actualizar('{{item.id}}')"  data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="btn btn-primary btn-sm rounded-0" >Actualizar</a></td>
                 <td><a onclick="eliminar('{{item.id}}')" class="btn btn-danger btn-sm rounded-0">eliminar</a></td>
@@ -59,18 +55,22 @@
   <script>
     function cargar_formulario(){
         const formulario = `
-                <form action="/guardar_entrada" method="POST">
+                <form action="/guardar" method="POST">
                   <div class="form-group">
-                    <label for="recipient-name" class="col-form-label">Id del benefactor:</label>
-                    <input type="text" class="form-control" name="id_benefactor"  value="">
+                    <label for="recipient-name" class="col-form-label">Id del beneficiario:</label>
+                    <input type="text" class="form-control" name="id_beneficiario"  value="">
                   </div>
                   <div class="form-group">
-                    <label for="message-text" class="col-form-label">Id_categoria:</label>
-                    <input type="text" class="form-control" name="id_categoria"  value="">
+                    <label for="message-text" class="col-form-label">Id de la entrada:</label>
+                    <input type="text" class="form-control" name="id_entrada"  value="">
                   </div>
                   <div class="form-group">
                     <label for="message-text" class="col-form-label">Fecha:</label>
                     <input type="text" class="form-control" name="fecha"  value="">
+                  </div>
+                  <div class="form-group">
+                    <label for="message-text" class="col-form-label">Bodega:</label>
+                    <input type="text" class="form-control" name="bodega"  value="">
                   </div>
                   <div class="form-group">
                     <label for="message-text" class="col-form-label">Cantidad (peso):</label>
@@ -85,17 +85,9 @@
                     <input type="text" class="form-control" name="unidad_de_medida"  value="">
                   </div>
                   <div class="form-group">
-                    <label for="message-text" class="col-form-label">Estibas:</label>
-                    <input type="text" class="form-control" name="estibas"  value="">
-                  </div>
-                  <div class="form-group">
-                    <label for="message-text" class="col-form-label">Ubicación:</label>
-                    <input type="text" class="form-control" name="ubicacion"  value="">
-                  </div>
-                  <div class="form-group">
-                    <label for="message-text" class="col-form-label">Bodega:</label>
-                    <input type="text" class="form-control" name="bodega"  value="">
-                  </div>
+                    <label for="message-text" class="col-form-label">Aporte solidario:</label>
+                    <input type="text" class="form-control" name="aporte_solidario"  value="">
+                  </div>                  
                   <div class="form-group">
                     <label for="message-text" class="col-form-label">Observaciones:</label>
                     <input type="text" class="form-control" name="observaciones"  value="">
@@ -109,7 +101,7 @@
     }   
     
     function eliminar(id){
-        url = '/eliminar_entrada';
+        url = '/eliminar';
         var request = $.ajax({
             contentType:"application/json",
             dataType: "json", //Expected data format from server  
@@ -138,19 +130,23 @@
         });
         request.done(function( data ) {
             const formulario = `
-                <form action="/actualizar_entrada" method="POST">
+                <form action="/actualizar" method="POST">
                     <input type="hidden" class="form-control" name="id"  value="${data.id}">
                   <div class="form-group">
-                    <label for="recipient-name" class="col-form-label">Id del benefactor:</label>
-                    <input type="text" class="form-control" name="id_benefactor"  value="${data.id_benefactor}">
+                    <label for="recipient-name" class="col-form-label">Id del beneficiario:</label>
+                    <input type="text" class="form-control" name="id_beneficiario"  value="${data.id_beneficiario}">
                   </div>
                   <div class="form-group">
-                    <label for="message-text" class="col-form-label">Id_categoria:</label>
-                    <input type="text" class="form-control" name="id_categoria"  value="${data.id_categoria}">
+                    <label for="message-text" class="col-form-label">Id de la entrada:</label>
+                    <input type="text" class="form-control" name="id_entrada"  value="${data.id_entrada}">
                   </div>
                   <div class="form-group">
                     <label for="message-text" class="col-form-label">Fecha:</label>
                     <input type="text" class="form-control" name="fecha"  value="${data.fecha}">
+                  </div>
+                  <div class="form-group">
+                    <label for="message-text" class="col-form-label">Bodega:</label>
+                    <input type="text" class="form-control" name="bodega"  value="${data.bodega}">
                   </div>
                   <div class="form-group">
                     <label for="message-text" class="col-form-label">Cantidad (peso):</label>
@@ -165,16 +161,8 @@
                     <input type="text" class="form-control" name="unidad_de_medida"  value="${data.unidad_de_medida}">
                   </div>
                   <div class="form-group">
-                    <label for="message-text" class="col-form-label">Estibas:</label>
-                    <input type="text" class="form-control" name="estibas"  value="${data.estibas}">
-                  </div>
-                  <div class="form-group">
-                    <label for="message-text" class="col-form-label">Ubicación:</label>
-                    <input type="text" class="form-control" name="ubicacion"  value="${data.ubicacion}">
-                  </div>
-                  <div class="form-group">
-                    <label for="message-text" class="col-form-label">Bodega:</label>
-                    <input type="text" class="form-control" name="bodega"  value="${data.bodega}">
+                    <label for="message-text" class="col-form-label">Aporte solidario:</label>
+                    <input type="text" class="form-control" name="aporte_solidario"  value="${data.aporte_solidario}">
                   </div>
                   <div class="form-group">
                     <label for="message-text" class="col-form-label">Observaciones:</label>

@@ -1,4 +1,4 @@
-from flask import Flask, redirect, request, jsonify, json, session, render_template
+from flask import Flask, redirect, request, jsonify, json, session, render_template, make_response
 
 from config.bd import app, db
 from modelos.Benefactores import Benefactor, BenefactorSchema
@@ -7,7 +7,7 @@ from modelos.Beneficiarios import Beneficiario, BeneficiarioSchema
 from modelos.Categoria import Categoria, CategoriaSchema
 from modelos.Entradas import Entrada, EntradaSchema
 from modelos.Salidas import Salida, SalidaSchema
-
+from modelos.Blockchain import Blockchain
 
 Benefactor_schema = BenefactorSchema()
 Benefactores_schema = BenefactorSchema(many=True)
@@ -27,9 +27,10 @@ Entradas_schema = EntradaSchema(many=True)
 Salida_schema = SalidaSchema()
 Salidas_schema = SalidaSchema(many=True)
 
+blockchain = Blockchain()
+
 @app.route('/', methods=['GET'])
-def index():
-    
+def index():  
     return render_template("login.html")
 
 @app.route('/ingresar', methods=['POST'])
@@ -54,13 +55,22 @@ def pagina_entradas():
     else:
         return redirect('/')
 
+@app.route('/pagina_salidas', methods=['GET'])
+def pagina_salidas():
+    if 'usuario' in session:
+        all_salidas = Salida.query.all()
+        resultado_salidas = Salidas_schema.dump(all_salidas)
+        return render_template('pagina_salidas.html', salidas = resultado_salidas, usuario = session['usuario'])
+    else:
+        return redirect('/')
+    
 @app.route('/cerrar')
 def cerrar():
     session.pop('usuario',None)
     return redirect('/')
 
-@app.route('/guardar', methods=['POST'] )
-def guardar_cultivo():
+@app.route('/guardar_entrada', methods=['POST'] )
+def guardar_entrada():
     id_benefactor = request.form['id_benefactor']
     id_categoria = request.form['id_categoria']
     fecha = request.form['fecha']
@@ -78,7 +88,7 @@ def guardar_cultivo():
     db.session.commit()
     return redirect('/pagina_entradas')
 
-@app.route('/eliminar', methods=['GET'] )
+@app.route('/eliminar_entrada', methods=['GET'] )
 def eliminar():
     id = request.args.get('id')
     entradas = Entrada.query.get(id)
@@ -93,7 +103,7 @@ def entradas():
     restul_entradas = Entrada_schema.dump(entradas)
     return jsonify(restul_entradas)
 
-@app.route('/actualizar', methods=['POST'] )
+@app.route('/actualizar_entrada', methods=['POST'] )
 def actualizar():
     id = request.form['id']
     #print('id: ', id)
@@ -122,6 +132,68 @@ def actualizar():
 
     db.session.commit()
     return redirect('/pagina_entradas')
+
+@app.route('/guardar_salida', methods=['POST'] )
+def guardar_salida():
+    id_beneficiario = request.form['id_beneficiario']
+    id_entrada = request.form['id_entrada']
+    fecha = request.form['fecha']
+    bodega = request.form['bodega']
+    cantidad_peso = request.form['cantidad_peso']
+    cantidad_unidades = request.form['cantidad_unidades']
+    unidad_de_medida = request.form['unidad_de_medida']
+    aporte_solidario = request.form['aporte_solidario']
+    observaciones = request.form['observaciones']
+    
+    nueva_donacion = Salida(id_beneficiario, id_entrada, fecha, bodega, cantidad_peso, cantidad_unidades, unidad_de_medida, aporte_solidario, observaciones)
+
+    db.session.add(nueva_donacion)
+    db.session.commit()
+    return redirect('/pagina_salidas')
+
+@app.route('/eliminar_salida', methods=['GET'] )
+def eliminar_salida():
+    id = request.args.get('id')
+    salidas = Salida.query.get(id)
+    db.session.delete(salidas)
+    db.session.commit()
+    return Salida_schema.dump(salidas)
+
+@app.route('/salidas', methods=['GET'] )
+def salidas():
+    id = request.args.get('id')
+    salidas = Salida.query.get(id)
+    restul_salida = Salida_schema.dump(salidas)
+    return jsonify(restul_salida)
+
+@app.route('/actualizar_salida', methods=['POST'] )
+def actualizar_salida():
+    id = request.form['id']
+    id_beneficiario = request.form['id_beneficiario']
+    id_entrada = request.form['id_entrada']
+    fecha = request.form['fecha']
+    bodega = request.form['bodega']
+    cantidad_peso = request.form['cantidad_peso']
+    cantidad_unidades = request.form['cantidad_unidades']
+    unidad_de_medida = request.form['unidad_de_medida']
+    aporte_solidario = request.form['aporte_solidario']
+    observaciones = request.form['observaciones']
+
+    entrada = Entrada.query.get(id)
+    entrada.id_beneficiario = id_beneficiario
+    entrada.id_entrada = id_entrada
+    entrada.fecha = fecha
+    entrada.bodega = bodega
+    entrada.cantidad_peso = cantidad_peso
+    entrada.cantidad_unidades = cantidad_unidades
+    entrada.unidad_de_medida = unidad_de_medida
+    entrada.aporte_solidario = aporte_solidario
+    entrada.observaciones = observaciones
+
+    db.session.commit()
+    return redirect('/pagina_salidas')
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)
