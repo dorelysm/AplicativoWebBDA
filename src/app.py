@@ -1,6 +1,7 @@
 from flask import Flask, redirect, request, jsonify, json, session, render_template, make_response
 
 from config.bd import app, db
+from config.token import generar_token, verificar_token
 from modelos.Benefactores import Benefactor, BenefactorSchema
 from modelos.Usuario import Usuario, UsuarioSchema
 from modelos.Beneficiarios import Beneficiario, BeneficiarioSchema
@@ -8,6 +9,8 @@ from modelos.Categoria import Categoria, CategoriaSchema
 from modelos.Entradas import Entrada, EntradaSchema
 from modelos.Salidas import Salida, SalidaSchema
 from modelos.Blockchain import Blockchain
+from modelos.Tokens import Token, TokenSchema
+
 
 Benefactor_schema = BenefactorSchema()
 Benefactores_schema = BenefactorSchema(many=True)
@@ -28,6 +31,9 @@ Salida_schema = SalidaSchema()
 Salidas_schema = SalidaSchema(many=True)
 
 blockchain = Blockchain()
+
+Token_schema = TokenSchema()
+Tokens_schema = TokenSchema(many=True)
 
 @app.route('/', methods=['GET'])
 def index():  
@@ -192,6 +198,28 @@ def actualizar_salida():
 
     db.session.commit()
     return redirect('/pagina_salidas')
+
+@app.route('/login', methods =['POST'])
+def login():
+    email = request.form['email']
+    password = request.form['password']
+    user = db.session.query(Usuario.id).filter(Usuario.email == email, Usuario.password == password).all()
+    resultado = Usuarios_schema.dump(user)
+
+    if len(resultado)>0:
+        session['usuario'] = email
+
+        token = generar_token(email, password)
+        print('Token: ', token)
+        print('Token contenido: ', token['token'])
+        token_contenido = token['token']
+        nuevo_token = Token(token_contenido)
+        db.session.add(nuevo_token)
+        db.session.commit()
+
+        return redirect('/pagina_entradas')
+    else:
+        return redirect('/')
 
 if __name__ == "__main__":
     app.run(debug=True)

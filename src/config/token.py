@@ -25,6 +25,7 @@ def generar_token(user_token, pass_token):
         encoded_jwt = jwt.encode({"some": "payload"}, "secret", algorithm="HS256")
         
         token = jwt.encode(payload, "pruebaToken", algorithm="HS256")
+        print(token)
         return Out_response(False, "Token generado exitosamente", datos=token)
 
     except Exception as err:
