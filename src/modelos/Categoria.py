@@ -4,11 +4,11 @@ class Categoria(db.Model):
     __tablename__ = 'Categoria'
 
     id  = db.Column(db.Integer, primary_key=True)
-    bodega = db.Column(db.Integer, unique=True)
+    id_bodega = db.Column(db.Integer, unique=True)
     descripcion = db.Column(db.String(500))
 
-    def __init__(self, bodega, descripcion):
-        self.bodega = bodega
+    def __init__(self, id_bodega, descripcion):
+        self.id_bodega = id_bodega
         self.descripcion = descripcion
 
 with app.app_context():
@@ -16,4 +16,4 @@ with app.app_context():
 
 class CategoriaSchema(ma.Schema):
     class Meta:
-        fields = ('id','bodega','descripcion')
+        fields = ('id','id_bodega','descripcion')

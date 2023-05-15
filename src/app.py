@@ -2,6 +2,8 @@ from flask import Flask, redirect, request, jsonify, json, session, render_templ
 
 from config.bd import app, db
 from config.token import generar_token, verificar_token
+from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, JWTManager
+
 from modelos.Benefactores import Benefactor, BenefactorSchema
 from modelos.Usuario import Usuario, UsuarioSchema
 from modelos.Beneficiarios import Beneficiario, BeneficiarioSchema
@@ -76,6 +78,7 @@ def cerrar():
     return redirect('/')
 
 @app.route('/guardar_entrada', methods=['POST'] )
+#@jwt_required()
 def guardar_entrada():
     id_benefactor = request.form['id_benefactor']
     id_categoria = request.form['id_categoria']

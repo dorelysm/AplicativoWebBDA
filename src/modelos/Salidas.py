@@ -12,9 +12,12 @@ class Salida(db.Model):
     unidad_de_medida = db.Column(db.String(50))
     aporte_solidario = db.Column(db.Integer)
     observaciones = db.Column(db.String(500))
+    tipo = db.Column(db.String(50))
 
 
-    def __init__(self, id_beneficiario, id_entrada, fecha, bodega, cantidad_peso, cantidad_unidades, unidad_de_medida, aporte_solidario, observaciones):
+    def __init__(self, id_beneficiario, id_entrada, fecha, bodega, cantidad_peso, 
+                 cantidad_unidades, unidad_de_medida, aporte_solidario, observaciones,
+                 tipo):
         #self.id = id
         self.id_beneficiario = id_beneficiario
         self.id_entrada = id_entrada
@@ -25,11 +28,14 @@ class Salida(db.Model):
         self.unidad_de_medida = unidad_de_medida
         self.aporte_solidario = aporte_solidario
         self.observaciones = observaciones
+        self.tipo = tipo
 
 with app.app_context():
     db.create_all()
 
 class SalidaSchema(ma.Schema):
     class Meta:
-        fields = ('id', 'id_beneficiario', 'id_entrada', 'fecha', 'bodega', 'cantidad_peso', 'cantidad_unidades', 'unidad_de_medida', 'aporte_solidario', 'observaciones')
+        fields = ('id', 'id_beneficiario', 'id_entrada', 'fecha', 'bodega', 
+                  'cantidad_peso', 'cantidad_unidades', 'unidad_de_medida', 
+                  'aporte_solidario', 'observaciones','tipo')
         
