@@ -1,8 +1,6 @@
 from flask import Flask, redirect, request, jsonify, json, session, render_template, make_response
 
 from config.bd import app, db
-from config.token import generar_token, verificar_token
-from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, JWTManager
 
 from modelos.Benefactores import Benefactor, BenefactorSchema
 from modelos.Usuario import Usuario, UsuarioSchema
@@ -10,8 +8,10 @@ from modelos.Beneficiarios import Beneficiario, BeneficiarioSchema
 from modelos.Categoria import Categoria, CategoriaSchema
 from modelos.Entradas import Entrada, EntradaSchema
 from modelos.Salidas import Salida, SalidaSchema
-from modelos.Blockchain import Blockchain
-from modelos.Tokens import Token, TokenSchema
+from modelos.Bodega import Bodega, BodegaSchema
+from modelos.Subcategoria import Subcategoria, SubcategoriaSchema
+from modelos.Vehiculo import Vehiculo, VehiculoSchema
+
 
 
 Benefactor_schema = BenefactorSchema()
@@ -31,11 +31,6 @@ Entradas_schema = EntradaSchema(many=True)
 
 Salida_schema = SalidaSchema()
 Salidas_schema = SalidaSchema(many=True)
-
-blockchain = Blockchain()
-
-Token_schema = TokenSchema()
-Tokens_schema = TokenSchema(many=True)
 
 @app.route('/', methods=['GET'])
 def index():  
@@ -86,12 +81,14 @@ def guardar_entrada():
     cantidad_peso = request.form['cantidad_peso']
     cantidad_unidades = request.form['cantidad_unidades']
     unidad_de_medida = request.form['unidad_de_medida']
-    estibas = request.form['estibas']
-    ubicacion = request.form['ubicacion']
+    #ubicacion = request.form['ubicacion']
     bodega = request.form['bodega']
     observaciones = request.form['observaciones']
     
-    nueva_donacion = Entrada(id_benefactor, id_categoria, fecha, cantidad_peso, cantidad_unidades, unidad_de_medida, estibas, ubicacion, bodega, observaciones)
+    nueva_donacion = Entrada(id_benefactor=id_benefactor, id_categoria=id_categoria,
+                             fecha=fecha, cantidad_peso=cantidad_peso,
+                             cantidad_unidades=cantidad_unidades, unidad_de_medida=unidad_de_medida,
+                             bodega=bodega, observaciones=observaciones)
 
     db.session.add(nueva_donacion)
     db.session.commit()
@@ -122,8 +119,6 @@ def actualizar():
     cantidad_peso = request.form['cantidad_peso']
     cantidad_unidades = request.form['cantidad_unidades']
     unidad_de_medida = request.form['unidad_de_medida']
-    estibas = request.form['estibas']
-    ubicacion = request.form['ubicacion']
     bodega = request.form['bodega']
     observaciones = request.form['observaciones']
 
@@ -134,8 +129,6 @@ def actualizar():
     entrada.cantidad_peso = cantidad_peso
     entrada.cantidad_unidades = cantidad_unidades
     entrada.unidad_de_medida = unidad_de_medida
-    entrada.estibas = estibas
-    entrada.ubicacion = ubicacion
     entrada.bodega = bodega
     entrada.observaciones = observaciones
 
@@ -201,28 +194,6 @@ def actualizar_salida():
 
     db.session.commit()
     return redirect('/pagina_salidas')
-
-@app.route('/login', methods =['POST'])
-def login():
-    email = request.form['email']
-    password = request.form['password']
-    user = db.session.query(Usuario.id).filter(Usuario.email == email, Usuario.password == password).all()
-    resultado = Usuarios_schema.dump(user)
-
-    if len(resultado)>0:
-        session['usuario'] = email
-
-        token = generar_token(email, password)
-        print('Token: ', token)
-        print('Token contenido: ', token['token'])
-        token_contenido = token['token']
-        nuevo_token = Token(token_contenido)
-        db.session.add(nuevo_token)
-        db.session.commit()
-
-        return redirect('/pagina_entradas')
-    else:
-        return redirect('/')
 
 if __name__ == "__main__":
     app.run(debug=True)
