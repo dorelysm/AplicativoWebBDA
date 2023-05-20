@@ -62,7 +62,7 @@ def pagina_entradas():
     if 'usuario' in session:
         all_entradas = Entrada.query.all()
         resultado_entradas = Entradas_schema.dump(all_entradas)
-        return render_template('pagina_entradas.html', entradas = resultado_entradas, usuario = session['usuario'])
+        return render_template('index.html', entradas = resultado_entradas, usuario = session['usuario'])
     else:
         return redirect('/')
 
@@ -89,14 +89,27 @@ def guardar_entrada():
     cantidad_peso = request.form['cantidad_peso']
     cantidad_unidades = request.form['cantidad_unidades']
     unidad_de_medida = request.form['unidad_de_medida']
-    #ubicacion = request.form['ubicacion']
     bodega = request.form['bodega']
     observaciones = request.form['observaciones']
+    proceso_de_inventarios = request.form['proceso_de_inventarios']
+    id_vehiculo = request.form['id_vehiculo']
+    num_factura = request.form['num_factura']
+    ingresado_al_sistema = request.form['ingresado_al_sistema']
+    tipo = request.form['tipo']
+    num_documento_siigo = request.form['num_documento_siigo']
+    cantidad_averiada_vencida_kg = request.form['cantidad_averiada_vencida_kg']
+    cantidad_buen_estado_kg = request.form['cantidad_buen_estado_kg']
+    cantidad_aprobada_kg = request.form['cantidad_aprobada_kg']
     
     nueva_donacion = Entrada(id_benefactor=id_benefactor, id_categoria=id_categoria,
                              fecha=fecha, cantidad_peso=cantidad_peso,
                              cantidad_unidades=cantidad_unidades, unidad_de_medida=unidad_de_medida,
-                             bodega=bodega, observaciones=observaciones)
+                             bodega=bodega, observaciones=observaciones, proceso_de_inventarios=proceso_de_inventarios,
+                             id_vehiculo=id_vehiculo, num_factura=num_factura, ingresado_al_sistema=ingresado_al_sistema,
+                             tipo=tipo, num_documento_siigo=num_documento_siigo,
+                             cantidad_averiada_vencida_kg=cantidad_averiada_vencida_kg,
+                             cantidad_buen_estado_kg=cantidad_buen_estado_kg,
+                             cantidad_aprobada_kg=cantidad_aprobada_kg)
 
     db.session.add(nueva_donacion)
     db.session.commit()
@@ -129,6 +142,15 @@ def actualizar():
     unidad_de_medida = request.form['unidad_de_medida']
     bodega = request.form['bodega']
     observaciones = request.form['observaciones']
+    proceso_de_inventarios = request.form['proceso_de_inventarios']
+    id_vehiculo = request.form['id_vehiculo']
+    num_factura = request.form['num_factura']
+    ingresado_al_sistema = request.form['ingresado_al_sistema']
+    tipo = request.form['tipo']
+    num_documento_siigo = request.form['num_documento_siigo']
+    cantidad_averiada_vencida_kg = request.form['cantidad_averiada_vencida_kg']
+    cantidad_buen_estado_kg = request.form['cantidad_buen_estado_kg']
+    cantidad_aprobada_kg = request.form['cantidad_aprobada_kg']
 
     entrada = Entrada.query.get(id)
     entrada.id_benefactor = id_benefactor
@@ -139,6 +161,15 @@ def actualizar():
     entrada.unidad_de_medida = unidad_de_medida
     entrada.bodega = bodega
     entrada.observaciones = observaciones
+    entrada.proceso_de_inventarios = proceso_de_inventarios
+    entrada.id_vehiculo = id_vehiculo
+    entrada.num_factura = num_factura
+    entrada.ingresado_al_sistema = ingresado_al_sistema
+    entrada.tipo = tipo
+    entrada.num_documento_siigo = num_documento_siigo
+    entrada.cantidad_averiada_vencida_kg = cantidad_averiada_vencida_kg
+    entrada.cantidad_buen_estado_kg = cantidad_buen_estado_kg
+    entrada.cantidad_aprobada_kg = cantidad_aprobada_kg
 
     db.session.commit()
     return redirect('/pagina_entradas')

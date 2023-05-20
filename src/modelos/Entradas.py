@@ -9,7 +9,7 @@ class Entrada(db.Model):
     cantidad_peso = db.Column(db.Integer)
     cantidad_unidades = db.Column(db.Integer)
     unidad_de_medida = db.Column(db.String(50))
-    bodega = db.Column(db.Integer)
+    bodega = db.Column(db.Integer, db.ForeignKey('Bodega.id'))
     observaciones = db.Column(db.String(500))
 
     proceso_de_inventarios = db.Column(db.Boolean)
