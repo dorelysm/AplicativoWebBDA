@@ -6,12 +6,11 @@ from modelos.Benefactores import Benefactor, BenefactorSchema
 from modelos.Usuario import Usuario, UsuarioSchema
 from modelos.Beneficiarios import Beneficiario, BeneficiarioSchema
 from modelos.Categoria import Categoria, CategoriaSchema
-from modelos.Entradas import Entrada, EntradaSchema
-from modelos.Salidas import Salida, SalidaSchema
 from modelos.Bodega import Bodega, BodegaSchema
 from modelos.Subcategoria import Subcategoria, SubcategoriaSchema
-from modelos.Vehiculo import Vehiculo, VehiculoSchema
-
+from modelos.Vehiculos import Vehiculo, VehiculoSchema
+from modelos.Entradas import Entrada, EntradaSchema
+from modelos.Salidas import Salida, SalidaSchema
 
 
 Benefactor_schema = BenefactorSchema()
@@ -31,6 +30,15 @@ Entradas_schema = EntradaSchema(many=True)
 
 Salida_schema = SalidaSchema()
 Salidas_schema = SalidaSchema(many=True)
+
+Bodega_schema = BodegaSchema()
+Bodegas_schema = BodegaSchema(many=True)
+
+Subcategoria_schema = SubcategoriaSchema()
+Subcategorias_schema = SubcategoriaSchema(many=True)
+
+Vehiculo_schema = VehiculoSchema()
+Vehiculos_schema = VehiculoSchema(many=True)
 
 @app.route('/', methods=['GET'])
 def index():  
