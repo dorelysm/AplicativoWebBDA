@@ -53,16 +53,21 @@ def ingresar():
 
     if len(resultado)>0:
         session['usuario'] = email
-        return redirect('/pagina_entradas')
+        return redirect('/inicio')
     else:
         return redirect('/')
+    
+@app.route('/inicio', methods=['GET'])
+def inicio():
+    if 'usuario' in session:
+        return render_template('dashboard.html', usuario = session['usuario'])
 
 @app.route('/pagina_entradas', methods=['GET'])
 def pagina_entradas():
     if 'usuario' in session:
         all_entradas = Entrada.query.all()
         resultado_entradas = Entradas_schema.dump(all_entradas)
-        return render_template('index.html', entradas = resultado_entradas, usuario = session['usuario'])
+        return render_template('pagina_entradas.html', entradas = resultado_entradas, usuario = session['usuario'])
     else:
         return redirect('/')
 
