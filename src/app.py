@@ -67,7 +67,7 @@ def pagina_entradas():
     if 'usuario' in session:
         all_entradas = Entrada.query.all()
         resultado_entradas = Entradas_schema.dump(all_entradas)
-        return render_template('pagina_entradas.html', entradas = resultado_entradas, usuario = session['usuario'])
+        return render_template('entradas.html', entradas = resultado_entradas, usuario = session['usuario'])
     else:
         return redirect('/')
 
