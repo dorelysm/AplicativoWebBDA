@@ -239,6 +239,91 @@ def actualizar_salida():
     db.session.commit()
     return redirect('/pagina_salidas')
 
+@app.route('/pagina_benefactores', methods=['GET'])
+def pagina_benefactores():
+    if 'usuario' in session:
+        all_benefactores = Benefactor.query.all()
+        resultado_benefactores = Benefactores_schema.dump(all_benefactores)
+        return render_template('pagina_benefactores.html', benefactores = resultado_benefactores, usuario = session['usuario'])
+    else:
+        return redirect('/')
+
+@app.route('/nuevo_benefactor', methods=['POST'] )
+def guardar_benefactor():
+    nombre = request.form['nombre']
+    contacto = request.form['contacto']
+    direccion = request.form['direccion']
+    
+    Nuevo_benefactor = Benefactor(nombre, contacto, direccion)
+
+    db.session.add(Nuevo_benefactor)
+    db.session.commit()
+    return redirect('/pagina_benefactores')
+
+@app.route('/pagina_beneficiarios', methods=['GET'])
+def pagina_beneficiarios():
+    if 'usuario' in session:
+        all_beneficiarios = Beneficiario.query.all()
+        resultado_beneficiarios = Beneficiario_schema.dump(all_beneficiarios)
+        return render_template('pagina_beneficiarios.html', beneficiarios = resultado_beneficiarios, usuario = session['usuario'])
+    else:
+        return redirect('/')
+
+@app.route('/nuevo_beneficiario', methods=['POST'] )
+def guardar_beneficiario():
+    nombre = request.form['nombre']
+    contacto = request.form['contacto']
+    direccion = request.form['direccion']
+    
+    Nuevo_beneficiario = Beneficiario(nombre, contacto, direccion)
+
+    db.session.add(Nuevo_beneficiario)
+    db.session.commit()
+    return redirect('/pagina_beneficiarios')
+
+@app.route('/nueva_bodega', methods=['POST'] )
+def guardar_bodega():
+    nombre = request.form['nombre']
+    
+    Nuevo_bodega = Bodega(nombre)
+
+    db.session.add(Nuevo_bodega)
+    db.session.commit()
+    return redirect('/inicio')
+
+@app.route('/nueva_categoria', methods=['POST'] )
+def guardar_categoria():
+    id_bodega = request.form['id_bodega']
+    descripcion = request.form['descripcion']
+    
+    Nuevo_categoria = Categoria(id_bodega, descripcion)
+
+    db.session.add(Nuevo_categoria)
+    db.session.commit()
+    return redirect('/inicio')
+
+@app.route('/nueva_subcategoria', methods=['POST'] )
+def guardar_subcategoria():
+    id_categoria = request.form['id_categoria']
+    descripcion = request.form['descripcion']
+    
+    Nuevo_subcategoria = Subcategoria(id_categoria, descripcion)
+
+    db.session.add(Nuevo_subcategoria)
+    db.session.commit()
+    return redirect('/inicio')
+
+@app.route('/nuevo_vehiculo', methods=['POST'] )
+def guardar_vehiculo():
+    matricula = request.form['matricula']
+    conductor = request.form['conductor']
+    
+    Nuevo_vehiculo = Vehiculo(matricula, conductor)
+
+    db.session.add(Nuevo_vehiculo)
+    db.session.commit()
+    return redirect('/inicio')
+
 if __name__ == "__main__":
     app.run(debug=True)
 
