@@ -324,6 +324,48 @@ def guardar_vehiculo():
     db.session.commit()
     return redirect('/inicio')
 
+@app.route('/benefactores', methods=['GET'] )
+def benefactores():
+    id = request.args.get('id')
+    benefactores = Benefactor.query.get(id)
+    restul_benefactor = Benefactor_schema.dump(benefactores)
+    return jsonify(restul_benefactor)
+
+@app.route('/beneficiarios', methods=['GET'] )
+def beneficiarios():
+    id = request.args.get('id')
+    beneficiarios = Beneficiario.query.get(id)
+    restul_beneficiario = Beneficiario_schema.dump(beneficiarios)
+    return jsonify(restul_beneficiario)
+
+@app.route('/bodegas', methods=['GET'] )
+def bodegas():
+    id = request.args.get('id')
+    bodegas = Bodega.query.get(id)
+    restul_bodega = Bodega_schema.dump(bodegas)
+    return jsonify(restul_bodega)
+
+@app.route('/categorias', methods=['GET'] )
+def categorias():
+    id = request.args.get('id')
+    categorias = Categoria.query.get(id)
+    restul_categoria = Categoria_schema.dump(categorias)
+    return jsonify(restul_categoria)
+
+@app.route('/subcategorias', methods=['GET'] )
+def categorias():
+    id = request.args.get('id')
+    subcategorias = Subcategoria.query.get(id)
+    restul_subcategoria = Subcategoria_schema.dump(subcategorias)
+    return jsonify(restul_subcategoria)
+
+@app.route('/vehiculos', methods=['GET'] )
+def vehiculos():
+    id = request.args.get('id')
+    vehiculos = Vehiculo.query.get(id)
+    restul_vehiculo = Vehiculo_schema.dump(vehiculos)
+    return jsonify(restul_vehiculo)
+
 if __name__ == "__main__":
     app.run(debug=True)
 
