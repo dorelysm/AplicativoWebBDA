@@ -375,7 +375,7 @@ def categorias():
     return jsonify(restul_categoria)
 
 @app.route('/subcategorias', methods=['GET'] )
-def categorias():
+def subcategorias():
     id = request.args.get('id')
     subcategorias = Subcategoria.query.get(id)
     restul_subcategoria = Subcategoria_schema.dump(subcategorias)
