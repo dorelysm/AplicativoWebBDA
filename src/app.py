@@ -11,8 +11,6 @@ from modelos.Subcategoria import Subcategoria, SubcategoriaSchema
 from modelos.Vehiculos import Vehiculo, VehiculoSchema
 from modelos.Entradas import Entrada, EntradaSchema
 from modelos.Salidas import Salida, SalidaSchema
-from modelos.Mermas import Merma, MermaSchema
-
 
 Benefactor_schema = BenefactorSchema()
 Benefactores_schema = BenefactorSchema(many=True)
@@ -40,9 +38,6 @@ Entradas_schema = EntradaSchema(many=True)
 
 Salida_schema = SalidaSchema()
 Salidas_schema = SalidaSchema(many=True)
-
-Merma_schema = MermaSchema()
-Mermas_schema = MermaSchema(many=True)
 
 @app.route('/', methods=['GET'])
 def index():  
@@ -325,24 +320,6 @@ def guardar_vehiculo():
     Nuevo_vehiculo = Vehiculo(matricula, conductor)
 
     db.session.add(Nuevo_vehiculo)
-    db.session.commit()
-    return redirect('/inicio')
-
-@app.route('/nueva_merma', methods=['POST'] )
-def guardar_merma():
-    id_entrada = request.form['id_entrada']
-    tipo = request.form['tipo']
-    fecha = request.form['fecha']
-    cantidad_peso = request.form['cantidad_peso']
-    cantidad_unidades = request.form['cantidad_unidades']
-    unidad_de_medida = request.form['unidad_de_medida']
-    observaciones = request.form['observaciones']
-    num_doc_merma_siigo = request.form['num_doc_merma_siigo']
-    
-    Nueva_merma = Merma(id_entrada, tipo, fecha, cantidad_peso, cantidad_unidades,
-                        unidad_de_medida, observaciones, num_doc_merma_siigo)
-
-    db.session.add(Nueva_merma)
     db.session.commit()
     return redirect('/inicio')
 
