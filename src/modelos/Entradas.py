@@ -4,12 +4,11 @@ class Entrada(db.Model):
     __tablename__ = 'Entrada'
     id = db.Column(db.Integer, primary_key=True)
     id_benefactor = db.Column(db.Integer, db.ForeignKey('Benefactor.id'))
-    id_categoria = db.Column(db.Integer, db.ForeignKey('Categoria.id'))
+    id_subcategoria = db.Column(db.Integer, db.ForeignKey('Subcategoria.id'))
     fecha = db.Column(db.String(50))
     cantidad_peso = db.Column(db.Integer)
     cantidad_unidades = db.Column(db.Integer)
     unidad_de_medida = db.Column(db.String(50))
-    bodega = db.Column(db.Integer, db.ForeignKey('Bodega.id'))
     observaciones = db.Column(db.String(500))
 
     proceso_de_inventarios = db.Column(db.Boolean)
@@ -25,7 +24,7 @@ class Entrada(db.Model):
 
     def __init__(self, id_benefactor = None, id_categoria = None, fecha = None, 
                  cantidad_peso= None, cantidad_unidades = None, 
-                 unidad_de_medida = None, ubicacion = None, bodega = None, 
+                 unidad_de_medida = None, ubicacion = None, 
                  observaciones = None, proceso_de_inventarios = None, 
                  id_vehiculo = None, num_factura = None, ingresado_al_sistema = None, 
                  tipo = None, num_documento_siigo = None,
@@ -39,7 +38,6 @@ class Entrada(db.Model):
         self.cantidad_unidades = cantidad_unidades
         self.unidad_de_medida = unidad_de_medida
         self.ubicacion = ubicacion
-        self.bodega = bodega
         self.observaciones = observaciones
         self.proceso_de_inventarios = proceso_de_inventarios
         self.id_vehiculo = id_vehiculo

@@ -4,7 +4,7 @@ class Categoria(db.Model):
     __tablename__ = 'Categoria'
 
     id  = db.Column(db.Integer, primary_key=True)
-    id_bodega = db.Column(db.Integer, unique=True)
+    id_bodega = db.Column(db.Integer, db.ForeignKey('Bodega.id'))
     descripcion = db.Column(db.String(500))
 
     def __init__(self, id_bodega, descripcion):

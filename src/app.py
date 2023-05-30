@@ -5,8 +5,8 @@ from config.bd import app, db
 from modelos.Benefactores import Benefactor, BenefactorSchema
 from modelos.Usuario import Usuario, UsuarioSchema
 from modelos.Beneficiarios import Beneficiario, BeneficiarioSchema
-from modelos.Categoria import Categoria, CategoriaSchema
 from modelos.Bodega import Bodega, BodegaSchema
+from modelos.Categoria import Categoria, CategoriaSchema
 from modelos.Subcategoria import Subcategoria, SubcategoriaSchema
 from modelos.Vehiculos import Vehiculo, VehiculoSchema
 from modelos.Entradas import Entrada, EntradaSchema
@@ -23,23 +23,23 @@ Usuarios_schema = UsuarioSchema(many=True)
 Beneficiario_schema = BeneficiarioSchema()
 Beneficiarios_schema = BeneficiarioSchema(many=True)
 
-Categoria_schema = CategoriaSchema()
-Categorias_schema = CategoriaSchema(many=True)
-
-Entrada_schema = EntradaSchema()
-Entradas_schema = EntradaSchema(many=True)
-
-Salida_schema = SalidaSchema()
-Salidas_schema = SalidaSchema(many=True)
-
 Bodega_schema = BodegaSchema()
 Bodegas_schema = BodegaSchema(many=True)
+
+Categoria_schema = CategoriaSchema()
+Categorias_schema = CategoriaSchema(many=True)
 
 Subcategoria_schema = SubcategoriaSchema()
 Subcategorias_schema = SubcategoriaSchema(many=True)
 
 Vehiculo_schema = VehiculoSchema()
 Vehiculos_schema = VehiculoSchema(many=True)
+
+Entrada_schema = EntradaSchema()
+Entradas_schema = EntradaSchema(many=True)
+
+Salida_schema = SalidaSchema()
+Salidas_schema = SalidaSchema(many=True)
 
 Merma_schema = MermaSchema()
 Mermas_schema = MermaSchema(many=True)

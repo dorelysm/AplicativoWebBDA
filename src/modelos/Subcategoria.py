@@ -4,7 +4,7 @@ class Subcategoria(db.Model):
     __tablename__ = 'Subcategoria'
 
     id  = db.Column(db.Integer, primary_key=True)
-    categoria = db.Column(db.Integer, unique=True)
+    categoria = db.Column(db.Integer, db.ForeignKey('Categoria.id'))
     descripcion = db.Column(db.String(500))
 
     def __init__(self, categoria, descripcion):
