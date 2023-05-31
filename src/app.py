@@ -153,14 +153,13 @@ def entradas():
 @app.route('/actualizar_entrada', methods=['POST'] )
 def actualizar():
     id = request.form['id']
-    #print('id: ', id)
     id_benefactor = request.form['id_benefactor']
-    id_categoria = request.form['id_categoria']
+    id_subcategoria = request.form['id_subcategoria']
     fecha = request.form['fecha']
     cantidad_peso = request.form['cantidad_peso']
     cantidad_unidades = request.form['cantidad_unidades']
     unidad_de_medida = request.form['unidad_de_medida']
-    bodega = request.form['bodega']
+    vencimiento = request.form['vencimiento']
     observaciones = request.form['observaciones']
     proceso_de_inventarios = request.form['proceso_de_inventarios']
     id_vehiculo = request.form['id_vehiculo']
@@ -174,12 +173,12 @@ def actualizar():
 
     entrada = Entrada.query.get(id)
     entrada.id_benefactor = id_benefactor
-    entrada.id_categoria = id_categoria
+    entrada.id_subcategoria = id_subcategoria
     entrada.fecha = fecha
     entrada.cantidad_peso = cantidad_peso
     entrada.cantidad_unidades = cantidad_unidades
     entrada.unidad_de_medida = unidad_de_medida
-    entrada.bodega = bodega
+    entrada.vencimiento = vencimiento
     entrada.observaciones = observaciones
     entrada.proceso_de_inventarios = proceso_de_inventarios
     entrada.id_vehiculo = id_vehiculo
@@ -199,14 +198,17 @@ def guardar_salida():
     id_beneficiario = request.form['id_beneficiario']
     id_entrada = request.form['id_entrada']
     fecha = request.form['fecha']
-    bodega = request.form['bodega']
     cantidad_peso = request.form['cantidad_peso']
     cantidad_unidades = request.form['cantidad_unidades']
     unidad_de_medida = request.form['unidad_de_medida']
+    tipo = request.form['tipo']
+    num_doc_siigo = request.form['num_doc_siigo']
     aporte_solidario = request.form['aporte_solidario']
     observaciones = request.form['observaciones']
     
-    nueva_donacion = Salida(id_beneficiario, id_entrada, fecha, bodega, cantidad_peso, cantidad_unidades, unidad_de_medida, aporte_solidario, observaciones)
+    nueva_donacion = Salida(id_beneficiario, id_entrada, fecha, cantidad_peso, 
+                            cantidad_unidades, unidad_de_medida, tipo, num_doc_siigo, 
+                            aporte_solidario, observaciones)
 
     db.session.add(nueva_donacion)
     db.session.commit()
@@ -229,14 +231,14 @@ def salidas():
 
 @app.route('/actualizar_salida', methods=['POST'] )
 def actualizar_salida():
-    id = request.form['id']
     id_beneficiario = request.form['id_beneficiario']
     id_entrada = request.form['id_entrada']
     fecha = request.form['fecha']
-    bodega = request.form['bodega']
     cantidad_peso = request.form['cantidad_peso']
     cantidad_unidades = request.form['cantidad_unidades']
     unidad_de_medida = request.form['unidad_de_medida']
+    tipo = request.form['tipo']
+    num_doc_siigo = request.form['num_doc_siigo']
     aporte_solidario = request.form['aporte_solidario']
     observaciones = request.form['observaciones']
 
@@ -244,10 +246,11 @@ def actualizar_salida():
     salida.id_beneficiario = id_beneficiario
     salida.id_entrada = id_entrada
     salida.fecha = fecha
-    salida.bodega = bodega
     salida.cantidad_peso = cantidad_peso
     salida.cantidad_unidades = cantidad_unidades
     salida.unidad_de_medida = unidad_de_medida
+    salida.tipo = tipo
+    salida.num_doc_siigo = num_doc_siigo
     salida.aporte_solidario = aporte_solidario
     salida.observaciones = observaciones
 
