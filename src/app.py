@@ -75,7 +75,23 @@ def pagina_salidas():
     if 'usuario' in session:
         all_salidas = Salida.query.all()
         resultado_salidas = Salidas_schema.dump(all_salidas)
-        return render_template('pagina_salidas.html', salidas = resultado_salidas, usuario = session['usuario'])
+        return render_template('salidas.html', salidas = resultado_salidas, usuario = session['usuario'])
+    else:
+        return redirect('/')
+    
+@app.route('/pagina_bodegas', methods=['GET'])
+def pagina_bodegas():
+    if 'usuario' in session:
+        all_bodegas = Bodega.query.all()
+        resultado_bodegas = Bodegas_schema.dump(all_bodegas)
+        return render_template('bodegas.html', bodegas = resultado_bodegas, usuario = session['usuario'])
+    else:
+        return redirect('/')
+    
+@app.route('/pagina_informes', methods=['GET'])
+def pagina_informes():
+    if 'usuario' in session:
+        return render_template('informes.html')
     else:
         return redirect('/')
     
