@@ -9,13 +9,13 @@ class Entrada(db.Model):
     cantidad_peso = db.Column(db.Integer)
     cantidad_unidades = db.Column(db.Integer)
     unidad_de_medida = db.Column(db.String(50))
-    vencimiento = db.Column(db.String(50))
+    vencimiento = db.Column(db.Integer)
     observaciones = db.Column(db.String(500))
 
-    proceso_de_inventarios = db.Column(db.Boolean)
+    proceso_de_inventarios = db.Column(db.String(1))
     id_vehiculo = db.Column(db.Integer, db.ForeignKey('Vehiculo.id'))
     num_factura = db.Column(db.String(50))
-    ingresado_al_sistema = db.Column(db.Boolean)
+    ingresado_al_sistema = db.Column(db.String(1))
     tipo = db.Column(db.String(50))
     
     num_documento_siigo = db.Column(db.Integer)

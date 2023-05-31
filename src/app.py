@@ -104,12 +104,12 @@ def cerrar():
 #@jwt_required()
 def guardar_entrada():
     id_benefactor = request.form['id_benefactor']
-    id_categoria = request.form['id_categoria']
+    id_subcategoria = request.form['id_subcategoria']
     fecha = request.form['fecha']
     cantidad_peso = request.form['cantidad_peso']
     cantidad_unidades = request.form['cantidad_unidades']
     unidad_de_medida = request.form['unidad_de_medida']
-    bodega = request.form['bodega']
+    vencimiento = request.form['vencimiento']
     observaciones = request.form['observaciones']
     proceso_de_inventarios = request.form['proceso_de_inventarios']
     id_vehiculo = request.form['id_vehiculo']
@@ -121,10 +121,10 @@ def guardar_entrada():
     cantidad_buen_estado_kg = request.form['cantidad_buen_estado_kg']
     cantidad_aprobada_kg = request.form['cantidad_aprobada_kg']
     
-    nueva_donacion = Entrada(id_benefactor=id_benefactor, id_categoria=id_categoria,
+    nueva_donacion = Entrada(id_benefactor=id_benefactor, id_subcategoria=id_subcategoria,
                              fecha=fecha, cantidad_peso=cantidad_peso,
                              cantidad_unidades=cantidad_unidades, unidad_de_medida=unidad_de_medida,
-                             bodega=bodega, observaciones=observaciones, proceso_de_inventarios=proceso_de_inventarios,
+                             vencimiento=vencimiento, observaciones=observaciones, proceso_de_inventarios=proceso_de_inventarios,
                              id_vehiculo=id_vehiculo, num_factura=num_factura, ingresado_al_sistema=ingresado_al_sistema,
                              tipo=tipo, num_documento_siigo=num_documento_siigo,
                              cantidad_averiada_vencida_kg=cantidad_averiada_vencida_kg,
