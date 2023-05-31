@@ -2,13 +2,16 @@
 
 {%  block content %}
 
+{% include('modal.html') %}
+
 <div id="layoutSidenav">
   <div id="layoutSidenav_content">
     <main>
       <div class="container-fluid px-4">
         <h1 class="mt-4">Salidas</h1>
+        <a onclick="cargar_formulario()" class="btn btn-primary btn-block mb-4"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">Nueva salida</a>
         <ol class="breadcrumb mb-4">
-          <li class="breadcrumb-item"><a href="index.html">Sistema de inventario</a></li>
+          <li class="breadcrumb-item"><a href="/inicio">Sistema de inventario</a></li>
           <li class="breadcrumb-item active">Salidas</li>
         </ol>
         <div class="card mb-4">
@@ -71,6 +74,58 @@
               </table>
 
               <script>
+
+                function cargar_formulario(){
+                    const formulario = `
+                            <form action="/guardar_salida" method="POST">
+                              <div class="form-group">
+                                <label for="recipient-name" class="col-form-label">Id del beneficiario:</label>
+                                <input type="text" class="form-control" name="id_beneficiario"  value="">
+                              </div>
+                              <div class="form-group">
+                                <label for="message-text" class="col-form-label">Id de la entrada:</label>
+                                <input type="text" class="form-control" name="id_entrada"  value="">
+                              </div>
+                              <div class="form-group">
+                                <label for="message-text" class="col-form-label">Fecha:</label>
+                                <input type="text" class="form-control" name="fecha"  value="">
+                              </div>
+                              <div class="form-group">
+                                <label for="message-text" class="col-form-label">Cantidad (peso):</label>
+                                <input type="text" class="form-control" name="cantidad_peso"  value="">
+                              </div>
+                              <div class="form-group">
+                                <label for="message-text" class="col-form-label">Cantidad (unidades):</label>
+                                <input type="text" class="form-control" name="cantidad_unidades"  value="">
+                              </div>
+                              <div class="form-group">
+                                <label for="message-text" class="col-form-label">Unidad de medida:</label>
+                                <input type="text" class="form-control" name="unidad_de_medida"  value="">
+                              </div>
+                              <div class="form-group">
+                                <label for="message-text" class="col-form-label">Tipo:</label>
+                                <input type="text" class="form-control" name="tipo"  value="">
+                              </div>
+                              <div class="form-group">
+                                <label for="message-text" class="col-form-label">Número de documento en SIIGO:</label>
+                                <input type="text" class="form-control" name="num_doc_siigo"  value="">
+                              </div>
+                              <div class="form-group">
+                                <label for="message-text" class="col-form-label">Aporte solidario:</label>
+                                <input type="text" class="form-control" name="aporte_solidario"  value="">
+                              </div>                  
+                              <div class="form-group">
+                                <label for="message-text" class="col-form-label">Observaciones:</label>
+                                <input type="text" class="form-control" name="observaciones"  value="">
+                              </div>
+                              <div class="modal-footer">
+                                <button  type="submit" class="btn btn-primary">Guardar</button>
+                              </div>
+                            </form> 
+                    `;
+                    $("#fromartc").html(formulario);
+                }
+
                 function eliminar(id){
                     url = '/eliminar_salida';
                     var request = $.ajax({
