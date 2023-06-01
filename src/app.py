@@ -60,6 +60,8 @@ def ingresar():
 def inicio():
     if 'usuario' in session:
         return render_template('dashboard.html', usuario = session['usuario'])
+    else:
+        return redirect('/')
 
 @app.route('/pagina_entradas', methods=['GET'])
 def pagina_entradas():
