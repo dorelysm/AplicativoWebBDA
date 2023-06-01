@@ -342,6 +342,17 @@ def guardar_vehiculo():
     db.session.commit()
     return redirect('/inicio')
 
+@app.route('/nuevo_usuario', methods=['POST'] )
+def guardar_usuario():
+    email = request.form['email']
+    password = request.form['password']
+    
+    Nuevo_usuario = Usuario(email, password)
+
+    db.session.add(Nuevo_usuario)
+    db.session.commit()
+    return redirect('/')
+
 @app.route('/benefactores', methods=['GET'] )
 def benefactores():
     id = request.args.get('id')
