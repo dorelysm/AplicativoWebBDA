@@ -9,9 +9,9 @@ from modelos.Bodega import Bodega, BodegaSchema
 from modelos.Categoria import Categoria, CategoriaSchema
 from modelos.Subcategoria import Subcategoria, SubcategoriaSchema
 from modelos.Vehiculos import Vehiculo, VehiculoSchema
+from modelos.Producto import Producto, ProductoSchema
 from modelos.Entradas import Entrada, EntradaSchema
 from modelos.Salidas import Salida, SalidaSchema
-from modelos.Producto import Producto, ProductoSchema
 from modelos.Informe import Informe, InformeSchema
 
 Benefactor_schema = BenefactorSchema()
@@ -35,14 +35,14 @@ Subcategorias_schema = SubcategoriaSchema(many=True)
 Vehiculo_schema = VehiculoSchema()
 Vehiculos_schema = VehiculoSchema(many=True)
 
+Producto_schema = ProductoSchema()
+Productos_schema = ProductoSchema(many=True)
+
 Entrada_schema = EntradaSchema()
 Entradas_schema = EntradaSchema(many=True)
 
 Salida_schema = SalidaSchema()
 Salidas_schema = SalidaSchema(many=True)
-
-Producto_schema = ProductoSchema()
-Productos_schema = ProductoSchema(many=True)
 
 Informe_schema = InformeSchema()
 Informes_schema = InformeSchema(many=True)
@@ -282,6 +282,18 @@ def guardar_benefactor():
     db.session.add(Nuevo_benefactor)
     db.session.commit()
     return redirect('/pagina_benefactores')
+
+@app.route('/nuevo_producto', methods=['POST'] )
+def guardar_producto():
+    subcategoria = request.form['subcategoria']
+    descripcion = request.form['descripcion']
+    peso = request.form['peso']
+    
+    Nuevo_producto = Producto(subcategoria, descripcion, peso)
+
+    db.session.add(Nuevo_producto)
+    db.session.commit()
+    return redirect('/inicio')
     
 #METODOS ELIMINAR
 
