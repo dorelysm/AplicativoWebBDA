@@ -13,6 +13,9 @@
         <a onclick="cargar_formulariobod()" class="btn btn-primary btn-block mb-4"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">Nueva bodega</a>
         <a onclick="cargar_formulariocat()" class="btn btn-primary btn-block mb-4"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">Nueva categoria</a>
         <a onclick="cargar_formulariosub()" class="btn btn-primary btn-block mb-4"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">Nueva subcategoria</a>
+        <a onclick="cargar_formularioprod()" class="btn btn-primary btn-block mb-4"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">Nuevo producto</a>
+        <a href="/pagina_productos" class="btn btn-primary btn-block mb-4">Ver producto</a>
+
         <ol class="breadcrumb mb-4">
           <li class="breadcrumb-item"><a href="/inicio">Sistema de inventario</a></li>
           <li class="breadcrumb-item active">Entradas</li>
@@ -29,11 +32,9 @@
                   <tr>
                     <th scope="col">Id entrada</th>
                     <th scope="col">Id benefactor</th>
-                    <th scope="col">Id categoria</th>
+                    <th scope="col">Id producto</th>
                     <th scope="col">Fecha</th>
-                    <th scope="col">Cantidad (peso)</th>
                     <th scope="col">Cantidad (unidades)</th>
-                    <th scope="col">Unidad de medidas</th>
                     <th scope="col">Fecha de vencimiento</th>
                     <th scope="col">Proceso de inventarios</th>
                     <th scope="col">Id del vehículo</th>
@@ -53,11 +54,9 @@
                   <tr>
                     <th scope="row">{{item.id}}</th>
                     <td>{{item.id_benefactor}}</td>
-                    <td>{{item.id_subcategoria}}</td>
+                    <td>{{item.id_producto}}</td>
                     <td>{{item.fecha}}</td>
-                    <td>{{item.cantidad_peso}}</td>
                     <td>{{item.cantidad_unidades}}</td>
-                    <td>{{item.unidad_de_medida}}</td>
                     <td>{{item.vencimiento}}</td>
                     <td>{{item.proceso_de_inventarios}}</td>
                     <td>{{item.id_vehiculo}}</td>
@@ -99,27 +98,19 @@
                               <input type="text" class="form-control" name="id_benefactor"  value="">
                             </div>
                             <div class="form-group">
-                              <label for="message-text" class="col-form-label">Id_subcategoria:</label>
-                              <input type="text" class="form-control" name="id_subcategoria"  value="">
+                              <label for="message-text" class="col-form-label">Id_producto:</label>
+                              <input type="text" class="form-control" name="id_producto"  value="">
                             </div>
                             <div class="form-group">
                               <label for="message-text" class="col-form-label">Fecha:</label>
                               <input type="text" class="form-control" name="fecha"  value="">
                             </div>
                             <div class="form-group">
-                              <label for="message-text" class="col-form-label">Cantidad (peso):</label>
-                              <input type="text" class="form-control" name="cantidad_peso"  value="">
-                            </div>
-                            <div class="form-group">
                               <label for="message-text" class="col-form-label">Cantidad (unidades):</label>
                               <input type="text" class="form-control" name="cantidad_unidades"  value="">
                             </div>
                             <div class="form-group">
-                              <label for="message-text" class="col-form-label">Unidad de medida:</label>
-                              <input type="text" class="form-control" name="unidad_de_medida"  value="">
-                            </div>
-                            <div class="form-group">
-                              <label for="message-text" class="col-form-label">Días para el vencimiento:</label>
+                              <label for="message-text" class="col-form-label">Fecha de vencimiento:</label>
                               <input type="text" class="form-control" name="vencimiento"  value="">
                             </div>
                             <div class="form-group">
@@ -206,24 +197,16 @@
                               <input type="text" class="form-control" name="id_benefactor"  value="${data.id_benefactor}">
                             </div>
                             <div class="form-group">
-                              <label for="message-text" class="col-form-label">Id_subcategoria:</label>
-                              <input type="text" class="form-control" name="id_subcategoria"  value="${data.id_subcategoria}">
+                              <label for="message-text" class="col-form-label">Id_producto:</label>
+                              <input type="text" class="form-control" name="id_producto"  value="${data.id_producto}">
                             </div>
                             <div class="form-group">
                               <label for="message-text" class="col-form-label">Fecha:</label>
                               <input type="text" class="form-control" name="fecha"  value="${data.fecha}">
                             </div>
                             <div class="form-group">
-                              <label for="message-text" class="col-form-label">Cantidad (peso):</label>
-                              <input type="text" class="form-control" name="cantidad_peso"  value="${data.cantidad_peso}">
-                            </div>
-                            <div class="form-group">
                               <label for="message-text" class="col-form-label">Cantidad (unidades):</label>
                               <input type="text" class="form-control" name="cantidad_unidades"  value="${data.cantidad_unidades}">
-                            </div>
-                            <div class="form-group">
-                              <label for="message-text" class="col-form-label">Unidad de medida:</label>
-                              <input type="text" class="form-control" name="unidad_de_medida"  value="${data.unidad_de_medida}">
                             </div>
                             <div class="form-group">
                               <label for="message-text" class="col-form-label">Días para el vencimiento:</label>
@@ -324,7 +307,11 @@
                     <form action="/nueva_subcategoria" method="POST">
                       <div class="form-group">
                         <label for="recipient-name" class="col-form-label">Id categoria:</label>
-                        <input type="text" class="form-control" name="id_categoria"  value="">
+                        <select class="form-control" name="categoria">
+                          {% for item in categorias %}
+                          <option>{{item.descripcion}}</option>
+                          {% endfor %}
+                        </select>
                       </div>
                       <div class="form-group">
                         <label for="recipient-name" class="col-form-label">Descripcion:</label>
@@ -337,6 +324,33 @@
             `;
             $("#fromartc").html(formulario);
         }
+
+        function cargar_formularioprod(){
+          const formulario = `
+                  <form action="/nuevo_producto" method="POST">
+                    <div class="form-group">
+                      <label for="recipient-name" class="col-form-label">Id subcategoria:</label>
+                      <select class="form-control" name="subcategoria">
+                        {% for item in subcategorias %}
+                        <option>{{item.descripcion}}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="recipient-name" class="col-form-label">Descripcion:</label>
+                      <input type="text" class="form-control" name="descripcion"  value="">
+                    </div>
+                    <div class="form-group">
+                      <label for="recipient-name" class="col-form-label">Peso (Kg):</label>
+                      <input type="text" class="form-control" name="peso"  value="">
+                    </div>
+                    <div class="modal-footer">
+                      <button  type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                  </form> 
+          `;
+          $("#fromartc").html(formulario);
+      }
 
               </script>
             </div>

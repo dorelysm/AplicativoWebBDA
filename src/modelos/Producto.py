@@ -1,4 +1,4 @@
-from config.bd import app, db, ma
+from config.bd import db, ma, app
 
 class Producto(db.Model):
     __tablename__ = 'Producto'
@@ -6,7 +6,7 @@ class Producto(db.Model):
     id  = db.Column(db.Integer, primary_key=True)
     subcategoria = db.Column(db.Integer, db.ForeignKey('Subcategoria.id'))
     descripcion = db.Column(db.String(500))
-    peso = db.Column(db.Integer)
+    peso = db.Column(db.Double)
 
     def __init__(self, subcategoria, descripcion, peso):
         self.subcategoria = subcategoria

@@ -85,7 +85,16 @@ def pagina_entradas():
         resultado_entradas = Entradas_schema.dump(all_entradas)
         all_bodegas = Bodega.query.all()
         resultado_bodegas = Bodegas_schema.dump(all_bodegas)
-        return render_template('entradas.html', entradas = resultado_entradas, bodegas = resultado_bodegas, usuario = session['usuario'])
+        all_categorias = Categoria.query.all()
+        resultado_categorias = Categorias_schema.dump(all_categorias)
+        all_subcategorias = Subcategoria.query.all()
+        resultado_subcategorias = Subcategorias_schema.dump(all_subcategorias)
+        all_productos = Producto.query.all()
+        resultado_productos = Productos_schema.dump(all_productos)
+        return render_template('entradas.html', entradas = resultado_entradas, 
+                               bodegas = resultado_bodegas, categorias = resultado_categorias, 
+                               subcategorias = resultado_subcategorias, productos = resultado_productos, 
+                               usuario = session['usuario'])
     else:
         return redirect('/')
 
@@ -120,7 +129,7 @@ def pagina_benefactores():
 def pagina_beneficiarios():
     if 'usuario' in session:
         all_beneficiarios = Beneficiario.query.all()
-        resultado_beneficiarios = Beneficiario_schema.dump(all_beneficiarios)
+        resultado_beneficiarios = Beneficiarios_schema.dump(all_beneficiarios)
         return render_template('pagina_beneficiarios.html', beneficiarios = resultado_beneficiarios, usuario = session['usuario'])
     else:
         return redirect('/')
@@ -129,8 +138,10 @@ def pagina_beneficiarios():
 def pagina_productos():
     if 'usuario' in session:
         all_productos = Producto.query.all()
-        resultado_productos = Producto_schema.dump(all_productos)
-        return render_template('productos.html', productos = resultado_productos, usuario = session['usuario'])
+        resultado_productos = Productos_schema.dump(all_productos)
+        all_subcategorias = Subcategoria.query.all()
+        resultado_subcategorias = Subcategorias_schema.dump(all_subcategorias)
+        return render_template('productos.html', productos = resultado_productos, subcategorias = resultado_subcategorias, usuario = session['usuario'])
     else:
         return redirect('/')
     
@@ -138,12 +149,10 @@ def pagina_productos():
 def pagina_informes():
     if 'usuario' in session:
         all_informes = Informe.query.all()
-        resultado_informes = Informe_schema.dump(all_informes)
+        resultado_informes = Informes_schema.dump(all_informes)
         return render_template('informes.html', informes = resultado_informes, usuario = session['usuario'])
     else:
         return redirect('/')
-    
-#Agregar página productos
 
 #METODOS GUARDAR/NUEVO
 
@@ -151,11 +160,9 @@ def pagina_informes():
 #@jwt_required()
 def guardar_entrada():
     id_benefactor = request.form['id_benefactor']
-    id_subcategoria = request.form['id_subcategoria']
+    id_producto = request.form['id_producto']
     fecha = request.form['fecha']
-    cantidad_peso = request.form['cantidad_peso']
     cantidad_unidades = request.form['cantidad_unidades']
-    unidad_de_medida = request.form['unidad_de_medida']
     vencimiento = request.form['vencimiento']
     observaciones = request.form['observaciones']
     proceso_de_inventarios = request.form['proceso_de_inventarios']
@@ -168,11 +175,12 @@ def guardar_entrada():
     cantidad_buen_estado_kg = request.form['cantidad_buen_estado_kg']
     cantidad_aprobada_kg = request.form['cantidad_aprobada_kg']
     
-    nueva_donacion = Entrada(id_benefactor=id_benefactor, id_subcategoria=id_subcategoria,
-                             fecha=fecha, cantidad_peso=cantidad_peso,
-                             cantidad_unidades=cantidad_unidades, unidad_de_medida=unidad_de_medida,
-                             vencimiento=vencimiento, observaciones=observaciones, proceso_de_inventarios=proceso_de_inventarios,
-                             id_vehiculo=id_vehiculo, num_factura=num_factura, ingresado_al_sistema=ingresado_al_sistema,
+    nueva_donacion = Entrada(id_benefactor=id_benefactor, id_producto=id_producto,
+                             fecha=fecha,cantidad_unidades=cantidad_unidades,
+                             vencimiento=vencimiento, observaciones=observaciones, 
+                             proceso_de_inventarios=proceso_de_inventarios,
+                             id_vehiculo=id_vehiculo, num_factura=num_factura, 
+                             ingresado_al_sistema=ingresado_al_sistema,
                              tipo=tipo, num_documento_siigo=num_documento_siigo,
                              cantidad_averiada_vencida_kg=cantidad_averiada_vencida_kg,
                              cantidad_buen_estado_kg=cantidad_buen_estado_kg,
@@ -230,9 +238,9 @@ def guardar_categoria():
     nombre_bodega = request.form['bodega']
     descripcion = request.form['descripcion']
     
-    bodega = Bodega.query.get(nombre_bodega)
-    
-    Nuevo_categoria = Categoria(bodega.id_bodega, descripcion)
+    bodega = Bodega.query.filter_by(nombre=nombre_bodega).first()
+    #print(bodega.id)
+    Nuevo_categoria = Categoria(bodega.id, descripcion)
 
     db.session.add(Nuevo_categoria)
     db.session.commit()
@@ -240,12 +248,28 @@ def guardar_categoria():
 
 @app.route('/nueva_subcategoria', methods=['POST'] )
 def guardar_subcategoria():
-    id_categoria = request.form['id_categoria']
+    nombre_categoria = request.form['categoria']
     descripcion = request.form['descripcion']
     
-    Nuevo_subcategoria = Subcategoria(id_categoria, descripcion)
+    categoria = Categoria.query.filter_by(descripcion=nombre_categoria).first()
+    
+    Nuevo_subcategoria = Subcategoria(categoria.id, descripcion)
 
     db.session.add(Nuevo_subcategoria)
+    db.session.commit()
+    return redirect('/inicio')
+
+@app.route('/nuevo_producto', methods=['POST'] )
+def guardar_producto():
+    nombre_subcategoria = request.form['subcategoria']
+    descripcion = request.form['descripcion']
+    peso = request.form['peso']
+    
+    subcategoria = Subcategoria.query.filter_by(descripcion = nombre_subcategoria).first()
+    
+    Nuevo_producto = Producto(subcategoria.id, descripcion, peso)
+
+    db.session.add(Nuevo_producto)
     db.session.commit()
     return redirect('/inicio')
 
@@ -282,18 +306,6 @@ def guardar_benefactor():
     db.session.add(Nuevo_benefactor)
     db.session.commit()
     return redirect('/pagina_benefactores')
-
-@app.route('/nuevo_producto', methods=['POST'] )
-def guardar_producto():
-    subcategoria = request.form['subcategoria']
-    descripcion = request.form['descripcion']
-    peso = request.form['peso']
-    
-    Nuevo_producto = Producto(subcategoria, descripcion, peso)
-
-    db.session.add(Nuevo_producto)
-    db.session.commit()
-    return redirect('/inicio')
     
 #METODOS ELIMINAR
 
@@ -312,6 +324,14 @@ def eliminar_salida():
     db.session.delete(salidas)
     db.session.commit()
     return Salida_schema.dump(salidas)
+
+@app.route('/eliminar_producto', methods=['GET'] )
+def eliminar_producto():
+    id = request.args.get('id')
+    productos = Producto.query.get(id)
+    db.session.delete(productos)
+    db.session.commit()
+    return Producto_schema.dump(productos)
 
 #METODOS GET LISTA
 
@@ -391,11 +411,9 @@ def informes():
 def actualizar():
     id = request.form['id']
     id_benefactor = request.form['id_benefactor']
-    id_subcategoria = request.form['id_subcategoria']
+    id_producto = request.form['id_producto']
     fecha = request.form['fecha']
-    cantidad_peso = request.form['cantidad_peso']
     cantidad_unidades = request.form['cantidad_unidades']
-    unidad_de_medida = request.form['unidad_de_medida']
     vencimiento = request.form['vencimiento']
     observaciones = request.form['observaciones']
     proceso_de_inventarios = request.form['proceso_de_inventarios']
@@ -410,11 +428,9 @@ def actualizar():
 
     entrada = Entrada.query.get(id)
     entrada.id_benefactor = id_benefactor
-    entrada.id_subcategoria = id_subcategoria
+    entrada.id_producto = id_producto
     entrada.fecha = fecha
-    entrada.cantidad_peso = cantidad_peso
     entrada.cantidad_unidades = cantidad_unidades
-    entrada.unidad_de_medida = unidad_de_medida
     entrada.vencimiento = vencimiento
     entrada.observaciones = observaciones
     entrada.proceso_de_inventarios = proceso_de_inventarios
