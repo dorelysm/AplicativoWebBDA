@@ -422,7 +422,7 @@ def benefactores():
 
 @app.route('/beneficiarios', methods=['GET'] )
 def beneficiarios():
-    id = request.args.get('id')
+    id = request.args.get('num_beneficiario')
     beneficiarios = Beneficiario.query.get(id)
     restul_beneficiario = Beneficiario_schema.dump(beneficiarios)
     return jsonify(restul_beneficiario)
@@ -468,6 +468,13 @@ def informes():
     informes = Informe.query.get(id)
     restul_informe = Informe_schema.dump(informes)
     return jsonify(restul_informe)
+
+@app.route('/usuarios', methods=['GET'] )
+def usuarios():
+    id = request.args.get('id')
+    usuarios = Usuario.query.get(id)
+    restul_usuario = Usuario_schema.dump(usuarios)
+    return jsonify(restul_usuario)
 
 #METODOS ACTUALIZAR
 
@@ -538,6 +545,123 @@ def actualizar_salida():
     db.session.commit()
     return redirect('/pagina_salidas')
 
+@app.route('/actualizar_bodega', methods=['POST'] )
+def actualizar_bodega():
+    id = request.form['id']
+    nombre = request.form['nombre']
+
+    bodega = Bodega.query.get(id)
+    bodega.id = id
+    bodega.nombre = nombre
+
+    db.session.commit()
+    return redirect('/pagina_entradas')
+
+@app.route('/actualizar_benefactor', methods=['POST'] )
+def actualizar_benefactor():
+    id = request.form['id']
+    nombre = request.form['nombre']
+    contacto = request.form['contacto']
+    direccion = request.form['direccion']
+
+    benefactor = Benefactor.query.get(id)
+    benefactor.id = id
+    benefactor.nombre = nombre
+    benefactor.contacto = contacto
+    benefactor.direccion = direccion
+
+    db.session.commit()
+    return redirect('/pagina_entradas')
+
+@app.route('/actualizar_beneficiario', methods=['POST'] )
+def actualizar_beneficiario():
+    num_beneficiario = request.form['num_beneficiario']
+    nombre = request.form['nombre']
+    contacto = request.form['contacto']
+    direccion = request.form['direccion']
+
+    beneficiario = Beneficiario.query.get(num_beneficiario)
+    beneficiario.num_beneficiario = num_beneficiario
+    beneficiario.nombre = nombre
+    beneficiario.contacto = contacto
+    beneficiario.direccion = direccion
+
+    db.session.commit()
+    return redirect('/pagina_entradas')
+
+@app.route('/actualizar_categoria', methods=['POST'] )
+def actualizar_categoria():
+    id = request.form['id']
+    id_bodega = request.form['id_bodega']
+    descripcion = request.form['descripcion']
+
+    categoria = Categoria.query.get(id)
+    categoria.id = id
+    categoria.id_bodega = id_bodega
+    categoria.descripcion = descripcion
+
+    db.session.commit()
+    return redirect('/pagina_entradas')
+
+@app.route('/actualizar_subcategoria', methods=['POST'] )
+def actualizar_subcategoria():
+    id = request.form['id']
+    categoria = request.form['categoria']
+    descripcion = request.form['descripcion']
+
+    subcategoria = Subcategoria.query.get(id)
+    subcategoria.id = id
+    subcategoria.categoria = categoria
+    subcategoria.descripcion = descripcion
+
+    db.session.commit()
+    return redirect('/pagina_entradas')
+
+@app.route('/actualizar_vehiculo', methods=['POST'] )
+def actualizar_vehiculo():
+    id = request.form['id']
+    matricula = request.form['matricula']
+    conductor = request.form['conductor']
+
+    vehiculo = Vehiculo.query.get(id)
+    vehiculo.id = id
+    vehiculo.matricula = matricula
+    vehiculo.conductor = conductor
+
+    db.session.commit()
+    return redirect('/pagina_entradas')
+
+@app.route('/actualizar_producto', methods=['POST'] )
+def actualizar_producto():
+    id = request.form['id']
+    subcategoria = request.form['subcategoria']
+    descripcion = request.form['descripcion']
+    peso = request.form['peso']
+
+    producto = Producto.query.get(id)
+    producto.id = id
+    producto.subcategoria = subcategoria
+    producto.descripcion = descripcion
+    producto.peso = peso
+    
+    db.session.commit()
+    return redirect('/pagina_entradas')
+    
+@app.route('/actualizar_usuario', methods=['POST'] )
+def actualizar_usuario():
+    id = request.form['id']
+    email = request.form['email']
+    password = request.form['password']
+
+    usuario = Usuario.query.get(id)
+    usuario.id = id
+    usuario.email = email
+    usuario.password = password
+
+    db.session.commit()
+    return redirect('/pagina_entradas')
+
+    
 
 
 if __name__ == "__main__":
