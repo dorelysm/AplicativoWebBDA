@@ -333,6 +333,70 @@ def eliminar_producto():
     db.session.commit()
     return Producto_schema.dump(productos)
 
+@app.route('/eliminar_bodega', methods=['GET'] )
+def eliminar_bodega():
+    id = request.args.get('id')
+    bodegas = Bodega.query.get(id)
+    db.session.delete(bodegas)
+    db.session.commit()
+    return Bodega_schema.dump(bodegas)
+
+@app.route('/eliminar_benefactor', methods=['GET'] )
+def eliminar_benefactor():
+    id = request.args.get('id')
+    benefactores = Benefactor.query.get(id)
+    db.session.delete(benefactores)
+    db.session.commit()
+    return Benefactor_schema.dump(benefactores)
+
+@app.route('/eliminar_beneficiario', methods=['GET'] )
+def eliminar_beneficiario():
+    id = request.args.get('id')
+    beneficiarios = Beneficiario.query.get(id)
+    db.session.delete(beneficiarios)
+    db.session.commit()
+    return Beneficiario_schema.dump(beneficiarios)
+
+@app.route('/eliminar_categoria', methods=['GET'] )
+def eliminar_categoria():
+    id = request.args.get('id')
+    categorias = Categoria.query.get(id)
+    db.session.delete(categorias)
+    db.session.commit()
+    return Categoria_schema.dump(categorias)
+
+@app.route('/eliminar_subcategoria', methods=['GET'] )
+def eliminar_subcategoria():
+    id = request.args.get('id')
+    subcategorias = Subcategoria.query.get(id)
+    db.session.delete(subcategorias)
+    db.session.commit()
+    return Subcategoria_schema.dump(subcategorias)
+
+@app.route('/eliminar_vehiculo', methods=['GET'] )
+def eliminar_vehiculo():
+    id = request.args.get('id')
+    vehiculos = Vehiculo.query.get(id)
+    db.session.delete(vehiculos)
+    db.session.commit()
+    return Vehiculo_schema.dump(vehiculos)
+
+@app.route('/eliminar_usuario', methods=['GET'] )
+def eliminar_usuario():
+    id = request.args.get('id')
+    usuarios = Usuario.query.get(id)
+    db.session.delete(usuarios)
+    db.session.commit()
+    return Usuario_schema.dump(usuarios)
+
+@app.route('/eliminar_informe', methods=['GET'] )
+def eliminar_informe():
+    id = request.args.get('id')
+    informes = Informe.query.get(id)
+    db.session.delete(informes)
+    db.session.commit()
+    return Informe_schema.dump(informes)
+
 #METODOS GET LISTA
 
 @app.route('/entradas', methods=['GET'] )
