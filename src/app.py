@@ -288,8 +288,11 @@ def guardar_vehiculo():
 def guardar_usuario():
     email = request.form['email']
     password = request.form['password']
+    nombre = request.form['nombre']
+    cedula = request.form['cedula']
+    rol = request.form['rol']
     
-    Nuevo_usuario = Usuario(email, password)
+    Nuevo_usuario = Usuario(email, password, nombre, cedula, rol)
 
     db.session.add(Nuevo_usuario)
     db.session.commit()
@@ -660,6 +663,7 @@ def actualizar_usuario():
 
     db.session.commit()
     return redirect('/pagina_entradas')
+
 
     
 
