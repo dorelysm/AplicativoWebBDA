@@ -2,6 +2,8 @@ from flask import Flask, redirect, request, jsonify, json, session, render_templ
 
 from config.bd import app, db
 
+from flask_bcrypt import check_password_hash
+
 from modelos.Benefactores import Benefactor, BenefactorSchema
 from modelos.Usuario import Usuario, UsuarioSchema
 from modelos.Beneficiarios import Beneficiario, BeneficiarioSchema
@@ -55,10 +57,21 @@ def index():
 def ingresar():
     email = request.form['email']
     password = request.form['password']
+    """
     user = db.session.query(Usuario.id).filter(Usuario.email == email, Usuario.password == password).all()
     resultado = Usuarios_schema.dump(user)
 
     if len(resultado)>0:
+        session['usuario'] = email
+        return redirect('/inicio')
+    else:
+        return redirect('/')
+    """
+    # Busca al usuario por su dirección de correo electrónico
+    user = Usuario.query.filter_by(email=email).first()
+    
+    if user and check_password_hash(user.password_hash, password):
+        # Verifica si el usuario existe y si la contraseña coincide
         session['usuario'] = email
         return redirect('/inicio')
     else:
