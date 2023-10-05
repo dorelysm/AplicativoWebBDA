@@ -125,7 +125,17 @@ def pagina_bodegas():
     if 'usuario' in session:
         all_bodegas = Bodega.query.all()
         resultado_bodegas = Bodegas_schema.dump(all_bodegas)
-        return render_template('bodegas.html', bodegas = resultado_bodegas, usuario = session['usuario'])
+        all_categorias = Categoria.query.all()
+        resultado_categorias = Categorias_schema.dump(all_categorias)
+        all_subcategorias = Subcategoria.query.all()
+        resultado_subcategorias = Subcategorias_schema.dump(all_subcategorias)
+        all_productos = Producto.query.all()
+        resultado_productos = Productos_schema.dump(all_productos)
+        return render_template('bodegas.html', bodegas = resultado_bodegas, 
+                               categorias = resultado_categorias, 
+                               subcategorias = resultado_subcategorias, 
+                               productos = resultado_productos,
+                               usuario = session['usuario'])
     else:
         return redirect('/')
     
