@@ -127,10 +127,14 @@ def pagina_bodegas():
         resultado_bodegas = Bodegas_schema.dump(all_bodegas)
         all_categorias = Categoria.query.all()
         resultado_categorias = Categorias_schema.dump(all_categorias)
+        
+        #categorias = Categoria.query.filter_by(id_bodega = bodega)
+        
         all_subcategorias = Subcategoria.query.all()
         resultado_subcategorias = Subcategorias_schema.dump(all_subcategorias)
         all_productos = Producto.query.all()
         resultado_productos = Productos_schema.dump(all_productos)
+        
         return render_template('bodegas.html', bodegas = resultado_bodegas, 
                                categorias = resultado_categorias, 
                                subcategorias = resultado_subcategorias, 
@@ -464,6 +468,15 @@ def bodegas():
 def categorias():
     id = request.args.get('id')
     categorias = Categoria.query.get(id)
+    restul_categoria = Categoria_schema.dump(categorias)
+    return jsonify(restul_categoria)
+
+@app.route('/categorias_de_bodega', methods=['GET'] ) #Nueva
+def categorias_de_bodega():
+    id = request.args.get('id')
+    bodega = request.args.get('bodega_id')
+    #Subcategoria.query.filter_by(descripcion = nombre_subcategoria).first()
+    categorias = Categoria.query.filter_by(id_bodega = bodega)
     restul_categoria = Categoria_schema.dump(categorias)
     return jsonify(restul_categoria)
 
