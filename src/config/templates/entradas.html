@@ -9,17 +9,37 @@
     <main>
       <div class="container-fluid px-4">
         <h1 class="mt-4">Entradas</h1>
-        <a onclick="cargar_formulario()" class="btn btn-primary btn-block mb-4"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">Nueva entrada</a>
-        <a onclick="cargar_formulariobod()" class="btn btn-primary btn-block mb-4"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">Nueva bodega</a>
-        <a onclick="cargar_formulariocat()" class="btn btn-primary btn-block mb-4"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">Nueva categoria</a>
-        <a onclick="cargar_formulariosub()" class="btn btn-primary btn-block mb-4"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">Nueva subcategoria</a>
-        <a onclick="cargar_formularioprod()" class="btn btn-primary btn-block mb-4"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">Nuevo producto</a>
-        <a href="/pagina_productos" class="btn btn-primary btn-block mb-4">Ver producto</a>
 
         <ol class="breadcrumb mb-4">
           <li class="breadcrumb-item"><a href="/inicio">Sistema de inventario</a></li>
           <li class="breadcrumb-item active">Entradas</li>
         </ol>
+
+        <div class="container">
+          <div class="row align-items-center">
+            <div class="col">
+              Bodega:
+            </div>
+            <div class="col-10">
+              <select class="form-control" name="entradas">
+                {% for item in bodegas %}
+                    <option>{{item.nombre}}</option>  
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col">
+              <button class="btn btn-primary btn-block mb-4">
+                Cargar
+              </button>
+            </div>
+          </div>
+          <div class="container">
+            <!--<a onclick="cargar_formulario()" class="btn btn-primary btn-block mb-4"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">Nueva entrada</a>
+            -->
+            <a class="btn btn-primary btn-block mb-4" href="/pagina_nueva_entrada">Nueva entrada</a>
+          </div>
+        </div>
+
         <div class="card mb-4">
           <div class="card-header">
             <i class="fas fa-table me-1"></i>
@@ -32,19 +52,13 @@
                   <tr>
                     <th scope="col">Id entrada</th>
                     <th scope="col">Id benefactor</th>
-                    <th scope="col">Id producto</th>
                     <th scope="col">Fecha</th>
-                    <th scope="col">Cantidad (unidades)</th>
-                    <th scope="col">Fecha de vencimiento</th>
                     <th scope="col">Proceso de inventarios</th>
                     <th scope="col">Id del vehículo</th>
                     <th scope="col">Número de factura</th>
                     <th scope="col">Ingresado a Siigo</th>
                     <th scope="col">Tipo</th>
                     <th scope="col">Número de documento Siigo</th>
-                    <th scope="col">Cantidad averiada o vencida</th>
-                    <th scope="col">Cantidad en buen estado</th>
-                    <th scope="col">Cantidad aprobada</th>
                     <th scope="col">Observaciones</th>
                     <th scope="col" colspan="2"><center>Opciones</center></th>
                   </tr>
@@ -54,19 +68,13 @@
                   <tr>
                     <th scope="row">{{item.id}}</th>
                     <td>{{item.id_benefactor}}</td>
-                    <td>{{item.id_producto}}</td>
                     <td>{{item.fecha}}</td>
-                    <td>{{item.cantidad_unidades}}</td>
-                    <td>{{item.vencimiento}}</td>
                     <td>{{item.proceso_de_inventarios}}</td>
                     <td>{{item.id_vehiculo}}</td>
                     <td>{{item.num_factura}}</td>
                     <td>{{item.ingresado_al_sistema}}</td>
                     <td>{{item.tipo}}</td>
                     <td>{{item.num_documento_siigo}}</td>
-                    <td>{{item.cantidad_averiada_vencida_kg}}</td>
-                    <td>{{item.cantidad_buen_estado_kg}}</td>
-                    <td>{{item.cantidad_aprobada_kg}}</td>
                     <td>{{item.observaciones}}</td>
                     <td>
                       <a
@@ -92,73 +100,74 @@
               <script>
                 function cargar_formulario(){
                   const formulario = `
-                          <form action="/guardar_entrada" method="POST">
-                            <div class="form-group">
-                              <label for="recipient-name" class="col-form-label">Id del benefactor:</label>
-                              <input type="text" class="form-control" name="id_benefactor"  value="">
-                            </div>
-                            <div class="form-group">
-                              <label for="message-text" class="col-form-label">Id_producto:</label>
-                              <input type="text" class="form-control" name="id_producto"  value="">
-                            </div>
-                            <div class="form-group">
-                              <label for="message-text" class="col-form-label">Fecha:</label>
-                              <input type="text" class="form-control" name="fecha"  value="">
-                            </div>
-                            <div class="form-group">
-                              <label for="message-text" class="col-form-label">Cantidad (unidades):</label>
-                              <input type="text" class="form-control" name="cantidad_unidades"  value="">
-                            </div>
-                            <div class="form-group">
-                              <label for="message-text" class="col-form-label">Fecha de vencimiento:</label>
-                              <input type="text" class="form-control" name="vencimiento"  value="">
-                            </div>
-                            <div class="form-group">
-                              <label for="message-text" class="col-form-label">Observaciones:</label>
-                              <textarea type="text" class="form-control" name="observaciones"></textarea>
-                            </div>
-                            <div class="form-group">
-                              <label for="message-text" class="col-form-label">¿Procesado en inventarios?:</label>
-                              <input type="text" class="form-control" name="proceso_de_inventarios"  value="">
-                            </div>
-                            <div class="form-group">
-                              <label for="message-text" class="col-form-label">Id del vehículo:</label>
-                              <input type="text" class="form-control" name="id_vehiculo"  value="">
-                            </div>
-                            <div class="form-group">
-                              <label for="message-text" class="col-form-label">Número de factura:</label>
-                              <input type="text" class="form-control" name="num_factura"  value="">
-                            </div>
-                            <div class="form-group">
-                              <label for="message-text" class="col-form-label">¿Ingresado al sistema?:</label>
-                              <input type="text" class="form-control" name="ingresado_al_sistema"  value="">
-                            </div>
-                            <div class="form-group">
-                              <label for="message-text" class="col-form-label">Tipo:</label>
-                              <input type="text" class="form-control" name="tipo"  value="">
-                            </div>
-                            <div class="form-group">
-                              <label for="message-text" class="col-form-label">Número de documento en SIIGO:</label>
-                              <input type="text" class="form-control" name="num_documento_siigo"  value="">
-                            </div>
-                            <div class="form-group">
-                              <label for="message-text" class="col-form-label">Kilogramos averiados/vencidos:</label>
-                              <input type="text" class="form-control" name="cantidad_averiada_vencida_kg"  value="">
-                            </div>
-                            <div class="form-group">
-                              <label for="message-text" class="col-form-label">Kilogramos en buen estado:</label>
-                              <input type="text" class="form-control" name="cantidad_buen_estado_kg"  value="">
-                            </div>
-                            <div class="form-group">
-                              <label for="message-text" class="col-form-label">Kilogramos aprobados:</label>
-                              <input type="text" class="form-control" name="cantidad_aprobada_kg"  value="">
-                            </div>
-                            <div class="modal-footer">
-                              <button  type="submit" class="btn btn-primary">Guardar</button>
-                            </div>
-                          </form> 
+                    <form action="/guardar_entrada" method="POST">
+                      <label>Datos generales</label>
+                      <div class="form-group">
+                        <div class="form-group">
+                          <label for="recipient-name" class="col-form-label">Id del benefactor:</label>
+                          <input type="text" class="form-control" name="id_benefactor"  value="">
+                        </div>
+                        <div id="date-picker-example" class="md-form md-outline input-with-post-icon datepicker" inline="true">
+                          <input placeholder="Selecciona la fecha" type="text" id="example" class="form-control">
+                          <label for="example">Fecha</label>
+                          <i class="fas fa-calendar input-prefix"></i>
+                        </div>
+                        <div class="form-group">
+                          <label for="message-text" class="col-form-label">Fecha:</label>
+                          <input type="text" class="form-control" name="fecha"  value="">
+                        </div>
+                        <div class="form-group">
+                          <label for="message-text" class="col-form-label">¿Procesado en inventarios?:</label>
+                          <input type="text" class="form-control" name="proceso_de_inventarios"  value="">
+                        </div>
+                        <div class="form-group">
+                          <label for="message-text" class="col-form-label">Id del vehículo:</label>
+                          <input type="text" class="form-control" name="id_vehiculo"  value="">
+                        </div>
+                        <div class="form-group">
+                          <label for="message-text" class="col-form-label">Número de factura:</label>
+                          <input type="text" class="form-control" name="num_factura"  value="">
+                        </div>
+                        <div class="form-group">
+                          <label for="message-text" class="col-form-label">¿Ingresado al sistema?:</label>
+                          <input type="text" class="form-control" name="ingresado_al_sistema"  value="">
+                        </div>
+                        <div class="form-group">
+                          <label for="message-text" class="col-form-label">Tipo:</label>
+                          <input type="text" class="form-control" name="tipo"  value="">
+                        </div>
+                        <div class="form-group">
+                          <label for="message-text" class="col-form-label">Número de documento en SIIGO:</label>
+                          <input type="text" class="form-control" name="num_documento_siigo"  value="">
+                        </div>
+                        <div class="form-group">
+                          <label for="message-text" class="col-form-label">Observaciones:</label>
+                          <textarea type="text" class="form-control" name="observaciones"></textarea>
+                        </div>
+                      </div>
+                      
+                      <label>Datos de los productos</label>
+                      <div class="container">
+                        <button class="btn btn-primary">
+                          Agregar producto
+                        </button>
+                      </div>
+                      <div class="form-group disable">
+                        <div class="form-group">
+                          <label for="recipient-name" class="col-form-label">Id del benefactor:</label>
+                          <input type="text" class="form-control" name="id_benefactor"  value="">
+                        </div>
+                      </div>
+
+                      <div class="modal-footer">
+                        <button  type="submit" class="btn btn-primary">Guardar</button>
+                      </div>
+                    </form> 
                   `;
                   $("#fromartc").html(formulario);
+                  $('.datepicker').datepicker({
+                    inline: true
+                  });
               }
 
                 function eliminar(id) {

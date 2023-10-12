@@ -15,6 +15,7 @@ from modelos.Producto import Producto, ProductoSchema
 from modelos.Entradas import Entrada, EntradaSchema
 from modelos.Salidas import Salida, SalidaSchema
 from modelos.Informe import Informe, InformeSchema
+from modelos.productos_inventario import Producto_inventario, Producto_inventarioSchema
 
 Benefactor_schema = BenefactorSchema()
 Benefactores_schema = BenefactorSchema(many=True)
@@ -48,6 +49,9 @@ Salidas_schema = SalidaSchema(many=True)
 
 Informe_schema = InformeSchema()
 Informes_schema = InformeSchema(many=True)
+
+Producto_inventario_schema = Producto_inventarioSchema()
+Productos_inventario_schema = Producto_inventarioSchema(many=True)
 
 @app.route('/', methods=['GET'])
 def index():  
@@ -135,7 +139,7 @@ def pagina_bodegas():
         all_productos = Producto.query.all()
         resultado_productos = Productos_schema.dump(all_productos)
         
-        return render_template('bodegas.html', bodegas = resultado_bodegas, 
+        return render_template('pproductos.html', bodegas = resultado_bodegas, 
                                categorias = resultado_categorias, 
                                subcategorias = resultado_subcategorias, 
                                productos = resultado_productos,
@@ -164,11 +168,22 @@ def pagina_beneficiarios():
 @app.route('/pagina_productos', methods=['GET'])
 def pagina_productos():
     if 'usuario' in session:
-        all_productos = Producto.query.all()
-        resultado_productos = Productos_schema.dump(all_productos)
+        all_bodegas = Bodega.query.all()
+        resultado_bodegas = Bodegas_schema.dump(all_bodegas)
+        all_categorias = Categoria.query.all()
+        resultado_categorias = Categorias_schema.dump(all_categorias)
+        
+        #categorias = Categoria.query.filter_by(id_bodega = bodega)
+        
         all_subcategorias = Subcategoria.query.all()
         resultado_subcategorias = Subcategorias_schema.dump(all_subcategorias)
-        return render_template('productos.html', productos = resultado_productos, subcategorias = resultado_subcategorias, usuario = session['usuario'])
+        all_productos = Producto.query.all()
+        resultado_productos = Productos_schema.dump(all_productos)
+        return render_template('productos.html', bodegas = resultado_bodegas, 
+                               categorias = resultado_categorias, 
+                               subcategorias = resultado_subcategorias, 
+                               productos = resultado_productos,
+                               usuario = session['usuario'])
     else:
         return redirect('/')
     
@@ -178,6 +193,34 @@ def pagina_informes():
         all_informes = Informe.query.all()
         resultado_informes = Informes_schema.dump(all_informes)
         return render_template('informes.html', informes = resultado_informes, usuario = session['usuario'])
+    else:
+        return redirect('/')
+    
+@app.route('/pagina_nueva_entrada', methods=['GET'])
+def pagina_nueva_entrada():
+    if 'usuario' in session:
+        all_entradas = Entrada.query.all()
+        resultado_entradas = Entradas_schema.dump(all_entradas)
+        all_bodegas = Bodega.query.all()
+        resultado_bodegas = Bodegas_schema.dump(all_bodegas)
+        all_categorias = Categoria.query.all()
+        resultado_categorias = Categorias_schema.dump(all_categorias)
+        all_subcategorias = Subcategoria.query.all()
+        resultado_subcategorias = Subcategorias_schema.dump(all_subcategorias)
+        all_productos = Producto.query.all()
+        resultado_productos = Productos_schema.dump(all_productos)
+        all_benefactores = Benefactor.query.all()
+        resultado_benefactores = Benefactores_schema.dump(all_benefactores)
+        all_vehiculos = Vehiculo.query.all()
+        resultado_vehiculos = Vehiculo_schema.dump(all_vehiculos)
+        all_producto_inventario = Producto_inventario.query.all()
+        resultado_productos_inventario = Producto_inventario_schema.dump(all_producto_inventario)
+        return render_template('nueva_entrada.html', entradas = resultado_entradas, 
+                               bodegas = resultado_bodegas, categorias = resultado_categorias, 
+                               subcategorias = resultado_subcategorias, productos = resultado_productos, 
+                               benefactores = resultado_benefactores, vehiculos = resultado_vehiculos,
+                               productos_inventario = resultado_productos_inventario,
+                               usuario = session['usuario'])
     else:
         return redirect('/')
 
@@ -335,7 +378,22 @@ def guardar_benefactor():
 
     db.session.add(Nuevo_benefactor)
     db.session.commit()
-    return redirect('/pagina_benefactores')
+    return redirect('/pagina_nueva_entrada')
+
+@app.route('/nuevo_producto_inventario', methods=['POST'] )
+def guardar_producto_inventario():
+    desc_producto = request.form['producto']
+    cantidad = request.form['cantidad']
+    peso = request.form['peso']
+    vencimiento = request.form['vencimiento']
+    
+    producto = Producto.query.filter_by(descripcion = desc_producto).first()
+    
+    Nuevo_producto_inventario = Producto_inventario(producto.id_producto, cantidad, peso, vencimiento)
+
+    db.session.add(Nuevo_producto_inventario)
+    db.session.commit()
+    return redirect('/pagina_nueva_entrada')
     
 #METODOS ELIMINAR
 

@@ -1,0 +1,202 @@
+{% extends "layout.html" %}
+
+{%  block content %}
+
+{% include('modal.html') %}
+
+<form action="/guardar_entrada" method="POST">
+    
+    <div class="form-group container-fluid">
+        <div class="card mb-5">
+            <div class="card-header">
+                <label class="">Datos generales de la entrada</label>
+            </div>
+            
+            <div class="class-body container-fluid">
+                <!--
+                <div class="form-group">
+                    <label for="recipient-name" class="col-form-label">Id del benefactor:</label>
+                    <input type="text" class="form-control" name="id_benefactor"  value="">
+                </div>
+                -->
+                <div class="form-group">
+                    <label for="recipient-name" class="col-form-label">Benefactor:</label>
+                    <select class="form-control" name="benefactor">
+                        {% for item in benefactores %}
+                            <option>{{item.nombre}}</option>  
+                        {% endfor %}
+                    </select>
+                    <a onclick="cargar_formulario_benefactor()" class="btn btn-primary btn-block mb-4"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                        Nuevo benefactor
+                    </a>
+                </div>
+                
+                <div class="form-group">
+                    <label for="message-text" class="col-form-label">Fecha:</label>
+                    <input type="text" class="form-control" name="fecha"  value="">
+                </div>
+                <div class="form-group">
+                    <label for="message-text" class="col-form-label">¿Procesado en inventarios?:</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="proceso_de_inventarios" id="no" checked>
+                        <label class="form-check-label" for="flexRadioDefault1">
+                          No
+                        </label>
+                      </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="proceso_de_inventarios" id="si">
+                        <label class="form-check-label" for="flexRadioDefault1">
+                          Si
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="message-text" class="col-form-label">Vehículo:</label>
+                    <select class="form-control" name="vehiculo">
+                        {% for item in vehiculos %}
+                            <option>{{item.metricula}}</option>  
+                        {% endfor %}
+                    </select>
+                    <a onclick="cargar_formulario_vehiculo()" class="btn btn-primary btn-block mb-4"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                        Nuevo vehículo
+                    </a>
+                </div>
+                <div class="form-group">
+                    <label for="message-text" class="col-form-label">Número de factura:</label>
+                    <input type="text" class="form-control" name="num_factura"  value="">
+                </div>
+                <div class="form-group">
+                    <label for="message-text" class="col-form-label">¿Ingresado al sistema?:</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="ingresado_al_sistema" id="no" checked>
+                        <label class="form-check-label" for="flexRadioDefault1">
+                          No
+                        </label>
+                      </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="ingresado_al_sistema" id="si">
+                        <label class="form-check-label" for="flexRadioDefault1">
+                          Si
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="message-text" class="col-form-label">Tipo:</label>
+                    <input type="text" class="form-control" name="tipo"  value="">
+                </div>
+                <div class="form-group">
+                    <label for="message-text" class="col-form-label">Número de documento en SIIGO:</label>
+                    <input type="text" class="form-control" name="num_documento_siigo"  value="">
+                </div>
+                <div class="form-group">
+                    <label for="message-text" class="col-form-label">Observaciones:</label>
+                    <textarea type="text" class="form-control" name="observaciones"></textarea>
+                </div>
+            </div>
+            
+        </div>
+        
+    </div>
+    
+    <div class="form-group container-fluid">
+        <div class="card mb-5">
+            <div class="card-header">
+                <label>Datos de los productos</label>
+            </div>
+
+            <div class="card-body container-fluid">
+                <div class="" id="contenedor_productos">
+                    <form action="/nuevo_producto_inventario" method="POST"></form>
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Producto:</label>
+                            <select class="form-control" name="producto">
+                                {% for item in productos %}
+                                    <option>{{item.descripcion}}</option>  
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Cantidad:</label>
+                            <input type="text" class="form-control" name="cantidad_unidades"  value="">
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Peso:</label>
+                            <input type="text" class="form-control" name="peso"  value="">
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Fecha de vencimiento:</label>
+                            <input type="text" class="form-control" name="vencimiento"  value="">
+                        </div>
+
+                        <button  type="submit" class="btn btn-primary">Agregar</button>
+                    </form>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button  type="submit" class="btn btn-primary">Agregar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            Listado de productos
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Producto</th>
+                        <th scope="col">Cantidad</th>
+                        <th scope="col">Peso</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in productos_inventario %}
+                    <tr>
+                        <td scope="row">{{item.id_producto}}</td>
+                        <td scope="row">{{item.cantidad_unidades}}</td>
+                        <td scope="row">{{item.peso}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+
+    <div class="container">
+      <button  type="submit" class="btn btn-primary">Nueva entrada</button>
+    </div>
+  </form> 
+
+  <script>
+    function cargar_formulario_benefactor(){
+        const formulario = `
+            <form action="/nuevo_benefactor" method="POST">
+                <h4>
+                    Nuevo benefactor
+                </h4>
+                <div class="form-group">
+                    <label for="recipient-name" class="col-form-label">Nombre:</label>
+                    <input type="text" class="form-control" name="nombre"  value="">
+                </div>
+                <div class="form-group">
+                    <label for="recipient-name" class="col-form-label">Contacto:</label>
+                    <input type="text" class="form-control" name="contacto"  value="">
+                </div>
+                <div class="form-group">
+                    <label for="recipient-name" class="col-form-label">Dirección:</label>
+                    <input type="text" class="form-control" name="direccion"  value="">
+                </div>
+                    <div class="modal-footer">
+                        <button  type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form> 
+        `;
+        $("#fromartc").html(formulario);
+        }
+  </script>
+
+{% endblock %}
