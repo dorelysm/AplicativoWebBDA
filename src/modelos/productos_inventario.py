@@ -15,9 +15,9 @@ class Producto_inventario(db.Model):
     cantidad_buen_estado = db.Column(db.Integer)
     cantidad_aprobada = db.Column(db.Integer)
 
-    def __init__(self, id_producto, id_entrada, cantidad_unidades, peso, 
-                 vencimiento, cantidad_averiada_vencida, 
-                 cantidad_buen_estado, cantidad_aprobada):
+    def __init__(self, id_producto = None, id_entrada= None, cantidad_unidades= None, peso= None, 
+                 vencimiento= None, cantidad_averiada_vencida= None, 
+                 cantidad_buen_estado= None, cantidad_aprobada= None):
         self.id_producto = id_producto
         self.id_entrada = id_entrada
         self.cantidad_unidades = cantidad_unidades

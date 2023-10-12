@@ -54,7 +54,7 @@
                     <label for="message-text" class="col-form-label">Vehículo:</label>
                     <select class="form-control" name="vehiculo">
                         {% for item in vehiculos %}
-                            <option>{{item.metricula}}</option>  
+                            <option>{{item.matricula}}</option>  
                         {% endfor %}
                     </select>
                     <a onclick="cargar_formulario_vehiculo()" class="btn btn-primary btn-block mb-4"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">
@@ -105,35 +105,9 @@
             </div>
 
             <div class="card-body container-fluid">
-                <div class="" id="contenedor_productos">
-                    <form action="/nuevo_producto_inventario" method="POST"></form>
-                        <div class="form-group">
-                            <label for="recipient-name" class="col-form-label">Producto:</label>
-                            <select class="form-control" name="producto">
-                                {% for item in productos %}
-                                    <option>{{item.descripcion}}</option>  
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="message-text" class="col-form-label">Cantidad:</label>
-                            <input type="text" class="form-control" name="cantidad_unidades"  value="">
-                        </div>
-                        <div class="form-group">
-                            <label for="message-text" class="col-form-label">Peso:</label>
-                            <input type="text" class="form-control" name="peso"  value="">
-                        </div>
-                        <div class="form-group">
-                            <label for="message-text" class="col-form-label">Fecha de vencimiento:</label>
-                            <input type="text" class="form-control" name="vencimiento"  value="">
-                        </div>
-
-                        <button  type="submit" class="btn btn-primary">Agregar</button>
-                    </form>
-                </div>
-            </div>
-            <div class="card-footer">
-                <button  type="submit" class="btn btn-primary">Agregar</button>
+                <a onclick="cargar_formulario_producto_inventario()" class="btn btn-primary btn-block mb-4"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                    Agregar_producto
+                </a>
             </div>
         </div>
     </div>
@@ -194,6 +168,60 @@
                         <button  type="submit" class="btn btn-primary">Guardar</button>
                 </div>
             </form> 
+        `;
+        $("#fromartc").html(formulario);
+        }
+        function cargar_formulario_vehiculo(){
+        const formulario = `
+            <form action="/nuevo_vehiculo" method="POST">
+                <h4>
+                    Nuevo vehículo
+                </h4>
+                <div class="form-group">
+                    <label for="recipient-name" class="col-form-label">Matrícula:</label>
+                    <input type="text" class="form-control" name="matricula"  value="">
+                </div>
+                <div class="form-group">
+                    <label for="recipient-name" class="col-form-label">Conductor:</label>
+                    <input type="text" class="form-control" name="conductor"  value="">
+                </div>
+                    <div class="modal-footer">
+                        <button  type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form> 
+        `;
+        $("#fromartc").html(formulario);
+        }
+
+        function cargar_formulario_producto_inventario(){
+        const formulario = `
+        <form action="/nuevo_producto_inventario_lista" method="POST">
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Producto:</label>
+                            <select class="form-control" name="producto">
+                                {% for item in productos %}
+                                    <option>{{item.descripcion}}</option>  
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Cantidad:</label>
+                            <input type="text" class="form-control" name="cantidad_unidades"  value="">
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Peso:</label>
+                            <input type="text" class="form-control" name="peso"  value="">
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Fecha de vencimiento:</label>
+                            <input type="text" class="form-control" name="vencimiento"  value="">
+                        </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button  type="submit" class="btn btn-primary">Agregar producto</button>
+                        </div>
+                        
+                    </form>
         `;
         $("#fromartc").html(formulario);
         }

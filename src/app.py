@@ -53,6 +53,8 @@ Informes_schema = InformeSchema(many=True)
 Producto_inventario_schema = Producto_inventarioSchema()
 Productos_inventario_schema = Producto_inventarioSchema(many=True)
 
+productos_lista = []
+
 @app.route('/', methods=['GET'])
 def index():  
     return render_template("login.html")
@@ -212,14 +214,15 @@ def pagina_nueva_entrada():
         all_benefactores = Benefactor.query.all()
         resultado_benefactores = Benefactores_schema.dump(all_benefactores)
         all_vehiculos = Vehiculo.query.all()
-        resultado_vehiculos = Vehiculo_schema.dump(all_vehiculos)
+        resultado_vehiculos = Vehiculos_schema.dump(all_vehiculos)
         all_producto_inventario = Producto_inventario.query.all()
         resultado_productos_inventario = Producto_inventario_schema.dump(all_producto_inventario)
+        lista_de_productos = productos_lista
         return render_template('nueva_entrada.html', entradas = resultado_entradas, 
                                bodegas = resultado_bodegas, categorias = resultado_categorias, 
                                subcategorias = resultado_subcategorias, productos = resultado_productos, 
                                benefactores = resultado_benefactores, vehiculos = resultado_vehiculos,
-                               productos_inventario = resultado_productos_inventario,
+                               productos_inventario = lista_de_productos, 
                                usuario = session['usuario'])
     else:
         return redirect('/')
@@ -230,10 +233,7 @@ def pagina_nueva_entrada():
 #@jwt_required()
 def guardar_entrada():
     id_benefactor = request.form['id_benefactor']
-    id_producto = request.form['id_producto']
     fecha = request.form['fecha']
-    cantidad_unidades = request.form['cantidad_unidades']
-    vencimiento = request.form['vencimiento']
     observaciones = request.form['observaciones']
     proceso_de_inventarios = request.form['proceso_de_inventarios']
     id_vehiculo = request.form['id_vehiculo']
@@ -241,20 +241,13 @@ def guardar_entrada():
     ingresado_al_sistema = request.form['ingresado_al_sistema']
     tipo = request.form['tipo']
     num_documento_siigo = request.form['num_documento_siigo']
-    cantidad_averiada_vencida_kg = request.form['cantidad_averiada_vencida_kg']
-    cantidad_buen_estado_kg = request.form['cantidad_buen_estado_kg']
-    cantidad_aprobada_kg = request.form['cantidad_aprobada_kg']
     
-    nueva_donacion = Entrada(id_benefactor=id_benefactor, id_producto=id_producto,
-                             fecha=fecha,cantidad_unidades=cantidad_unidades,
-                             vencimiento=vencimiento, observaciones=observaciones, 
+    nueva_donacion = Entrada(id_benefactor=id_benefactor, fecha=fecha,
+                             observaciones=observaciones, 
                              proceso_de_inventarios=proceso_de_inventarios,
                              id_vehiculo=id_vehiculo, num_factura=num_factura, 
                              ingresado_al_sistema=ingresado_al_sistema,
-                             tipo=tipo, num_documento_siigo=num_documento_siigo,
-                             cantidad_averiada_vencida_kg=cantidad_averiada_vencida_kg,
-                             cantidad_buen_estado_kg=cantidad_buen_estado_kg,
-                             cantidad_aprobada_kg=cantidad_aprobada_kg)
+                             tipo=tipo, num_documento_siigo=num_documento_siigo)
 
     db.session.add(nueva_donacion)
     db.session.commit()
@@ -301,7 +294,7 @@ def guardar_bodega():
 
     db.session.add(Nuevo_bodega)
     db.session.commit()
-    return redirect('/inicio')
+    return redirect('/pagina_productos')
 
 @app.route('/nueva_categoria', methods=['POST'] )
 def guardar_categoria():
@@ -314,7 +307,7 @@ def guardar_categoria():
 
     db.session.add(Nuevo_categoria)
     db.session.commit()
-    return redirect('/inicio')
+    return redirect('/pagina_productos')
 
 @app.route('/nueva_subcategoria', methods=['POST'] )
 def guardar_subcategoria():
@@ -327,7 +320,7 @@ def guardar_subcategoria():
 
     db.session.add(Nuevo_subcategoria)
     db.session.commit()
-    return redirect('/inicio')
+    return redirect('/pagina_productos')
 
 @app.route('/nuevo_producto', methods=['POST'] )
 def guardar_producto():
@@ -341,7 +334,7 @@ def guardar_producto():
 
     db.session.add(Nuevo_producto)
     db.session.commit()
-    return redirect('/inicio')
+    return redirect('/pagina_productos')
 
 @app.route('/nuevo_vehiculo', methods=['POST'] )
 def guardar_vehiculo():
@@ -352,7 +345,7 @@ def guardar_vehiculo():
 
     db.session.add(Nuevo_vehiculo)
     db.session.commit()
-    return redirect('/inicio')
+    return redirect('/pagina_nueva_entrada')
 
 @app.route('/nuevo_usuario', methods=['POST'] )
 def guardar_usuario():
@@ -382,17 +375,38 @@ def guardar_benefactor():
 
 @app.route('/nuevo_producto_inventario', methods=['POST'] )
 def guardar_producto_inventario():
-    desc_producto = request.form['producto']
-    cantidad = request.form['cantidad']
-    peso = request.form['peso']
-    vencimiento = request.form['vencimiento']
-    
-    producto = Producto.query.filter_by(descripcion = desc_producto).first()
-    
-    Nuevo_producto_inventario = Producto_inventario(producto.id_producto, cantidad, peso, vencimiento)
+    #id_entrada = request.form['producto']
+    for i in productos_lista:
+        for j in range(productos_lista[i].len()):
+            if j == 0:
+                id_producto = productos_lista[i,j]
+            elif j == 1:
+                cantidad = productos_lista[i,j]
+            elif j == 2:
+                peso = productos_lista[i,j]
+            elif j == 3:
+                vencimiento = productos_lista[i,j]
+                
+        Nuevo_producto_inventario = Producto_inventario(id_producto=id_producto, 
+                                                        cantidad=cantidad, peso=peso, 
+                                                        vencimiento=vencimiento)
 
     db.session.add(Nuevo_producto_inventario)
     db.session.commit()
+    return redirect('/pagina_nueva_entrada')
+
+@app.route('/nuevo_producto_inventario_lista', methods=['GET', 'POST'])
+def guardar_producto_inventario_lista():
+    desc_producto = request.form['producto']
+    cantidad = request.form['cantidad_unidades']
+    peso = request.form['peso']
+    vencimiento = request.form['vencimiento']
+
+    producto = Producto.query.filter_by(descripcion = desc_producto).first()
+    print(productos_lista)
+    productos_lista.append([producto.id, cantidad, peso, vencimiento])
+    print(productos_lista)
+
     return redirect('/pagina_nueva_entrada')
     
 #METODOS ELIMINAR

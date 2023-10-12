@@ -98,78 +98,6 @@
               </table>
 
               <script>
-                function cargar_formulario(){
-                  const formulario = `
-                    <form action="/guardar_entrada" method="POST">
-                      <label>Datos generales</label>
-                      <div class="form-group">
-                        <div class="form-group">
-                          <label for="recipient-name" class="col-form-label">Id del benefactor:</label>
-                          <input type="text" class="form-control" name="id_benefactor"  value="">
-                        </div>
-                        <div id="date-picker-example" class="md-form md-outline input-with-post-icon datepicker" inline="true">
-                          <input placeholder="Selecciona la fecha" type="text" id="example" class="form-control">
-                          <label for="example">Fecha</label>
-                          <i class="fas fa-calendar input-prefix"></i>
-                        </div>
-                        <div class="form-group">
-                          <label for="message-text" class="col-form-label">Fecha:</label>
-                          <input type="text" class="form-control" name="fecha"  value="">
-                        </div>
-                        <div class="form-group">
-                          <label for="message-text" class="col-form-label">¿Procesado en inventarios?:</label>
-                          <input type="text" class="form-control" name="proceso_de_inventarios"  value="">
-                        </div>
-                        <div class="form-group">
-                          <label for="message-text" class="col-form-label">Id del vehículo:</label>
-                          <input type="text" class="form-control" name="id_vehiculo"  value="">
-                        </div>
-                        <div class="form-group">
-                          <label for="message-text" class="col-form-label">Número de factura:</label>
-                          <input type="text" class="form-control" name="num_factura"  value="">
-                        </div>
-                        <div class="form-group">
-                          <label for="message-text" class="col-form-label">¿Ingresado al sistema?:</label>
-                          <input type="text" class="form-control" name="ingresado_al_sistema"  value="">
-                        </div>
-                        <div class="form-group">
-                          <label for="message-text" class="col-form-label">Tipo:</label>
-                          <input type="text" class="form-control" name="tipo"  value="">
-                        </div>
-                        <div class="form-group">
-                          <label for="message-text" class="col-form-label">Número de documento en SIIGO:</label>
-                          <input type="text" class="form-control" name="num_documento_siigo"  value="">
-                        </div>
-                        <div class="form-group">
-                          <label for="message-text" class="col-form-label">Observaciones:</label>
-                          <textarea type="text" class="form-control" name="observaciones"></textarea>
-                        </div>
-                      </div>
-                      
-                      <label>Datos de los productos</label>
-                      <div class="container">
-                        <button class="btn btn-primary">
-                          Agregar producto
-                        </button>
-                      </div>
-                      <div class="form-group disable">
-                        <div class="form-group">
-                          <label for="recipient-name" class="col-form-label">Id del benefactor:</label>
-                          <input type="text" class="form-control" name="id_benefactor"  value="">
-                        </div>
-                      </div>
-
-                      <div class="modal-footer">
-                        <button  type="submit" class="btn btn-primary">Guardar</button>
-                      </div>
-                    </form> 
-                  `;
-                  $("#fromartc").html(formulario);
-                  $('.datepicker').datepicker({
-                    inline: true
-                  });
-              }
-
                 function eliminar(id) {
                   url = "/eliminar_entrada";
                   var request = $.ajax({
@@ -206,20 +134,8 @@
                               <input type="text" class="form-control" name="id_benefactor"  value="${data.id_benefactor}">
                             </div>
                             <div class="form-group">
-                              <label for="message-text" class="col-form-label">Id_producto:</label>
-                              <input type="text" class="form-control" name="id_producto"  value="${data.id_producto}">
-                            </div>
-                            <div class="form-group">
                               <label for="message-text" class="col-form-label">Fecha:</label>
                               <input type="text" class="form-control" name="fecha"  value="${data.fecha}">
-                            </div>
-                            <div class="form-group">
-                              <label for="message-text" class="col-form-label">Cantidad (unidades):</label>
-                              <input type="text" class="form-control" name="cantidad_unidades"  value="${data.cantidad_unidades}">
-                            </div>
-                            <div class="form-group">
-                              <label for="message-text" class="col-form-label">Días para el vencimiento:</label>
-                              <input type="text" class="form-control" name="vencimiento"  value="${data.vencimiento}">
                             </div>
                             <div class="form-group">
                               <label for="message-text" class="col-form-label">Observaciones:</label>
@@ -249,18 +165,6 @@
                               <label for="message-text" class="col-form-label">Número de documento en SIIGO:</label>
                               <input type="text" class="form-control" name="num_documento_siigo"  value="${data.num_documento_siigo}">
                             </div>
-                            <div class="form-group">
-                              <label for="message-text" class="col-form-label">Kilogramos averiados/vencidos:</label>
-                              <input type="text" class="form-control" name="cantidad_averiada_vencida_kg"  value="${data.cantidad_averiada_vencida_kg}">
-                            </div>
-                            <div class="form-group">
-                              <label for="message-text" class="col-form-label">Kilogramos en buen estado:</label>
-                              <input type="text" class="form-control" name="cantidad_buen_estado_kg"  value="${data.cantidad_buen_estado_kg}">
-                            </div>
-                            <div class="form-group">
-                              <label for="message-text" class="col-form-label">Kilogramos aprobados:</label>
-                              <input type="text" class="form-control" name="cantidad_aprobada_kg"  value="${data.cantidad_aprobada_kg}">
-                            </div>
                             <div class="modal-footer">
                               <button  type="submit" class="btn btn-primary">Guardar</button>
                             </div>
@@ -272,95 +176,6 @@
                       alert( "Error" + textStatus );
                   });
               }
-
-              function cargar_formulariobod(){
-                const formulario = `
-                        <form action="/nueva_bodega" method="POST">
-                          <div class="form-group">
-                            <label for="recipient-name" class="col-form-label">Nombre:</label>
-                            <input type="text" class="form-control" name="nombre"  value="">
-                          </div>
-                          <div class="modal-footer">
-                            <button  type="submit" class="btn btn-primary">Guardar</button>
-                          </div>
-                        </form> 
-                `;
-                $("#fromartc").html(formulario);
-            }
-
-            function cargar_formulariocat(){
-              const formulario = `
-                      <form action="/nueva_categoria" method="POST">
-                        <div class="form-group">
-                          <label for="recipient-name" class="col-form-label">Bodega:</label>
-                          <select class="form-control" name="bodega">
-                            {% for item in bodegas %}
-                            <option>{{item.nombre}}</option>  
-                            {% endfor %}
-                          </select>
-                        </div>
-                        <div class="form-group">
-                          <label for="recipient-name" class="col-form-label">Descripcion:</label>
-                          <input type="text" class="form-control" name="descripcion"  value="">
-                        </div>
-                        <div class="modal-footer">
-                          <button  type="submit" class="btn btn-primary">Guardar</button>
-                        </div>
-                      </form> 
-              `;
-              $("#fromartc").html(formulario);
-          }
-
-          function cargar_formulariosub(){
-            const formulario = `
-                    <form action="/nueva_subcategoria" method="POST">
-                      <div class="form-group">
-                        <label for="recipient-name" class="col-form-label">Id categoria:</label>
-                        <select class="form-control" name="categoria">
-                          {% for item in categorias %}
-                          <option>{{item.descripcion}}</option>
-                          {% endfor %}
-                        </select>
-                      </div>
-                      <div class="form-group">
-                        <label for="recipient-name" class="col-form-label">Descripcion:</label>
-                        <input type="text" class="form-control" name="descripcion"  value="">
-                      </div>
-                      <div class="modal-footer">
-                        <button  type="submit" class="btn btn-primary">Guardar</button>
-                      </div>
-                    </form> 
-            `;
-            $("#fromartc").html(formulario);
-        }
-
-        function cargar_formularioprod(){
-          const formulario = `
-                  <form action="/nuevo_producto" method="POST">
-                    <div class="form-group">
-                      <label for="recipient-name" class="col-form-label">Id subcategoria:</label>
-                      <select class="form-control" name="subcategoria">
-                        {% for item in subcategorias %}
-                        <option>{{item.descripcion}}</option>
-                        {% endfor %}
-                      </select>
-                    </div>
-                    <div class="form-group">
-                      <label for="recipient-name" class="col-form-label">Descripcion:</label>
-                      <input type="text" class="form-control" name="descripcion"  value="">
-                    </div>
-                    <div class="form-group">
-                      <label for="recipient-name" class="col-form-label">Peso (Kg):</label>
-                      <input type="text" class="form-control" name="peso"  value="">
-                    </div>
-                    <div class="modal-footer">
-                      <button  type="submit" class="btn btn-primary">Guardar</button>
-                    </div>
-                  </form> 
-          `;
-          $("#fromartc").html(formulario);
-      }
-
               </script>
             </div>
           </div>
