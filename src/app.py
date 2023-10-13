@@ -207,12 +207,6 @@ def pagina_nueva_entrada():
     if 'usuario' in session:
         all_entradas = Entrada.query.all()
         resultado_entradas = Entradas_schema.dump(all_entradas)
-        all_bodegas = Bodega.query.all()
-        resultado_bodegas = Bodegas_schema.dump(all_bodegas)
-        all_categorias = Categoria.query.all()
-        resultado_categorias = Categorias_schema.dump(all_categorias)
-        all_subcategorias = Subcategoria.query.all()
-        resultado_subcategorias = Subcategorias_schema.dump(all_subcategorias)
         all_productos = Producto.query.all()
         resultado_productos = Productos_schema.dump(all_productos)
         all_benefactores = Benefactor.query.all()
@@ -223,10 +217,33 @@ def pagina_nueva_entrada():
         resultado_productos_inventario = Productos_inventario_schema.dump(all_producto_inventario)
 
         return render_template('nueva_entrada.html', entradas = resultado_entradas, 
-                               bodegas = resultado_bodegas, categorias = resultado_categorias, 
-                               subcategorias = resultado_subcategorias, productos = resultado_productos, 
+                               productos = resultado_productos, 
                                benefactores = resultado_benefactores, vehiculos = resultado_vehiculos,
                                productos_inventario = resultado_productos_inventario, 
+                               usuario = session['usuario'])
+    else:
+        return redirect('/')
+    
+@app.route('/cargar_productos_por_entrada', methods=['GET', 'POST'])
+def cargar_productos_por_entrada():
+    if 'usuario' in session:
+        entrada = request.form['entrada_para_lista']
+        
+        carrito = Producto_inventario.query.filter_by(id_entrada = entrada)
+        resultado_carrito = Productos_inventario_schema.dump(carrito)
+        
+        all_entradas = Entrada.query.all()
+        resultado_entradas = Entradas_schema.dump(all_entradas)
+        all_productos = Producto.query.all()
+        resultado_productos = Productos_schema.dump(all_productos)
+        all_benefactores = Benefactor.query.all()
+        resultado_benefactores = Benefactores_schema.dump(all_benefactores)
+        all_vehiculos = Vehiculo.query.all()
+        resultado_vehiculos = Vehiculos_schema.dump(all_vehiculos)
+
+        return render_template('nueva_entrada.html', productos_inventario = resultado_carrito,
+                               entradas = resultado_entradas, productos = resultado_productos, 
+                               benefactores = resultado_benefactores, vehiculos = resultado_vehiculos,
                                usuario = session['usuario'])
     else:
         return redirect('/')
