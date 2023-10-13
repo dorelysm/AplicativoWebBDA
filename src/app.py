@@ -97,22 +97,26 @@ def cerrar():
 
 #METODOS PARA VER PAGINAS
 
-@app.route('/pagina_entradas', methods=['GET'])
+@app.route('/pagina_entradas/', methods=['GET', 'POST'])
 def pagina_entradas():
     if 'usuario' in session:
         all_entradas = Entrada.query.all()
         resultado_entradas = Entradas_schema.dump(all_entradas)
-        all_bodegas = Bodega.query.all()
-        resultado_bodegas = Bodegas_schema.dump(all_bodegas)
-        all_categorias = Categoria.query.all()
-        resultado_categorias = Categorias_schema.dump(all_categorias)
-        all_subcategorias = Subcategoria.query.all()
-        resultado_subcategorias = Subcategorias_schema.dump(all_subcategorias)
-        all_productos = Producto.query.all()
-        resultado_productos = Productos_schema.dump(all_productos)
+        
         return render_template('entradas.html', entradas = resultado_entradas, 
-                               bodegas = resultado_bodegas, categorias = resultado_categorias, 
-                               subcategorias = resultado_subcategorias, productos = resultado_productos, 
+                               usuario = session['usuario'])
+    else:
+        return redirect('/')
+    
+@app.route('/cargar_entradas_por_fecha', methods=['GET', 'POST'])
+def cargar_entradas_por_fecha():
+    if 'usuario' in session:
+        fecha_sel = request.form['fecha_datepicker']
+        print(fecha_sel)
+        entradas = Entrada.query.filter_by(fecha = fecha_sel)
+        resultado_entradas = Entradas_schema.dump(entradas)
+        print(resultado_entradas)
+        return render_template('entradas.html', entradas = resultado_entradas, 
                                usuario = session['usuario'])
     else:
         return redirect('/')
@@ -216,13 +220,13 @@ def pagina_nueva_entrada():
         all_vehiculos = Vehiculo.query.all()
         resultado_vehiculos = Vehiculos_schema.dump(all_vehiculos)
         all_producto_inventario = Producto_inventario.query.all()
-        resultado_productos_inventario = Producto_inventario_schema.dump(all_producto_inventario)
-        lista_de_productos = productos_lista
+        resultado_productos_inventario = Productos_inventario_schema.dump(all_producto_inventario)
+
         return render_template('nueva_entrada.html', entradas = resultado_entradas, 
                                bodegas = resultado_bodegas, categorias = resultado_categorias, 
                                subcategorias = resultado_subcategorias, productos = resultado_productos, 
                                benefactores = resultado_benefactores, vehiculos = resultado_vehiculos,
-                               productos_inventario = lista_de_productos, 
+                               productos_inventario = resultado_productos_inventario, 
                                usuario = session['usuario'])
     else:
         return redirect('/')
@@ -232,20 +236,23 @@ def pagina_nueva_entrada():
 @app.route('/guardar_entrada', methods=['POST'] )
 #@jwt_required()
 def guardar_entrada():
-    id_benefactor = request.form['id_benefactor']
-    fecha = request.form['fecha']
+    nombre_benefactor = request.form['benefactor']
+    fecha = request.form['fecha_datepicker']
     observaciones = request.form['observaciones']
     proceso_de_inventarios = request.form['proceso_de_inventarios']
-    id_vehiculo = request.form['id_vehiculo']
+    matricula_vehiculo = request.form['vehiculo']
     num_factura = request.form['num_factura']
     ingresado_al_sistema = request.form['ingresado_al_sistema']
     tipo = request.form['tipo']
     num_documento_siigo = request.form['num_documento_siigo']
     
-    nueva_donacion = Entrada(id_benefactor=id_benefactor, fecha=fecha,
+    benefactor = Benefactor.query.filter_by(nombre=nombre_benefactor).first()
+    vehiculo = Vehiculo.query.filter_by(matricula=matricula_vehiculo).first()
+    
+    nueva_donacion = Entrada(id_benefactor=benefactor.id, fecha=fecha,
                              observaciones=observaciones, 
                              proceso_de_inventarios=proceso_de_inventarios,
-                             id_vehiculo=id_vehiculo, num_factura=num_factura, 
+                             id_vehiculo=vehiculo.id, num_factura=num_factura, 
                              ingresado_al_sistema=ingresado_al_sistema,
                              tipo=tipo, num_documento_siigo=num_documento_siigo)
 
@@ -375,38 +382,21 @@ def guardar_benefactor():
 
 @app.route('/nuevo_producto_inventario', methods=['POST'] )
 def guardar_producto_inventario():
-    #id_entrada = request.form['producto']
-    for i in productos_lista:
-        for j in range(productos_lista[i].len()):
-            if j == 0:
-                id_producto = productos_lista[i,j]
-            elif j == 1:
-                cantidad = productos_lista[i,j]
-            elif j == 2:
-                peso = productos_lista[i,j]
-            elif j == 3:
-                vencimiento = productos_lista[i,j]
-                
-        Nuevo_producto_inventario = Producto_inventario(id_producto=id_producto, 
-                                                        cantidad=cantidad, peso=peso, 
-                                                        vencimiento=vencimiento)
-
-    db.session.add(Nuevo_producto_inventario)
-    db.session.commit()
-    return redirect('/pagina_nueva_entrada')
-
-@app.route('/nuevo_producto_inventario_lista', methods=['GET', 'POST'])
-def guardar_producto_inventario_lista():
+    id_entrada = request.form['entrada']
     desc_producto = request.form['producto']
     cantidad = request.form['cantidad_unidades']
     peso = request.form['peso']
-    vencimiento = request.form['vencimiento']
-
+    vencimiento = request.form['vencimiento_datepicker']
+    print(desc_producto)
+    #entrada = Entrada.query.filter_by()
     producto = Producto.query.filter_by(descripcion = desc_producto).first()
-    print(productos_lista)
-    productos_lista.append([producto.id, cantidad, peso, vencimiento])
-    print(productos_lista)
 
+    Nuevo_producto_inventario = Producto_inventario(id_entrada=id_entrada ,id_producto=producto.id, 
+                                                    cantidad_unidades=cantidad, peso=peso, 
+                                                    vencimiento=vencimiento)
+
+    db.session.add(Nuevo_producto_inventario)
+    db.session.commit()
     return redirect('/pagina_nueva_entrada')
     
 #METODOS ELIMINAR
@@ -501,7 +491,7 @@ def eliminar_informe():
 
 #METODOS GET LISTA
 
-@app.route('/entradas', methods=['GET'] )
+@app.route('/entradas', methods=['GET', 'POST'] )
 def entradas():
     id = request.args.get('id')
     entradas = Entrada.query.get(id)
@@ -593,10 +583,7 @@ def usuarios():
 def actualizar():
     id = request.form['id']
     id_benefactor = request.form['id_benefactor']
-    id_producto = request.form['id_producto']
     fecha = request.form['fecha']
-    cantidad_unidades = request.form['cantidad_unidades']
-    vencimiento = request.form['vencimiento']
     observaciones = request.form['observaciones']
     proceso_de_inventarios = request.form['proceso_de_inventarios']
     id_vehiculo = request.form['id_vehiculo']
@@ -604,16 +591,10 @@ def actualizar():
     ingresado_al_sistema = request.form['ingresado_al_sistema']
     tipo = request.form['tipo']
     num_documento_siigo = request.form['num_documento_siigo']
-    cantidad_averiada_vencida_kg = request.form['cantidad_averiada_vencida_kg']
-    cantidad_buen_estado_kg = request.form['cantidad_buen_estado_kg']
-    cantidad_aprobada_kg = request.form['cantidad_aprobada_kg']
 
     entrada = Entrada.query.get(id)
     entrada.id_benefactor = id_benefactor
-    entrada.id_producto = id_producto
     entrada.fecha = fecha
-    entrada.cantidad_unidades = cantidad_unidades
-    entrada.vencimiento = vencimiento
     entrada.observaciones = observaciones
     entrada.proceso_de_inventarios = proceso_de_inventarios
     entrada.id_vehiculo = id_vehiculo
@@ -621,9 +602,6 @@ def actualizar():
     entrada.ingresado_al_sistema = ingresado_al_sistema
     entrada.tipo = tipo
     entrada.num_documento_siigo = num_documento_siigo
-    entrada.cantidad_averiada_vencida_kg = cantidad_averiada_vencida_kg
-    entrada.cantidad_buen_estado_kg = cantidad_buen_estado_kg
-    entrada.cantidad_aprobada_kg = cantidad_aprobada_kg
 
     db.session.commit()
     return redirect('/pagina_entradas')

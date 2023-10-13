@@ -4,7 +4,8 @@ class Entrada(db.Model):
     __tablename__ = 'Entrada'
     id = db.Column(db.Integer, primary_key=True)
     id_benefactor = db.Column(db.Integer, db.ForeignKey('Benefactor.id'))
-    fecha = db.Column(db.String(50))
+    #fecha = db.Column(db.Date)
+    fecha = db.Column(db.String(10))
     observaciones = db.Column(db.String(500))
 
     proceso_de_inventarios = db.Column(db.String(1)) #Cambiar por Boolean
@@ -14,7 +15,7 @@ class Entrada(db.Model):
     tipo = db.Column(db.String(50))
     num_documento_siigo = db.Column(db.Integer)
 
-    def __init__(self, id_benefactor = None, fecha = None, 
+    def __init__(self, id_benefactor = None, fecha = None,
                  observaciones = None, proceso_de_inventarios = None, 
                  id_vehiculo = None, num_factura = None, ingresado_al_sistema = None, 
                  tipo = None, num_documento_siigo = None):

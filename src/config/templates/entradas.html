@@ -16,23 +16,18 @@
         </ol>
 
         <div class="container">
-          <div class="row align-items-center">
-            <div class="col">
-              Bodega:
+          <form action="/cargar_entradas_por_fecha" method="POST">
+            <div class="row align-items-start">
+              <div class="col form-group">
+                <label for="message-text" class="col-form-label">Fecha:</label>
+                <input data-date-format="yyyy-mm-dd" name="fecha_datepicker" id="datepicker">
             </div>
-            <div class="col-10">
-              <select class="form-control" name="entradas">
-                {% for item in bodegas %}
-                    <option>{{item.nombre}}</option>  
-                {% endfor %}
-              </select>
+              <div class="col align-self-center">
+                <button  type="submit" class="btn btn-primary">Cargar</button>
+              </div>
             </div>
-            <div class="col">
-              <button class="btn btn-primary btn-block mb-4">
-                Cargar
-              </button>
-            </div>
-          </div>
+          </form>
+          
           <div class="container">
             <!--<a onclick="cargar_formulario()" class="btn btn-primary btn-block mb-4"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">Nueva entrada</a>
             -->
@@ -177,6 +172,22 @@
                   });
               }
               </script>
+
+              <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+              <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
+
+              <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script><script type="text/javascript">
+                $('#datepicker').datepicker({
+                    language: 'ES',
+                    weekStart: 1,
+                    daysOfWeekHighlighted: "6,0",
+                    autoclose: true,
+                    todayHighlight: true,
+                    
+                });
+                $('#datepicker').datepicker("setDate", new Date());
+            </script>
             </div>
           </div>
         </div>
