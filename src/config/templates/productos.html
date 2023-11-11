@@ -10,10 +10,10 @@
             <div class="container-fluid px-4">
                 <h1 class="mt-4">Productos</h1>
         
-                <ol class="breadcrumb mb-4">
+                <!-- <ol class="breadcrumb mb-4">
                     <li class="breadcrumb-item"><a href="/inicio">Sistema de inventario</a></li>
                     <li class="breadcrumb-item active">Productos</li>
-                </ol>
+                </ol> -->
 
                 <div class="card mb-4">
                     <div class="card-header">
@@ -82,26 +82,28 @@
                         Listado de productos
                     </div>
                     <div class="card-body">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Id</th>
-                                    <th scope="col">Subcategoria</th>
-                                    <th scope="col">Descripcion</th>
-                                    <th scope="col">Peso</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for item in productos %}
-                                <tr>
-                                    <td scope="row">{{item.id}}</td>
-                                    <td scope="row">{{item.subcategoria}}</td>
-                                    <td scope="row">{{item.descripcion}}</td>
-                                    <td scope="row">{{item.peso}}</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Id</th>
+                                        <th scope="col">Subcategoria</th>
+                                        <th scope="col">Descripcion</th>
+                                        <th scope="col">Peso</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in productos %}
+                                    <tr>
+                                        <td scope="row">{{item.id}}</td>
+                                        <td scope="row">{{item.subcategoria}}</td>
+                                        <td scope="row">{{item.descripcion}}</td>
+                                        <td scope="row">{{item.peso}}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -10,30 +10,28 @@
       <div class="container-fluid px-4">
         <h1 class="mt-4">Entradas</h1>
 
-        <ol class="breadcrumb mb-4">
+        <!-- <ol class="breadcrumb mb-4">
           <li class="breadcrumb-item"><a href="/inicio">Sistema de inventario</a></li>
           <li class="breadcrumb-item active">Entradas</li>
-        </ol>
-
-        <div class="container">
-          <form action="/cargar_entradas_por_fecha" method="POST">
-            <div class="row align-items-start">
-              <div class="col form-group">
-                <label for="message-text" class="col-form-label">Fecha:</label>
-                <input data-date-format="yyyy-mm-dd" name="fecha_datepicker" id="datepicker">
-            </div>
-              <div class="col align-self-center">
-                <button  type="submit" class="btn btn-primary">Cargar</button>
-              </div>
-            </div>
-          </form>
-          
-          <div class="container">
+        </ol> -->
             <!--<a onclick="cargar_formulario()" class="btn btn-primary btn-block mb-4"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">Nueva entrada</a>
             -->
             <a class="btn btn-primary btn-block mb-4" href="/pagina_nueva_entrada">Nueva entrada</a>
           </div>
         </div>
+
+        <div class="container">
+          <form action="/cargar_entradas_por_fecha" method="POST">
+            <div class="row">
+              <div class="col-6 form-group">
+                <label for="message-text" class="col-form-label">Fecha:</label>
+                <input data-date-format="yyyy-mm-dd" name="fecha_datepicker" id="datepicker">
+              </div>
+              <div class="col align-self-center">
+                <button  type="submit" class="btn btn-primary mb-3">Cargar</button>
+              </div>
+          </form>
+        <div class="container">
 
         <div class="card mb-4">
           <div class="card-header">
@@ -41,7 +39,7 @@
             Listado de entradas
           </div>
           <div class="card-body">
-            <div class="card-body">
+            <div class="table-responsive">
               <table class="table table-striped">
                 <thead>
                   <tr>
