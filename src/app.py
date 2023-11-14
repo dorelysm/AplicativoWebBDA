@@ -427,9 +427,11 @@ def guardar_producto():
 @app.route('/nuevo_vehiculo', methods=['POST'] )
 def guardar_vehiculo():
     matricula = request.form['matricula']
-    conductor = request.form['conductor']
+    tipo = request.form['tipo']
+    capacidad = request.form['capacidad']
+    empresa = request.form['empresa']
     
-    Nuevo_vehiculo = Vehiculo(matricula, conductor)
+    Nuevo_vehiculo = Vehiculo(matricula, tipo, capacidad, empresa)
 
     db.session.add(Nuevo_vehiculo)
     db.session.commit()
@@ -452,10 +454,11 @@ def guardar_usuario():
 @app.route('/nuevo_benefactor', methods=['POST'] )
 def guardar_benefactor():
     nombre = request.form['nombre']
+    nit = request.form['nit']
     contacto = request.form['contacto']
     direccion = request.form['direccion']
     
-    Nuevo_benefactor = Benefactor(nombre, contacto, direccion)
+    Nuevo_benefactor = Benefactor(nombre, nit, contacto, direccion)
 
     db.session.add(Nuevo_benefactor)
     db.session.commit()
