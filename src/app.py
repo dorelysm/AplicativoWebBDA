@@ -344,19 +344,15 @@ def guardar_entrada():
 @app.route('/guardar_salida', methods=['POST'] )
 def guardar_salida():
     id_beneficiario = request.form['id_beneficiario']
-    id_entrada = request.form['id_entrada']
     fecha = request.form['fecha']
-    cantidad_peso = request.form['cantidad_peso']
-    cantidad_unidades = request.form['cantidad_unidades']
-    unidad_de_medida = request.form['unidad_de_medida']
     tipo = request.form['tipo']
-    num_doc_siigo = request.form['num_doc_siigo']
     aporte_solidario = request.form['aporte_solidario']
+    ingresado_siigo = request.form['ingresado_siigo']
+    num_doc_siigo = request.form['num_doc_siigo']
     observaciones = request.form['observaciones']
     
-    nueva_donacion = Salida(id_beneficiario, id_entrada, fecha, cantidad_peso, 
-                            cantidad_unidades, unidad_de_medida, tipo, num_doc_siigo, 
-                            aporte_solidario, observaciones)
+    nueva_donacion = Salida(id_beneficiario, fecha, tipo, aporte_solidario,
+                            ingresado_siigo, num_doc_siigo, observaciones)
 
     db.session.add(nueva_donacion)
     db.session.commit()

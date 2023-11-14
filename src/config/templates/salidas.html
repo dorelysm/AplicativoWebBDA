@@ -8,16 +8,30 @@
   <div id="layoutSidenav_content">
     <main>
       <div class="container-fluid px-4">
-        <h1 class="mt-4">Salidas</h1>
-        <a onclick="cargar_formulario()" class="btn btn-primary btn-block mb-4"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">Nueva salida</a>
+        <h1 class="mt-4">Donaciones salientes</h1>
         <!-- <ol class="breadcrumb mb-4">
           <li class="breadcrumb-item"><a href="/inicio">Sistema de inventario</a></li>
           <li class="breadcrumb-item active">Salidas</li>
         </ol> -->
+            <a class="btn btn-primary btn-block mb-4" href="/pagina_nueva_salida">Nueva salida</a>
+          </div>
+        </div>
+        <div class="container">
+          <form action="/cargar_entradas_por_fecha" method="POST">
+            <div class="row">
+              <div class="col-6 form-group">
+                <label for="message-text" class="col-form-label">Fecha:</label>
+                <input data-date-format="yyyy-mm-dd" name="fecha_datepicker" id="datepicker">
+              </div>
+              <div class="col align-self-center">
+                <button  type="submit" class="btn btn-primary mb-3">Buscar</button>
+              </div>
+          </form>
+        </div>
         <div class="card mb-4">
           <div class="card-header">
             <i class="fas fa-table me-1"></i>
-            Listado de salidas
+            Listado de donaciones salientes
           </div>
           <div class="card-body">
             <div class="table-responsive">
@@ -26,14 +40,11 @@
                   <tr>
                     <th scope="col">Id salida</th>
                     <th scope="col">Id beneficiario</th>
-                    <th scope="col">Id entrada</th>
                     <th scope="col">Fecha</th>
-                    <th scope="col">Cantidad (peso)</th>
-                    <th scope="col">Cantidad (unidades)</th>
-                    <th scope="col">Unidad de medidas</th>
                     <th scope="col">Tipo</th>
-                    <th scope="col">Número de documento Siigo</th>
                     <th scope="col">Aporte solidario</th>
+                    <th scope="col">¿Ingresado a SIIGO</th>
+                    <th scope="col">Número de documento SIIGO</th>
                     <th scope="col">Observaciones</th>
                     <th scope="col" colspan="2"><center>Opciones</center></th>
                   </tr>
@@ -43,14 +54,11 @@
                   <tr>
                     <th scope="row">{{item.id}}</th>
                     <td>{{item.id_beneficiario}}</td>
-                    <td>{{item.id_entrada}}</td>
                     <td>{{item.fecha}}</td>
-                    <td>{{item.cantidad_peso}}</td>
-                    <td>{{item.cantidad_unidades}}</td>
-                    <td>{{item.unidad_de_medida}}</td>
                     <td>{{item.tipo}}</td>
-                    <td>{{item.num_doc_siigo}}</td>
                     <td>{{item.aporte_solidario}}</td>
+                    <td>{{item.ingresado_siigo}}</td>
+                    <td>{{item.num_doc_siigo}}</td>
                     <td>{{item.observaciones}}</td>
                     <td>
                       <a
@@ -83,37 +91,25 @@
                                 <input type="text" class="form-control" name="id_beneficiario"  value="">
                               </div>
                               <div class="form-group">
-                                <label for="message-text" class="col-form-label">Id de la entrada:</label>
-                                <input type="text" class="form-control" name="id_entrada"  value="">
-                              </div>
-                              <div class="form-group">
                                 <label for="message-text" class="col-form-label">Fecha:</label>
                                 <input type="text" class="form-control" name="fecha"  value="">
-                              </div>
-                              <div class="form-group">
-                                <label for="message-text" class="col-form-label">Cantidad (peso):</label>
-                                <input type="text" class="form-control" name="cantidad_peso"  value="">
-                              </div>
-                              <div class="form-group">
-                                <label for="message-text" class="col-form-label">Cantidad (unidades):</label>
-                                <input type="text" class="form-control" name="cantidad_unidades"  value="">
-                              </div>
-                              <div class="form-group">
-                                <label for="message-text" class="col-form-label">Unidad de medida:</label>
-                                <input type="text" class="form-control" name="unidad_de_medida"  value="">
                               </div>
                               <div class="form-group">
                                 <label for="message-text" class="col-form-label">Tipo:</label>
                                 <input type="text" class="form-control" name="tipo"  value="">
                               </div>
                               <div class="form-group">
-                                <label for="message-text" class="col-form-label">Número de documento en SIIGO:</label>
-                                <input type="text" class="form-control" name="num_doc_siigo"  value="">
-                              </div>
-                              <div class="form-group">
                                 <label for="message-text" class="col-form-label">Aporte solidario:</label>
                                 <input type="text" class="form-control" name="aporte_solidario"  value="">
-                              </div>                  
+                              </div>
+                              <div class="form-group">
+                                <label for="message-text" class="col-form-label">¿Ingresado a SIIGO?</label>
+                                <input type="text" class="form-control" name="ingresado_siigo"  value="">
+                              </div>
+                              <div class="form-group">
+                                <label for="message-text" class="col-form-label">Número de documento en SIIGO:</label>
+                                <input type="text" class="form-control" name="num_doc_siigo"  value="">
+                              </div>       
                               <div class="form-group">
                                 <label for="message-text" class="col-form-label">Observaciones:</label>
                                 <input type="text" class="form-control" name="observaciones"  value="">
@@ -162,37 +158,25 @@
                                 <input type="text" class="form-control" name="id_beneficiario"  value="${data.id_beneficiario}">
                               </div>
                               <div class="form-group">
-                                <label for="message-text" class="col-form-label">Id de la entrada:</label>
-                                <input type="text" class="form-control" name="id_entrada"  value="${data.id_entrada}">
-                              </div>
-                              <div class="form-group">
                                 <label for="message-text" class="col-form-label">Fecha:</label>
                                 <input type="text" class="form-control" name="fecha"  value="${data.fecha}">
-                              </div>
-                              <div class="form-group">
-                                <label for="message-text" class="col-form-label">Cantidad (peso):</label>
-                                <input type="text" class="form-control" name="cantidad_peso"  value="${data.cantidad_peso}">
-                              </div>
-                              <div class="form-group">
-                                <label for="message-text" class="col-form-label">Cantidad (unidades):</label>
-                                <input type="text" class="form-control" name="cantidad_unidades"  value="${data.cantidad_unidades}">
-                              </div>
-                              <div class="form-group">
-                                <label for="message-text" class="col-form-label">Unidad de medida:</label>
-                                <input type="text" class="form-control" name="unidad_de_medida"  value="${data.unidad_de_medida}">
                               </div>
                               <div class="form-group">
                                 <label for="message-text" class="col-form-label">Tipo:</label>
                                 <input type="text" class="form-control" name="tipo"  value="${data.tipo}">
                               </div>
                               <div class="form-group">
-                                <label for="message-text" class="col-form-label">Número de documento en SIIGO:</label>
-                                <input type="text" class="form-control" name="num_doc_siigo"  value="${data.num_doc_siigo}">
-                              </div>
-                              <div class="form-group">
                                 <label for="message-text" class="col-form-label">Aporte solidario:</label>
                                 <input type="text" class="form-control" name="aporte_solidario"  value="${data.aporte_solidario}">
-                              </div>                  
+                              </div>
+                              <div class="form-group">
+                                <label for="message-text" class="col-form-label">¿Ingresado en SIIGO?:</label>
+                                <input type="text" class="form-control" name="num_doc_siigo"  value="${data.ingresado_siigo}">
+                              </div>
+                              <div class="form-group">
+                                <label for="message-text" class="col-form-label">Número de documento en SIIGO:</label>
+                                <input type="text" class="form-control" name="num_doc_siigo"  value="${data.num_doc_siigo}">
+                              </div>     
                               <div class="form-group">
                                 <label for="message-text" class="col-form-label">Observaciones:</label>
                                 <input type="text" class="form-control" name="observaciones"  value="${data.observaciones}">
