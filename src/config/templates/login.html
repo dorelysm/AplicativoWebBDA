@@ -29,51 +29,6 @@
                                   </div>
                               </form>
                           </div>
-                          <div class="card-footer text-center py-3">
-                              <div class="small">
-                                <a onclick="cargar_formulario()" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Registrar nuevo usuario</a>
-                            </div>
-                          </div>
-
-                          <script>
-
-                            function cargar_formulario(){
-                                const formulario = `
-                                        <form action="/nuevo_usuario" method="POST">
-                                        <div class="form-group">
-                                            <label for="recipient-name" class="col-form-label">Correo:</label>
-                                            <input type="text" class="form-control" name="email"  value="">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="message-text" class="col-form-label">Contraseña:</label>
-                                            <input type="text" class="form-control" name="password"  value="">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="message-text" class="col-form-label">Nombre:</label>
-                                            <input type="text" class="form-control" name="nombre"  value="">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="message-text" class="col-form-label">Cedula:</label>
-                                            <input type="text" class="form-control" name="cedula"  value="">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="rol" class="col-form-label">Tipo de Usuario:</label>
-                                            <select class="form-control" name="rol">
-                                                <option value="admin">Administrador</option>
-                                                <option value="user">Operario de bodega</option>
-                                                <option value="user">Jefe de operaciones</option>
-                                                <option value="user">Operario de entradas</option>
-                                            </select>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button  type="submit" class="btn btn-primary">Guardar</button>
-                                        </div>
-                                        </form> 
-                                `;
-                                $("#fromartc").html(formulario);
-                            }
-
-                          </script>
                       </div>
                   </div>
               </div>
