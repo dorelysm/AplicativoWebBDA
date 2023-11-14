@@ -115,7 +115,6 @@ def cargar_entradas_por_fecha():
         print(fecha_sel)
         entradas = Entrada.query.filter_by(fecha = fecha_sel)
         resultado_entradas = Entradas_schema.dump(entradas)
-        print(resultado_entradas)
         return render_template('entradas.html', entradas = resultado_entradas, 
                                usuario = session['usuario'])
     else:
@@ -178,9 +177,6 @@ def pagina_productos():
         resultado_bodegas = Bodegas_schema.dump(all_bodegas)
         all_categorias = Categoria.query.all()
         resultado_categorias = Categorias_schema.dump(all_categorias)
-        
-        #categorias = Categoria.query.filter_by(id_bodega = bodega)
-        
         all_subcategorias = Subcategoria.query.all()
         resultado_subcategorias = Subcategorias_schema.dump(all_subcategorias)
         all_productos = Producto.query.all()
@@ -189,6 +185,74 @@ def pagina_productos():
                                categorias = resultado_categorias, 
                                subcategorias = resultado_subcategorias, 
                                productos = resultado_productos,
+                               usuario = session['usuario'])
+    else:
+        return redirect('/')
+    
+@app.route('/cargar_categorias_por_bodega', methods=['GET', 'POST'])
+def cargar_categorias_por_bodega():
+    if 'usuario' in session:
+        nombre_bodega_sel = request.form['bodega']
+        bodega_sel = Bodega.query.filter_by(nombre = nombre_bodega_sel).first()
+        categorias = Categoria.query.filter_by(id_bodega = bodega_sel.id)
+        
+        resultado_categorias = Categorias_schema.dump(categorias)
+        
+        all_bodegas = Bodega.query.all()
+        resultado_bodegas = Bodegas_schema.dump(all_bodegas)
+        all_subcategorias = Subcategoria.query.all()
+        resultado_subcategorias = Subcategorias_schema.dump(all_subcategorias)
+        all_productos = Producto.query.all()
+        resultado_productos = Productos_schema.dump(all_productos)
+        return render_template('productos.html', bodegas = resultado_bodegas,
+                               subcategorias = resultado_subcategorias,
+                               productos = resultado_productos,
+                               categorias = resultado_categorias,
+                               usuario = session['usuario'])
+    else:
+        return redirect('/')
+    
+@app.route('/cargar_subcategorias_por_categoria', methods=['GET', 'POST'])
+def cargar_subcategorias_por_categoria():
+    if 'usuario' in session:
+        nombre_categoria_sel = request.form['categoria']
+        categoria_sel = Categoria.query.filter_by(descripcion = nombre_categoria_sel).first()
+        subcategorias = Subcategoria.query.filter_by(categoria = categoria_sel.id)
+        resultado_subcategorias = Subcategorias_schema.dump(subcategorias)
+        
+        all_bodegas = Bodega.query.all()
+        resultado_bodegas = Bodegas_schema.dump(all_bodegas)
+        all_categorias = Categoria.query.all()
+        resultado_categorias = Categorias_schema.dump(all_categorias)
+        all_productos = Producto.query.all()
+        resultado_productos = Productos_schema.dump(all_productos)
+        return render_template('productos.html', bodegas = resultado_bodegas,
+                               subcategorias = resultado_subcategorias,
+                               productos = resultado_productos,
+                               categorias = resultado_categorias,
+                               usuario = session['usuario'])
+    else:
+        return redirect('/')
+    
+@app.route('/cargar_productos_por_subcategoria', methods=['GET', 'POST'])
+def cargar_productos_por_subcategoria():
+    if 'usuario' in session:
+        nombre_subcategoria_sel = request.form['subcategoria']
+        subcategoria_sel = Subcategoria.query.filter_by(descripcion = nombre_subcategoria_sel).first()
+        productos = Producto.query.filter_by(subcategoria = subcategoria_sel.id)
+        resultado_productos = Productos_schema.dump(productos)
+        
+        all_bodegas = Bodega.query.all()
+        resultado_bodegas = Bodegas_schema.dump(all_bodegas)
+        all_categorias = Categoria.query.all()
+        resultado_categorias = Categorias_schema.dump(all_categorias)
+        all_subcategorias = Subcategoria.query.all()
+        resultado_subcategorias = Subcategorias_schema.dump(all_subcategorias)
+        
+        return render_template('productos.html', bodegas = resultado_bodegas,
+                               subcategorias = resultado_subcategorias,
+                               productos = resultado_productos,
+                               categorias = resultado_categorias,
                                usuario = session['usuario'])
     else:
         return redirect('/')
