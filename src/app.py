@@ -83,6 +83,7 @@ def ingresar():
     if user and check_password_hash(user.password_hash, password):
         # Verifica si el usuario existe y si la contraseña coincide
         session['usuario'] = email
+        session['rol'] = 1
         return redirect('/inicio')
     else:
         return redirect('/')
@@ -267,6 +268,15 @@ def pagina_informes():
         all_informes = Informe.query.all()
         resultado_informes = Informes_schema.dump(all_informes)
         return render_template('informes.html', informes = resultado_informes, usuario = session['usuario'])
+    else:
+        return redirect('/')
+    
+@app.route('/pagina_usuarios', methods=['GET'])
+def pagina_usuarios():
+    if 'usuario' in session:
+        all_informes = Informe.query.all()
+        resultado_informes = Informes_schema.dump(all_informes)
+        return render_template('usuarios.html', informes = resultado_informes, usuario = session['usuario'])
     else:
         return redirect('/')
     
@@ -487,7 +497,7 @@ def guardar_usuario():
 
     db.session.add(Nuevo_usuario)
     db.session.commit()
-    return redirect('/')
+    return redirect('/pagina_usuarios')
 
 @app.route('/nuevo_benefactor', methods=['POST'] )
 def guardar_benefactor():
