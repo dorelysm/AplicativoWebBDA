@@ -20,57 +20,72 @@
                         Navegación
                     </div>
                     <div class="card-body">
-                        <div class="container">
-                            <div class="row justify-content-start">
-                                <div class="col">
-                                    Bodega:
-                                </div>
-                                <div class="col-8">
-                                    <select class="form-control" name="bodega">
-                                        {% for item in bodegas %}
-                                            <option>{{item.nombre}}</option>  
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                <div class="col">
-                                    <a onclick="cargar_formulariobod()" class="btn btn-primary btn-block mb-4"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">Nueva bodega</a>
-                                </div>                                
-                            </div>
-                        </div>
-                        <div class="container">
-                            <div class="row justify-content-start">
-                                <div class="col">
-                                    Categoría:
-                                </div>
-                                <div class="col-8">
-                                    <select class="form-control" name="categoria">
-                                        {% for item in categorias %}
-                                            <option>{{item.descripcion}}</option>  
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                <div class="col">
-                                    <a onclick="cargar_formulariocat()" class="btn btn-primary btn-block mb-4"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">Nueva categoria</a>
+                        <form action="/cargar_categorias_por_bodega" method="POST">
+                            <div class="container">
+                                <div class="row justify-content-start">
+                                    <div class="col">
+                                        Bodega:
+                                    </div>
+                                    <div class="col-8">
+                                        <select class="form-control" name="bodega">
+                                            {% for item in bodegas %}
+                                                <option>{{item.nombre}}</option>  
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col">
+                                        <a onclick="cargar_formulariobod()" class="btn btn-primary btn-block mb-4"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">Nueva bodega</a>
+                                    </div>
+                                    <div class="col">
+                                        <button type="submit" class="btn btn-primary btn-block mb-4">Buscar</button>
+                                    </div>                       
                                 </div>
                             </div>
-                        </div>
-                        <div class="container">
-                            <div class="row justify-content-start">
-                                <div class="col">
-                                    Subcategoría:
-                                </div>
-                                <div class="col-8">
-                                    <select class="form-control" name="subcategoria">
-                                        {% for item in subcategorias %}
-                                            <option>{{item.descripcion}}</option>  
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                <div class="col">
-                                    <a onclick="cargar_formulariosub()" class="btn btn-primary btn-block mb-4"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">Nueva subcategoria</a>
+                        </form>
+                        <form action="/cargar_subcategorias_por_categoria" method="POST">
+                            <div class="container">
+                                <div class="row justify-content-start">
+                                    <div class="col">
+                                        Categoría:
+                                    </div>
+                                    <div class="col-8">
+                                        <select class="form-control" name="categoria">
+                                            {% for item in categorias %}
+                                                <option>{{item.descripcion}}</option>  
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col">
+                                        <a onclick="cargar_formulariocat()" class="btn btn-primary btn-block mb-4"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">Nueva categoria</a>
+                                    </div>
+                                    <div class="col">
+                                        <button type="submit" class="btn btn-primary btn-block mb-4">Buscar</button>
+                                    </div>  
                                 </div>
                             </div>
-                        </div>
+                        </form>
+                        <form action="/cargar_productos_por_subcategoria" method="POST">
+                            <div class="container">
+                                <div class="row justify-content-start">
+                                    <div class="col">
+                                        Subcategoría:
+                                    </div>
+                                    <div class="col-8">
+                                        <select class="form-control" name="subcategoria">
+                                            {% for item in subcategorias %}
+                                                <option>{{item.descripcion}}</option>  
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col">
+                                        <a onclick="cargar_formulariosub()" class="btn btn-primary btn-block mb-4"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">Nueva subcategoria</a>
+                                    </div>
+                                    <div class="col">
+                                        <button type="submit" class="btn btn-primary btn-block mb-4">Buscar</button>
+                                    </div> 
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
                 <div>
