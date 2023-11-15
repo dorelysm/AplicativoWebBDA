@@ -1,7 +1,5 @@
 from config.bd import db, ma, app
 
-from datetime import datetime
-
 class Producto_inventario(db.Model):
     __tablename__ = 'Producto_inventario'
 
