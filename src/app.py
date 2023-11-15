@@ -53,6 +53,9 @@ Informes_schema = InformeSchema(many=True)
 Producto_inventario_schema = Producto_inventarioSchema()
 Productos_inventario_schema = Producto_inventarioSchema(many=True)
 
+Usuarios_schema = UsuarioSchema()
+Usuarios_schema = UsuarioSchema(many=True)
+
 productos_lista = []
 
 @app.route('/', methods=['GET'])
@@ -270,9 +273,9 @@ def pagina_informes():
 @app.route('/pagina_usuarios', methods=['GET'])
 def pagina_usuarios():
     if 'usuario' in session:
-        all_informes = Informe.query.all()
-        resultado_informes = Informes_schema.dump(all_informes)
-        return render_template('usuarios.html', informes = resultado_informes, usuario = session['usuario'])
+        all_usuarios = Usuario.query.all()
+        resultado_usuarios = Usuarios_schema.dump(all_usuarios)
+        return render_template('usuarios.html', usuarios = resultado_usuarios, usuario = session['usuario'])
     else:
         return redirect('/')
     

@@ -18,7 +18,6 @@
               <table class="table table-striped">
                 <thead>
                   <tr>
-                    <th scope="col"></th>
                     <th scope="col">Nombre</th>
                     <th scope="col">Email</th>
                     <th scope="col">Cédula</th>
@@ -27,9 +26,8 @@
                   </tr>
                 </thead>
                 <tbody>
-                  {% for item in usuario %}
+                  {% for item in usuarios %}
                     <tr>
-                      <th scope="row">{{item.id}}</th>
                       <td>{{item.nombre}}</td>
                       <td>{{item.email}}</td>
                       <td>{{item.cedula}}</td>
@@ -85,7 +83,7 @@
 
 
                 function eliminar(id){
-                    url = '/eliminar_salida';
+                    url = '/eliminar_usuario';
                     var request = $.ajax({
                         contentType:"application/json",
                         dataType: "json", //Expected data format from server  
@@ -95,7 +93,7 @@
                     });
                     request.done(function( data ) {
                         alert("Datos Eliminado")
-                        window.location.href = "/pagina_salidas";                
+                        window.location.href = "/pagina_usuarios";                
                     });
                     request.fail(function( jqXHR, textStatus ) {
                         alert( "Error" + textStatus );
