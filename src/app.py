@@ -16,6 +16,7 @@ from modelos.Entradas import Entrada, EntradaSchema
 from modelos.Salidas import Salida, SalidaSchema
 from modelos.Informe import Informe, InformeSchema
 from modelos.productos_inventario import Producto_inventario, Producto_inventarioSchema
+from modelos.productos_salida import Producto_salida, Producto_salidaSchema
 
 Benefactor_schema = BenefactorSchema()
 Benefactores_schema = BenefactorSchema(many=True)
@@ -52,6 +53,9 @@ Informes_schema = InformeSchema(many=True)
 
 Producto_inventario_schema = Producto_inventarioSchema()
 Productos_inventario_schema = Producto_inventarioSchema(many=True)
+
+Producto_salida_schema = Producto_salidaSchema()
+Productos_salida_schema = Producto_salidaSchema(many=True)
 
 productos_lista = []
 
@@ -279,11 +283,49 @@ def pagina_nueva_entrada():
         resultado_vehiculos = Vehiculos_schema.dump(all_vehiculos)
         all_producto_inventario = Producto_inventario.query.all()
         resultado_productos_inventario = Productos_inventario_schema.dump(all_producto_inventario)
-
+        all_bodegas = Bodega.query.all()
+        resultado_bodegas = Bodegas_schema.dump(all_bodegas)
+        all_categorias = Categoria.query.all()
+        resultado_categorias = Categorias_schema.dump(all_categorias)
+        all_subcategorias = Subcategoria.query.all()
+        resultado_subcategorias = Subcategorias_schema.dump(all_subcategorias)
+        
         return render_template('nueva_entrada.html', entradas = resultado_entradas, 
                                productos = resultado_productos, 
                                benefactores = resultado_benefactores, vehiculos = resultado_vehiculos,
                                productos_inventario = resultado_productos_inventario, 
+                               bodegas = resultado_bodegas,
+                               categorias = resultado_categorias,
+                               subcategorias = resultado_subcategorias,
+                               usuario = session['usuario'])
+    else:
+        return redirect('/')
+    
+@app.route('/pagina_nueva_salida', methods=['GET'])
+def pagina_nueva_salida():
+    if 'usuario' in session:
+        all_salidas = Salida.query.all()
+        resultado_salidas = Salidas_schema.dump(all_salidas)
+        all_beneficiarios = Beneficiario.query.all()
+        resultado_beneficiarios = Beneficiarios_schema.dump(all_beneficiarios)
+        all_producto_inventario = Producto_inventario.query.all()
+        resultado_productos_inventario = Productos_inventario_schema.dump(all_producto_inventario)
+        all_bodegas = Bodega.query.all()
+        resultado_bodegas = Bodegas_schema.dump(all_bodegas)
+        all_categorias = Categoria.query.all()
+        resultado_categorias = Categorias_schema.dump(all_categorias)
+        all_subcategorias = Subcategoria.query.all()
+        resultado_subcategorias = Subcategorias_schema.dump(all_subcategorias)
+        all_producto_salida = Producto_salida.query.all()
+        resultado_productos_salida = Productos_salida_schema.dump(all_producto_salida)
+        
+        return render_template('nueva_salida.html', salidas = resultado_salidas, 
+                               beneficiarios = resultado_beneficiarios,
+                               productos_inventario = resultado_productos_inventario,
+                               bodegas = resultado_bodegas,
+                               categorias = resultado_categorias,
+                               subcategorias = resultado_subcategorias,
+                               productos_salida = resultado_productos_salida,
                                usuario = session['usuario'])
     else:
         return redirect('/')
