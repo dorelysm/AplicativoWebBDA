@@ -393,7 +393,7 @@ def guardar_usuario():
 
     db.session.add(Nuevo_usuario)
     db.session.commit()
-    return redirect('/')
+    return redirect('/pagina_usuarios')
 
 @app.route('/nuevo_benefactor', methods=['POST'] )
 def guardar_benefactor():
