@@ -31,29 +31,47 @@
     <link href="css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
   </head>
+  <style>
+    .btn-outline-custom {
+        color: black;
+    }
+
+    .btn-outline-custom:hover {
+        color: #fff;
+        background-color: #198754;
+    }
+    .btn-outline-red {
+        color: black;
+    }
+
+    .btn-outline-red:hover {
+        color: #fff;
+        background-color: #dc3545;
+    }
+</style>
   <body class="sb-nav-fixed bg-light">
     <nav class="sb-topnav navbar navbar-expand" style="background-color: #A9BA3B;">
       <!-- Navbar Brand-->
       <a class="navbar-brand ps-3" href="/inicio">Banco de alimentos</a>
       <!-- Navbar Buttons-->
       <div class="d-flex justify-content-around gap-2">
-        <a class="btn btn-outline-success" href="/pagina_entradas">
+        <a class="btn btn-outline-custom border-0" href="/pagina_entradas">
           <div class=""></div>
           Entradas
         </a>
-        <a class="btn btn-outline-success" href="/pagina_salidas">
+        <a class="btn btn-outline-custom border-0" href="/pagina_salidas">
           <div class=""></div>
           Salidas
         </a>
-        <a class="btn btn-outline-success" href="/pagina_productos">
+        <a class="btn btn-outline-custom border-0" href="/pagina_productos">
           <div class=""></div>
           Productos
         </a>
-        <a class="btn btn-outline-success" href="/pagina_informes">
+        <a class="btn btn-outline-custom border-0" href="/pagina_informes">
           <div class=""></div>
           Informes
         </a>
-        <a class="btn btn-outline-success" href="/pagina_usuarios">
+        <a class="btn btn-outline-custom border-0" href="/pagina_usuarios">
           <div class=""></div>
           Usuarios
         </a>
@@ -66,7 +84,7 @@
               <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
           </div>
       </form> -->
-      <a href="/cerrar" class="btn btn-outline-danger ms-auto me-0 me-md-3 my-2 my-md-0">Cerrar sesión</a>
+      <a href="/cerrar" class="btn btn-outline-red ms-auto me-0 me-md-3 my-2 my-md-0 border-0">Cerrar sesión</a>
     </nav>
     {% block content %} 
     
