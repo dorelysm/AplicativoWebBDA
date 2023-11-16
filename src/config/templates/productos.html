@@ -4,6 +4,12 @@
 
 {% include('modal.html') %}
 
+<style>
+    .table-striped tbody tr:nth-child(odd) {
+        background-color: #d4dd9d;
+    }
+</style>
+
 <div id="layoutSidenav">
     <div id="layoutSidenav_content">
         <main>
@@ -15,8 +21,8 @@
                     <li class="breadcrumb-item active">Productos</li>
                 </ol> -->
 
-                <div class="card mb-4">
-                    <div class="card-header">
+                <div class="card mb-4" >
+                    <div class="card-header" style="background-color: #A9BA3B;color: black;">
                         Navegación
                     </div>
                     <div class="card-body">
@@ -34,10 +40,10 @@
                                         </select>
                                     </div>
                                     <div class="col">
-                                        <a onclick="cargar_formulariobod()" class="btn btn-primary btn-block mb-4"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">Nueva bodega</a>
+                                        <a onclick="cargar_formulariobod()" class="btn btn-primary btn-block mb-4 border-0"  data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="background-color: #A9BA3B;color: black;">Nueva bodega</a>
                                     </div>
                                     <div class="col">
-                                        <button type="submit" class="btn btn-primary btn-block mb-4">Buscar</button>
+                                        <button type="submit" class="btn btn-primary btn-block mb-4 border-0" style="background-color: #A9BA3B;color: black;">Buscar</button>
                                     </div>                       
                                 </div>
                             </div>
@@ -56,10 +62,10 @@
                                         </select>
                                     </div>
                                     <div class="col">
-                                        <a onclick="cargar_formulariocat()" class="btn btn-primary btn-block mb-4"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">Nueva categoria</a>
+                                        <a onclick="cargar_formulariocat()" class="btn btn-primary btn-block mb-4 border-0"  data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="background-color: #A9BA3B;color: black;">Nueva categoria</a>
                                     </div>
                                     <div class="col">
-                                        <button type="submit" class="btn btn-primary btn-block mb-4">Buscar</button>
+                                        <button type="submit" class="btn btn-primary btn-block mb-4 border-0" style="background-color: #A9BA3B;color: black;">Buscar</button>
                                     </div>  
                                 </div>
                             </div>
@@ -78,10 +84,10 @@
                                         </select>
                                     </div>
                                     <div class="col">
-                                        <a onclick="cargar_formulariosub()" class="btn btn-primary btn-block mb-4"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">Nueva subcategoria</a>
+                                        <a onclick="cargar_formulariosub()" class="btn btn-primary btn-block mb-4 border-0"  data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="background-color: #A9BA3B;color: black;">Nueva subcategoria</a>
                                     </div>
                                     <div class="col">
-                                        <button type="submit" class="btn btn-primary btn-block mb-4">Buscar</button>
+                                        <button type="submit" class="btn btn-primary btn-block mb-4 border-0" style="background-color: #A9BA3B;color: black;">Buscar</button>
                                     </div> 
                                 </div>
                             </div>
@@ -89,10 +95,10 @@
                     </div>
                 </div>
                 <div>
-                    <a onclick="cargar_formularioprod()" class="btn btn-primary btn-block mb-4"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">Nuevo producto</a>
+                    <a onclick="cargar_formularioprod()" class="btn btn-primary btn-block mb-4 border-0"  data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="background-color: #A9BA3B;color: black;">Nuevo producto</a>
                 </div>
                 <div class="card mb-4">
-                    <div class="card-header">
+                    <div class="card-header" style="background-color: #A9BA3B;color: black;">
                         <i class="fas fa-table me-1"></i>
                         Listado de productos
                     </div>
