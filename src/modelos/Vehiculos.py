@@ -5,15 +5,19 @@ class Vehiculo(db.Model):
 
     id  = db.Column(db.Integer, primary_key=True)
     matricula = db.Column(db.String(6), unique=True)
-    conductor = db.Column(db.String(50))
+    tipo = db.Column(db.String(50))
+    capacidad = db.Column(db.Integer)
+    empresa = db.Column(db.String(50))
 
-    def __init__(self, matricula, conductor):
+    def __init__(self, matricula, tipo, capacidad, empresa):
         self.matricula = matricula
-        self.conductor = conductor
+        self.tipo = tipo
+        self.capacidad = capacidad
+        self.empresa = empresa
 
 with app.app_context():
     db.create_all()
 
 class VehiculoSchema(ma.Schema):
     class Meta:
-        fields = ('id', 'matricula', 'conductor')
+        fields = ('id', 'matricula', 'tipo', 'capacidad', 'empresa')

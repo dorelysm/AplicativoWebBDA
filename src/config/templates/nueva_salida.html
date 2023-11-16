@@ -4,26 +4,26 @@
 
 {% include('modal.html') %}
     <div class="container-fluid px-4">
-        <h1 class="mt-4">Nuevas Entradas</h1>
+        <h1 class="mt-4">Nuevas Salidas</h1>
     </div>
-    <form action="/guardar_entrada" method="POST">
+    <form action="/guardar_salida" method="POST">
     <div class="container-fluid">
         <div class="card mb-5">
             <div class="card-header">
-                <label class="">Datos generales de la entrada</label>
+                <label class="">Datos generales de la salida</label>
             </div>
             
             <div class="class-body container-fluid">
                 <form action="/guardar_entrada" method="POST">
                     <div class="form-group">
-                        <label for="recipient-name" class="col-form-label">Benefactor:</label>
+                        <label for="recipient-name" class="col-form-label">Beneficiario:</label>
                         <select class="form-control" name="benefactor">
-                            {% for item in benefactores %}
+                            {% for item in beneficiario %}
                                 <option>{{item.nombre}}</option>  
                             {% endfor %}
                         </select>
-                        <a onclick="cargar_formulario_benefactor()" class="btn btn-primary btn-block mb-4"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                            Nuevo benefactor
+                        <a onclick="cargar_formulario_beneficiario()" class="btn btn-primary btn-block mb-4"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                            Nuevo beneficiario
                         </a>
                     </div>
                     
@@ -32,7 +32,19 @@
                         <input data-date-format="yyyy-mm-dd" name="fecha_datepicker" id="datepicker">
                     </div>
                     <div class="form-group">
-                        <label for="message-text" class="col-form-label">¿Procesado en inventarios?:</label>
+                        <label for="recipient-name" class="col-form-label">Tipo:</label>
+                        <select class="form-control" name="tipo">
+                            <option value="fundacion">A fundación</option>
+                            <option value="persona">A persona</option>
+                            <option value="merma">Merma</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Aporte solidario:</label>
+                        <input type="text" class="form-control" name="aporte_solidario"  value="">
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">¿Ingresado en SIIGO?:</label>
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="proceso_de_inventarios" value="n" id="n" checked>
                             <label class="form-check-label" for="flexRadioDefault1">
@@ -47,40 +59,6 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="message-text" class="col-form-label">Vehículo:</label>
-                        <select class="form-control" name="vehiculo">
-                            {% for item in vehiculos %}
-                                <option>{{item.matricula}}</option>  
-                            {% endfor %}
-                        </select>
-                        <a onclick="cargar_formulario_vehiculo()" class="btn btn-primary btn-block mb-4"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                            Nuevo vehículo
-                        </a>
-                    </div>
-                    <div class="form-group">
-                        <label for="message-text" class="col-form-label">Número de factura:</label>
-                        <input type="text" class="form-control" name="num_factura"  value="">
-                    </div>
-                    <div class="form-group">
-                        <label for="message-text" class="col-form-label">¿Ingresado al sistema?:</label>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="ingresado_al_sistema" value="n" id="n" checked>
-                            <label class="form-check-label" for="flexRadioDefault1">
-                              No
-                            </label>
-                          </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="ingresado_al_sistema" value="s" id="s">
-                            <label class="form-check-label" for="flexRadioDefault1">
-                              Si
-                            </label>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="message-text" class="col-form-label">Tipo:</label>
-                        <input type="text" class="form-control" name="tipo"  value="">
-                    </div>
-                    <div class="form-group">
                         <label for="message-text" class="col-form-label">Número de documento en SIIGO:</label>
                         <input type="text" class="form-control" name="num_documento_siigo"  value="">
                     </div>
@@ -88,11 +66,10 @@
                         <label for="message-text" class="col-form-label">Observaciones:</label>
                         <textarea type="text" class="form-control" name="observaciones"></textarea>
                     </div>
-                    <button  type="submit" class="btn btn-primary">Guardar entrada</button>
+                    <button  type="submit" class="btn btn-primary">Guardar salida</button>
                 </form>
             </div>
         </div>
-        
     </div>
     
     <div class="container-fluid">
@@ -102,20 +79,19 @@
             </div>
 
             <div class="card-body container-fluid">
-                <form action="/nuevo_producto_inventario" method="POST">
+                <form action="/nuevo_producto_salida" method="POST">
                     <div class="form-group">
-                        <label for="recipient-name" class="col-form-label">Entrada id:</label>
-                        <select class="form-control" name="entrada">
-                            {% for item in entradas %}
+                        <label for="recipient-name" class="col-form-label">Salida id:</label>
+                        <select class="form-control" name="salida">
+                            {% for item in salidas %}
                                 <option>{{item.id}}</option>  
                             {% endfor %}
                         </select>
                     </div>
-                    
                     <div class="form-group">
                         <label for="recipient-name" class="col-form-label">Producto:</label>
-                        <select class="form-control" name="producto">
-                            {% for item in productos %}
+                        <select class="form-control" name="producto_inventario">
+                            {% for item in productos_inventario %}
                                 <option>{{item.descripcion}}</option>  
                             {% endfor %}
                         </select>
@@ -127,10 +103,6 @@
                     <div class="form-group">
                         <label for="message-text" class="col-form-label">Peso:</label>
                         <input type="text" class="form-control" name="peso"  value="">
-                    </div>
-                    <div class="form-group">
-                        <label for="message-text" class="col-form-label">Fecha de vencimiento:</label>
-                        <input data-date-format="yyyy-mm-dd" name="vencimiento_datepicker" id="datepicker_venc">
                     </div>
                     <button  type="submit" class="btn btn-primary">Agregar producto</button>
                 </form>
@@ -147,9 +119,9 @@
             <form action="/cargar_productos_por_entrada" method="POST">
                 <div class="row align-items-start">
                   <div class="col form-group">
-                    <label for="message-text" class="col-form-label">Entrada:</label>
+                    <label for="message-text" class="col-form-label">Salida:</label>
                     <select class="form-control" name="entrada_para_lista">
-                        {% for item in entradas %}
+                        {% for item in salidas %}
                             <option>{{item.id}}</option>  
                         {% endfor %}
                     </select>
@@ -163,6 +135,7 @@
                 <thead>
                     <tr>
                         <th scope="col">Producto</th>
+                        <th scope="col">Id entrada</th>
                         <th scope="col">Cantidad</th>
                         <th scope="col">Peso</th>
                         <th scope="col">Fecha de vencimiento</th>
@@ -170,28 +143,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for item in productos_inventario %}
+                    {% for item in productos_salida %}
                     <tr>
                         <td scope="row">{{item.id_producto}}</td>
+                        <td scope="row">{{item.id_entrada}}</td>
                         <td scope="row">{{item.cantidad_unidades}}</td>
                         <td scope="row">{{item.peso}}</td>
                         <td scope="row">{{item.vencimiento}}</td>
-                        <td>
-                            <a
-                                onclick="actualizar('{{item.id}}')"
-                                data-bs-toggle="modal"
-                                data-bs-target="#staticBackdrop"
-                                class="btn btn-primary btn-sm rounded-0"
-                                >Actualizar
-                            </a>
-                        </td>
-                        <td>
-                            <a
-                              onclick="eliminar('{{item.id}}')"
-                              class="btn btn-danger btn-sm rounded-0">
-                              eliminar
-                            </a>
-                          </td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -201,18 +159,18 @@
   </form> 
 
   <script>
-    function cargar_formulario_benefactor(){
+    function cargar_formulario_beneficiario(){
         const formulario = `
-            <form action="/nuevo_benefactor" method="POST">
+            <form action="/nuevo_beneficiario" method="POST">
                 <h4>
-                    Nuevo benefactor
+                    Nuevo beneficiario
                 </h4>
                 <div class="form-group">
                     <label for="recipient-name" class="col-form-label">Nombre:</label>
                     <input type="text" class="form-control" name="nombre"  value="">
                 </div>
                 <div class="form-group">
-                    <label for="recipient-name" class="col-form-label">Nit:</label>
+                    <label for="recipient-name" class="col-form-label">Nit o cédula:</label>
                     <input type="text" class="form-control" name="nit"  value="">
                 </div>
                 <div class="form-group">
@@ -259,27 +217,6 @@
         `;
         $("#fromartc").html(formulario);
         }
-
-        function eliminar(id){
-            url = '/eliminar_producto_inventario';
-            var request = $.ajax({
-                contentType:"application/json",
-                dataType: "json", //Expected data format from server  
-                method: "GET",
-                data: { id},
-                url: url      
-            });
-            request.done(function( data ) {
-                alert("Datos Eliminado")
-                window.location.href = "/pagina_nueva_entrada";                
-            });
-            request.fail(function( jqXHR, textStatus ) {
-                alert( "Error" + textStatus );
-            });
-        }
-
-        
-
   </script>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

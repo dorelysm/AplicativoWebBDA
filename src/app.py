@@ -16,6 +16,7 @@ from modelos.Entradas import Entrada, EntradaSchema
 from modelos.Salidas import Salida, SalidaSchema
 from modelos.Informe import Informe, InformeSchema
 from modelos.productos_inventario import Producto_inventario, Producto_inventarioSchema
+from modelos.productos_salida import Producto_salida, Producto_salidaSchema
 
 Benefactor_schema = BenefactorSchema()
 Benefactores_schema = BenefactorSchema(many=True)
@@ -53,6 +54,12 @@ Informes_schema = InformeSchema(many=True)
 Producto_inventario_schema = Producto_inventarioSchema()
 Productos_inventario_schema = Producto_inventarioSchema(many=True)
 
+Usuarios_schema = UsuarioSchema()
+Usuarios_schema = UsuarioSchema(many=True)
+
+Producto_salida_schema = Producto_salidaSchema()
+Productos_salida_schema = Producto_salidaSchema(many=True)
+
 productos_lista = []
 
 @app.route('/', methods=['GET'])
@@ -79,6 +86,7 @@ def ingresar():
     if user and check_password_hash(user.password_hash, password):
         # Verifica si el usuario existe y si la contraseña coincide
         session['usuario'] = email
+        session['rol'] = 1
         return redirect('/inicio')
     else:
         return redirect('/')
@@ -115,7 +123,6 @@ def cargar_entradas_por_fecha():
         print(fecha_sel)
         entradas = Entrada.query.filter_by(fecha = fecha_sel)
         resultado_entradas = Entradas_schema.dump(entradas)
-        print(resultado_entradas)
         return render_template('entradas.html', entradas = resultado_entradas, 
                                usuario = session['usuario'])
     else:
@@ -178,9 +185,6 @@ def pagina_productos():
         resultado_bodegas = Bodegas_schema.dump(all_bodegas)
         all_categorias = Categoria.query.all()
         resultado_categorias = Categorias_schema.dump(all_categorias)
-        
-        #categorias = Categoria.query.filter_by(id_bodega = bodega)
-        
         all_subcategorias = Subcategoria.query.all()
         resultado_subcategorias = Subcategorias_schema.dump(all_subcategorias)
         all_productos = Producto.query.all()
@@ -193,12 +197,89 @@ def pagina_productos():
     else:
         return redirect('/')
     
+@app.route('/cargar_categorias_por_bodega', methods=['GET', 'POST'])
+def cargar_categorias_por_bodega():
+    if 'usuario' in session:
+        nombre_bodega_sel = request.form['bodega']
+        bodega_sel = Bodega.query.filter_by(nombre = nombre_bodega_sel).first()
+        categorias = Categoria.query.filter_by(id_bodega = bodega_sel.id)
+        
+        resultado_categorias = Categorias_schema.dump(categorias)
+        
+        all_bodegas = Bodega.query.all()
+        resultado_bodegas = Bodegas_schema.dump(all_bodegas)
+        all_subcategorias = Subcategoria.query.all()
+        resultado_subcategorias = Subcategorias_schema.dump(all_subcategorias)
+        all_productos = Producto.query.all()
+        resultado_productos = Productos_schema.dump(all_productos)
+        return render_template('productos.html', bodegas = resultado_bodegas,
+                               subcategorias = resultado_subcategorias,
+                               productos = resultado_productos,
+                               categorias = resultado_categorias,
+                               usuario = session['usuario'])
+    else:
+        return redirect('/')
+    
+@app.route('/cargar_subcategorias_por_categoria', methods=['GET', 'POST'])
+def cargar_subcategorias_por_categoria():
+    if 'usuario' in session:
+        nombre_categoria_sel = request.form['categoria']
+        categoria_sel = Categoria.query.filter_by(descripcion = nombre_categoria_sel).first()
+        subcategorias = Subcategoria.query.filter_by(categoria = categoria_sel.id)
+        resultado_subcategorias = Subcategorias_schema.dump(subcategorias)
+        
+        all_bodegas = Bodega.query.all()
+        resultado_bodegas = Bodegas_schema.dump(all_bodegas)
+        all_categorias = Categoria.query.all()
+        resultado_categorias = Categorias_schema.dump(all_categorias)
+        all_productos = Producto.query.all()
+        resultado_productos = Productos_schema.dump(all_productos)
+        return render_template('productos.html', bodegas = resultado_bodegas,
+                               subcategorias = resultado_subcategorias,
+                               productos = resultado_productos,
+                               categorias = resultado_categorias,
+                               usuario = session['usuario'])
+    else:
+        return redirect('/')
+    
+@app.route('/cargar_productos_por_subcategoria', methods=['GET', 'POST'])
+def cargar_productos_por_subcategoria():
+    if 'usuario' in session:
+        nombre_subcategoria_sel = request.form['subcategoria']
+        subcategoria_sel = Subcategoria.query.filter_by(descripcion = nombre_subcategoria_sel).first()
+        productos = Producto.query.filter_by(subcategoria = subcategoria_sel.id)
+        resultado_productos = Productos_schema.dump(productos)
+        
+        all_bodegas = Bodega.query.all()
+        resultado_bodegas = Bodegas_schema.dump(all_bodegas)
+        all_categorias = Categoria.query.all()
+        resultado_categorias = Categorias_schema.dump(all_categorias)
+        all_subcategorias = Subcategoria.query.all()
+        resultado_subcategorias = Subcategorias_schema.dump(all_subcategorias)
+        
+        return render_template('productos.html', bodegas = resultado_bodegas,
+                               subcategorias = resultado_subcategorias,
+                               productos = resultado_productos,
+                               categorias = resultado_categorias,
+                               usuario = session['usuario'])
+    else:
+        return redirect('/')
+    
 @app.route('/pagina_informes', methods=['GET'])
 def pagina_informes():
     if 'usuario' in session:
         all_informes = Informe.query.all()
         resultado_informes = Informes_schema.dump(all_informes)
         return render_template('informes.html', informes = resultado_informes, usuario = session['usuario'])
+    else:
+        return redirect('/')
+    
+@app.route('/pagina_usuarios', methods=['GET'])
+def pagina_usuarios():
+    if 'usuario' in session:
+        all_usuarios = Usuario.query.all()
+        resultado_usuarios = Usuarios_schema.dump(all_usuarios)
+        return render_template('usuarios.html', usuarios = resultado_usuarios, usuario = session['usuario'])
     else:
         return redirect('/')
     
@@ -215,11 +296,49 @@ def pagina_nueva_entrada():
         resultado_vehiculos = Vehiculos_schema.dump(all_vehiculos)
         all_producto_inventario = Producto_inventario.query.all()
         resultado_productos_inventario = Productos_inventario_schema.dump(all_producto_inventario)
-
+        all_bodegas = Bodega.query.all()
+        resultado_bodegas = Bodegas_schema.dump(all_bodegas)
+        all_categorias = Categoria.query.all()
+        resultado_categorias = Categorias_schema.dump(all_categorias)
+        all_subcategorias = Subcategoria.query.all()
+        resultado_subcategorias = Subcategorias_schema.dump(all_subcategorias)
+        
         return render_template('nueva_entrada.html', entradas = resultado_entradas, 
                                productos = resultado_productos, 
                                benefactores = resultado_benefactores, vehiculos = resultado_vehiculos,
                                productos_inventario = resultado_productos_inventario, 
+                               bodegas = resultado_bodegas,
+                               categorias = resultado_categorias,
+                               subcategorias = resultado_subcategorias,
+                               usuario = session['usuario'])
+    else:
+        return redirect('/')
+    
+@app.route('/pagina_nueva_salida', methods=['GET'])
+def pagina_nueva_salida():
+    if 'usuario' in session:
+        all_salidas = Salida.query.all()
+        resultado_salidas = Salidas_schema.dump(all_salidas)
+        all_beneficiarios = Beneficiario.query.all()
+        resultado_beneficiarios = Beneficiarios_schema.dump(all_beneficiarios)
+        all_producto_inventario = Producto_inventario.query.all()
+        resultado_productos_inventario = Productos_inventario_schema.dump(all_producto_inventario)
+        all_bodegas = Bodega.query.all()
+        resultado_bodegas = Bodegas_schema.dump(all_bodegas)
+        all_categorias = Categoria.query.all()
+        resultado_categorias = Categorias_schema.dump(all_categorias)
+        all_subcategorias = Subcategoria.query.all()
+        resultado_subcategorias = Subcategorias_schema.dump(all_subcategorias)
+        all_producto_salida = Producto_salida.query.all()
+        resultado_productos_salida = Productos_salida_schema.dump(all_producto_salida)
+        
+        return render_template('nueva_salida.html', salidas = resultado_salidas, 
+                               beneficiarios = resultado_beneficiarios,
+                               productos_inventario = resultado_productos_inventario,
+                               bodegas = resultado_bodegas,
+                               categorias = resultado_categorias,
+                               subcategorias = resultado_subcategorias,
+                               productos_salida = resultado_productos_salida,
                                usuario = session['usuario'])
     else:
         return redirect('/')
@@ -280,19 +399,15 @@ def guardar_entrada():
 @app.route('/guardar_salida', methods=['POST'] )
 def guardar_salida():
     id_beneficiario = request.form['id_beneficiario']
-    id_entrada = request.form['id_entrada']
     fecha = request.form['fecha']
-    cantidad_peso = request.form['cantidad_peso']
-    cantidad_unidades = request.form['cantidad_unidades']
-    unidad_de_medida = request.form['unidad_de_medida']
     tipo = request.form['tipo']
-    num_doc_siigo = request.form['num_doc_siigo']
     aporte_solidario = request.form['aporte_solidario']
+    ingresado_siigo = request.form['ingresado_siigo']
+    num_doc_siigo = request.form['num_doc_siigo']
     observaciones = request.form['observaciones']
     
-    nueva_donacion = Salida(id_beneficiario, id_entrada, fecha, cantidad_peso, 
-                            cantidad_unidades, unidad_de_medida, tipo, num_doc_siigo, 
-                            aporte_solidario, observaciones)
+    nueva_donacion = Salida(id_beneficiario, fecha, tipo, aporte_solidario,
+                            ingresado_siigo, num_doc_siigo, observaciones)
 
     db.session.add(nueva_donacion)
     db.session.commit()
@@ -363,9 +478,11 @@ def guardar_producto():
 @app.route('/nuevo_vehiculo', methods=['POST'] )
 def guardar_vehiculo():
     matricula = request.form['matricula']
-    conductor = request.form['conductor']
+    tipo = request.form['tipo']
+    capacidad = request.form['capacidad']
+    empresa = request.form['empresa']
     
-    Nuevo_vehiculo = Vehiculo(matricula, conductor)
+    Nuevo_vehiculo = Vehiculo(matricula, tipo, capacidad, empresa)
 
     db.session.add(Nuevo_vehiculo)
     db.session.commit()
@@ -383,15 +500,16 @@ def guardar_usuario():
 
     db.session.add(Nuevo_usuario)
     db.session.commit()
-    return redirect('/')
+    return redirect('/pagina_usuarios')
 
 @app.route('/nuevo_benefactor', methods=['POST'] )
 def guardar_benefactor():
     nombre = request.form['nombre']
+    nit = request.form['nit']
     contacto = request.form['contacto']
     direccion = request.form['direccion']
     
-    Nuevo_benefactor = Benefactor(nombre, contacto, direccion)
+    Nuevo_benefactor = Benefactor(nombre, nit, contacto, direccion)
 
     db.session.add(Nuevo_benefactor)
     db.session.commit()
