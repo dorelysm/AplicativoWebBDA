@@ -120,10 +120,20 @@ def pagina_entradas():
 def cargar_entradas_por_fecha():
     if 'usuario' in session:
         fecha_sel = request.form['fecha_datepicker']
-        print(fecha_sel)
         entradas = Entrada.query.filter_by(fecha = fecha_sel)
         resultado_entradas = Entradas_schema.dump(entradas)
         return render_template('entradas.html', entradas = resultado_entradas, 
+                               usuario = session['usuario'])
+    else:
+        return redirect('/')
+    
+@app.route('/cargar_salidas_por_fecha', methods=['GET', 'POST'])
+def cargar_salidas_por_fecha():
+    if 'usuario' in session:
+        fecha_sel = request.form['fecha_datepicker']
+        salidas = Salida.query.filter_by(fecha = fecha_sel)
+        resultado_salidas = Salidas_schema.dump(salidas)
+        return render_template('salidas.html', salidas = resultado_salidas, 
                                usuario = session['usuario'])
     else:
         return redirect('/')
@@ -271,6 +281,48 @@ def pagina_informes():
         all_informes = Informe.query.all()
         resultado_informes = Informes_schema.dump(all_informes)
         return render_template('informes.html', informes = resultado_informes, usuario = session['usuario'])
+    else:
+        return redirect('/')
+    
+@app.route('/pagina_inventario', methods=['GET'])
+def pagina_inventario():
+    if 'usuario' in session:
+        all_bodegas = Bodega.query.all()
+        resultado_bodegas = Bodegas_schema.dump(all_bodegas)
+        all_categorias = Categoria.query.all()
+        resultado_categorias = Categorias_schema.dump(all_categorias)
+        all_subcategorias = Subcategoria.query.all()
+        resultado_subcategorias = Subcategorias_schema.dump(all_subcategorias)
+        all_productos = Producto.query.all()
+        resultado_productos = Productos_schema.dump(all_productos)
+        all_producto_inventario = Producto_inventario.query.all()
+        resultado_productos_inventario = Productos_inventario_schema.dump(all_producto_inventario)
+        return render_template('inventario.html', usuario = session['usuario'],
+                               bodegas = resultado_bodegas, categorias = resultado_categorias,
+                               subcategorias = resultado_subcategorias, productos = resultado_productos,
+                               productos_inventario = resultado_productos_inventario)
+    else:
+        return redirect('/')
+    
+@app.route('/inventario_por_bodega', methods=['GET'])
+def inventario_por_bodega():
+    if 'usuario' in session:
+        bodega_sel = request.form['bodega']
+        
+        all_bodegas = Bodega.query.all()
+        resultado_bodegas = Bodegas_schema.dump(all_bodegas)
+        all_categorias = Categoria.query.all()
+        resultado_categorias = Categorias_schema.dump(all_categorias)
+        all_subcategorias = Subcategoria.query.all()
+        resultado_subcategorias = Subcategorias_schema.dump(all_subcategorias)
+        all_productos = Producto.query.all()
+        resultado_productos = Productos_schema.dump(all_productos)
+        all_producto_inventario = Producto_inventario.query.all()
+        resultado_productos_inventario = Productos_inventario_schema.dump(all_producto_inventario)
+        return render_template('inventario.html', usuario = session['usuario'],
+                               bodegas = resultado_bodegas, categorias = resultado_categorias,
+                               subcategorias = resultado_subcategorias, productos = resultado_productos,
+                               productos_inventario = resultado_productos_inventario)
     else:
         return redirect('/')
     
