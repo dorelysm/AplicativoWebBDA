@@ -1,7 +1,7 @@
 from flask import Flask, redirect, request, jsonify, json, session, render_template, make_response
 
 from config.bd import app, db
-
+from sqlalchemy import select
 from flask_bcrypt import check_password_hash
 
 from modelos.Benefactores import Benefactor, BenefactorSchema
@@ -331,6 +331,7 @@ def pagina_nueva_salida():
         resultado_subcategorias = Subcategorias_schema.dump(all_subcategorias)
         all_producto_salida = Producto_salida.query.all()
         resultado_productos_salida = Productos_salida_schema.dump(all_producto_salida)
+        #sel = select(producto_inventario, producto).where()
         
         return render_template('nueva_salida.html', salidas = resultado_salidas, 
                                beneficiarios = resultado_beneficiarios,
@@ -394,36 +395,59 @@ def guardar_entrada():
 
     db.session.add(nueva_donacion)
     db.session.commit()
-    return redirect('/pagina_entradas')
+    return redirect('/pagina_nueva_entrada')
 
 @app.route('/guardar_salida', methods=['POST'] )
 def guardar_salida():
-    id_beneficiario = request.form['id_beneficiario']
-    fecha = request.form['fecha']
+    nombre_beneficiario = request.form['beneficiario']
+    fecha = request.form['fecha_datepicker']
     tipo = request.form['tipo']
-    aporte_solidario = request.form['aporte_solidario']
-    ingresado_siigo = request.form['ingresado_siigo']
+    ingresado_siigo = request.form['siigo']
     num_doc_siigo = request.form['num_doc_siigo']
     observaciones = request.form['observaciones']
     
-    nueva_donacion = Salida(id_beneficiario, fecha, tipo, aporte_solidario,
-                            ingresado_siigo, num_doc_siigo, observaciones)
+    beneficiario = Beneficiario.query.filter_by(nombre=nombre_beneficiario).first()
+    
+    nueva_donacion = Salida(id_beneficiario = beneficiario.num_beneficiario, 
+                            fecha = fecha, tipo = tipo, 
+                            ingresado_siigo = ingresado_siigo, 
+                            num_doc_siigo = num_doc_siigo, 
+                            observaciones = observaciones)
 
     db.session.add(nueva_donacion)
     db.session.commit()
-    return redirect('/pagina_salidas')
+    return redirect('/pagina_nueva_salida')
+
+@app.route('/nuevo_producto_salida', methods=['POST'] )
+def nuevo_producto_salida():
+    id_salida = request.form['salida']
+    producto = request.form['producto_inventario']
+    cantidad = request.form['cantidad_unidades']
+    peso = request.form['peso']
+    aporte_solidario = request.form['aporte_solidario']
+    
+    #producto = Producto_inventario.query.filter_by(descripcion = desc_producto).first()
+
+    Nuevo_producto_salida = Producto_salida(id_salida=id_salida ,id_producto=producto, 
+                                                    cantidad_unidades=cantidad, peso=peso, 
+                                                    aporte_solidario=aporte_solidario)
+
+    db.session.add(Nuevo_producto_salida)
+    db.session.commit()
+    return redirect('/pagina_nueva_salida')
 
 @app.route('/nuevo_beneficiario', methods=['POST'] )
 def guardar_beneficiario():
     nombre = request.form['nombre']
+    cc = request.form['cc']
     contacto = request.form['contacto']
     direccion = request.form['direccion']
     
-    Nuevo_beneficiario = Beneficiario(nombre, contacto, direccion)
+    Nuevo_beneficiario = Beneficiario(nombre, cc, contacto, direccion)
 
     db.session.add(Nuevo_beneficiario)
     db.session.commit()
-    return redirect('/pagina_beneficiarios')
+    return redirect('/pagina_nueva_salida')
 
 @app.route('/nueva_bodega', methods=['POST'] )
 def guardar_bodega():

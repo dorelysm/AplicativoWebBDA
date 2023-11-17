@@ -17,8 +17,8 @@
                 <form action="/guardar_entrada" method="POST">
                     <div class="form-group">
                         <label for="recipient-name" class="col-form-label">Beneficiario:</label>
-                        <select class="form-control" name="benefactor">
-                            {% for item in beneficiario %}
+                        <select class="form-control" name="beneficiario">
+                            {% for item in beneficiarios %}
                                 <option>{{item.nombre}}</option>  
                             {% endfor %}
                         </select>
@@ -40,19 +40,15 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="message-text" class="col-form-label">Aporte solidario:</label>
-                        <input type="text" class="form-control" name="aporte_solidario"  value="">
-                    </div>
-                    <div class="form-group">
                         <label for="message-text" class="col-form-label">¿Ingresado en SIIGO?:</label>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="proceso_de_inventarios" value="n" id="n" checked>
+                            <input class="form-check-input" type="radio" name="siigo" value="n" id="n" checked>
                             <label class="form-check-label" for="flexRadioDefault1">
                               No
                             </label>
                           </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="proceso_de_inventarios" value="s" id="s">
+                            <input class="form-check-input" type="radio" name="siigo" value="s" id="s">
                             <label class="form-check-label" for="flexRadioDefault1">
                               Si
                             </label>
@@ -60,7 +56,7 @@
                     </div>
                     <div class="form-group">
                         <label for="message-text" class="col-form-label">Número de documento en SIIGO:</label>
-                        <input type="text" class="form-control" name="num_documento_siigo"  value="">
+                        <input type="text" class="form-control" name="num_doc_siigo"  value="">
                     </div>
                     <div class="form-group">
                         <label for="message-text" class="col-form-label">Observaciones:</label>
@@ -92,7 +88,7 @@
                         <label for="recipient-name" class="col-form-label">Producto:</label>
                         <select class="form-control" name="producto_inventario">
                             {% for item in productos_inventario %}
-                                <option>{{item.descripcion}}</option>  
+                                <option>{{item.id}}</option>  
                             {% endfor %}
                         </select>
                     </div>
@@ -103,6 +99,10 @@
                     <div class="form-group">
                         <label for="message-text" class="col-form-label">Peso:</label>
                         <input type="text" class="form-control" name="peso"  value="">
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Aporte solidario:</label>
+                        <input type="text" class="form-control" name="aporte_solidario"  value="">
                     </div>
                     <button  type="submit" class="btn btn-primary">Agregar producto</button>
                 </form>
@@ -135,10 +135,10 @@
                 <thead>
                     <tr>
                         <th scope="col">Producto</th>
-                        <th scope="col">Id entrada</th>
+                        <th scope="col">Id salida</th>
                         <th scope="col">Cantidad</th>
                         <th scope="col">Peso</th>
-                        <th scope="col">Fecha de vencimiento</th>
+                        <th scope="col">Aporte solidario</th>
                         <th scope="col" colspan="2">Opciones</th>
                     </tr>
                 </thead>
@@ -146,10 +146,10 @@
                     {% for item in productos_salida %}
                     <tr>
                         <td scope="row">{{item.id_producto}}</td>
-                        <td scope="row">{{item.id_entrada}}</td>
+                        <td scope="row">{{item.id_salida}}</td>
                         <td scope="row">{{item.cantidad_unidades}}</td>
                         <td scope="row">{{item.peso}}</td>
-                        <td scope="row">{{item.vencimiento}}</td>
+                        <td scope="row">{{item.aporte_solidario}}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -171,7 +171,7 @@
                 </div>
                 <div class="form-group">
                     <label for="recipient-name" class="col-form-label">Nit o cédula:</label>
-                    <input type="text" class="form-control" name="nit"  value="">
+                    <input type="text" class="form-control" name="cc"  value="">
                 </div>
                 <div class="form-group">
                     <label for="recipient-name" class="col-form-label">Contacto:</label>
@@ -183,35 +183,6 @@
                 </div>
                     <div class="modal-footer">
                         <button  type="submit" class="btn btn-primary">Guardar</button>
-                </div>
-            </form> 
-        `;
-        $("#fromartc").html(formulario);
-        }
-        function cargar_formulario_vehiculo(){
-        const formulario = `
-            <form action="/nuevo_vehiculo" method="POST">
-                <h4>
-                    Nuevo vehículo
-                </h4>
-                <div class="form-group">
-                    <label for="recipient-name" class="col-form-label">Matrícula:</label>
-                    <input type="text" class="form-control" name="matricula"  value="">
-                </div>
-                <div class="form-group">
-                    <label for="recipient-name" class="col-form-label">Tipo:</label>
-                    <input type="text" class="form-control" name="tipo"  value="">
-                </div>
-                <div class="form-group">
-                    <label for="recipient-name" class="col-form-label">Capacidad:</label>
-                    <input type="text" class="form-control" name="capacidad"  value="">
-                </div>
-                <div class="form-group">
-                    <label for="recipient-name" class="col-form-label">Empresa:</label>
-                    <input type="text" class="form-control" name="empresa"  value="">
-                </div>
-                <div class="modal-footer">
-                    <button  type="submit" class="btn btn-primary">Guardar</button>
                 </div>
             </form> 
         `;

@@ -12,8 +12,10 @@ class Salida(db.Model):
     num_doc_siigo = db.Column(db.Integer)
     observaciones = db.Column(db.String(500))
 
-    def __init__(self, id_beneficiario, fecha, tipo, aporte_solidario, 
-                 ingresado_siigo, num_doc_siigo, observaciones):
+    def __init__(self, id_beneficiario = None, fecha = None, 
+                 tipo = None, aporte_solidario = None, 
+                 ingresado_siigo = None, num_doc_siigo = None, 
+                 observaciones = None):
         #self.id = id
         self.id_beneficiario = id_beneficiario
         self.fecha = fecha
