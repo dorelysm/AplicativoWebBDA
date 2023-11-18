@@ -4,32 +4,32 @@
 
 {% include('modal.html') %}
 
+<style>
+  .table-striped tbody tr:nth-child(odd) {
+      background-color: #d4dd9d;
+  }
+</style>
+
 <div id="layoutSidenav">
-  <div id="layoutSidenav_content">
-    <main>
-      <div class="container-fluid px-4">
-        <h1 class="mt-4">Donaciones salientes</h1>
-        <!-- <ol class="breadcrumb mb-4">
-          <li class="breadcrumb-item"><a href="/inicio">Sistema de inventario</a></li>
-          <li class="breadcrumb-item active">Salidas</li>
-        </ol> -->
-            <a class="btn btn-primary btn-block mb-4" href="/pagina_nueva_salida">Nueva salida</a>
+  <main>
+    <div class="container">
+      <h1 class="mt-4">Donaciones salientes</h1>
+
+      <a class="btn btn-primary btn-block mb-4 border-0" style="background-color: #A9BA3B;color: black;" href="/pagina_nueva_salida">Nueva salida</a>
+
+      <form action="/cargar_salidas_por_fecha" method="POST">
+        <div class="row">
+          <div class="col-6 form-group">
+            <label for="message-text" class="col-form-label">Fecha:</label>
+            <input data-date-format="yyyy-mm-dd" name="fecha_datepicker" id="datepicker">
           </div>
-        </div>
-        <div class="container">
-          <form action="/cargar_salidas_por_fecha" method="POST">
-            <div class="row">
-              <div class="col-6 form-group">
-                <label for="message-text" class="col-form-label">Fecha:</label>
-                <input data-date-format="yyyy-mm-dd" name="fecha_datepicker" id="datepicker">
-              </div>
-              <div class="col align-self-center">
-                <button  type="submit" class="btn btn-primary mb-3">Buscar</button>
-              </div>
-          </form>
-        </div>
+          <div class="col align-self-center">
+            <button  type="submit" class="btn btn-primary btn-block mb-4 border-0" style="background-color: #A9BA3B;color: black;">Buscar</button>
+          </div>
+      </form>
+    </div>
         <div class="card mb-4">
-          <div class="card-header">
+          <div class="card-header" style="background-color: #A9BA3B;color: black;">
             <i class="fas fa-table me-1"></i>
             Listado de donaciones salientes
           </div>
