@@ -127,6 +127,12 @@ def cargar_entradas_por_fecha():
     else:
         return redirect('/')
     
+@app.route('/ver_productos_entrada', methods=['GET'] ) 
+def ver_productos_entrada():
+    id = request.args.get('id')
+    productos = Producto_inventario.query.get(id)
+    return Producto_inventario_schema.dump(productos)
+    
 @app.route('/cargar_salidas_por_fecha', methods=['GET', 'POST'])
 def cargar_salidas_por_fecha():
     if 'usuario' in session:
@@ -945,7 +951,7 @@ def actualizar_producto():
     producto.peso = peso
     
     db.session.commit()
-    return redirect('/pagina_entradas')
+    return redirect('/pagina_productos')
     
 @app.route('/actualizar_usuario', methods=['POST'] )
 def actualizar_usuario():

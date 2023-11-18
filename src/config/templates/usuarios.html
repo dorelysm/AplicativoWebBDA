@@ -41,7 +41,7 @@
                       <td>
                         <a
                           onclick="eliminar('{{item.id}}')"
-                          class="btn btn-danger btn-sm rounded-0"
+                          class="btn btn-danger btn-sm"
                           >Eliminar</a
                         >
                       </td>
@@ -54,6 +54,9 @@
                 function cargar_formulario(){
                     const formulario = `
                             <form action="/nuevo_usuario" method="POST">
+                            <div class="container text-center">
+                              <h3>Registrar nuevo usuario</h3>
+                            </div>
                             <div class="form-group">
                                 <label for="recipient-name" class="col-form-label">Correo:</label>
                                 <input type="email" class="form-control" name="email"  placeholder="correo@correo.com">
@@ -80,7 +83,7 @@
                                 </select>
                             </div>
                             <div class="modal-footer">
-                                <button  type="submit" class="btn btn-primary">Guardar</button>
+                                <button  type="submit" class="btn btn-primary btn-block mb-4 border-0"  style="background-color: #A9BA3B;color: black;" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Guardar</button>
                             </div>
                             </form> 
                     `;

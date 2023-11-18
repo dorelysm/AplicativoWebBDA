@@ -3,6 +3,13 @@
 {%  block content %}
 
 {% include('modal.html') %}
+
+<style>
+    .table-striped tbody tr:nth-child(odd) {
+        background-color: #d4dd9d;
+    }
+</style>
+
     <div class="container">
         <h1 class="mt-4">Nuevas Entradas</h1>
     </div>
@@ -160,7 +167,7 @@
                       </div>
                     </div>
                 </form>
-                <table class="table table-striped">
+                <table class="table table-striped text-center">
                     <thead>
                         <tr>
                             <th scope="col">Producto</th>
@@ -182,14 +189,14 @@
                                     onclick="actualizar('{{item.id}}')"
                                     data-bs-toggle="modal"
                                     data-bs-target="#staticBackdrop"
-                                    class="btn btn-primary btn-sm rounded-0"
+                                    class="btn btn-warning btn-sm"
                                     >Actualizar
                                 </a>
                             </td>
                             <td>
                                 <a
                                   onclick="eliminar('{{item.id}}')"
-                                  class="btn btn-danger btn-sm rounded-0">
+                                  class="btn btn-danger btn-sm">
                                   eliminar
                                 </a>
                               </td>
@@ -207,9 +214,9 @@
     function cargar_formulario_benefactor(){
         const formulario = `
             <form action="/nuevo_benefactor" method="POST">
-                <h4>
-                    Nuevo benefactor
-                </h4>
+                <div class="container text-center">
+                    <h3>Nuevo benefactor</h3>
+                </div>
                 <div class="form-group">
                     <label for="recipient-name" class="col-form-label">Nombre:</label>
                     <input type="text" class="form-control" name="nombre"  value="">
@@ -227,7 +234,7 @@
                     <input type="text" class="form-control" name="direccion"  value="">
                 </div>
                     <div class="modal-footer">
-                        <button  type="submit" class="btn btn-primary">Guardar</button>
+                        <button  type="submit" class="btn btn-primary btn-block mb-4 border-0" style="background-color: #A9BA3B;color: black;">Guardar</button>
                 </div>
             </form> 
         `;
@@ -236,9 +243,9 @@
         function cargar_formulario_vehiculo(){
         const formulario = `
             <form action="/nuevo_vehiculo" method="POST">
-                <h4>
-                    Nuevo vehículo
-                </h4>
+                <div class="container text-center">
+                    <h3>Nuevo vehículo</h3>
+                </div>
                 <div class="form-group">
                     <label for="recipient-name" class="col-form-label">Matrícula:</label>
                     <input type="text" class="form-control" name="matricula"  value="">
@@ -256,7 +263,7 @@
                     <input type="text" class="form-control" name="empresa"  value="">
                 </div>
                 <div class="modal-footer">
-                    <button  type="submit" class="btn btn-primary">Guardar</button>
+                    <button  type="submit" class="btn btn-primary btn-block mb-4 border-0" style="background-color: #A9BA3B;color: black;">Guardar</button>
                 </div>
             </form> 
         `;

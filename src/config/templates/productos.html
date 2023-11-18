@@ -106,6 +106,7 @@
                                         <th scope="col">Subcategoria</th>
                                         <th scope="col">Descripcion</th>
                                         <th scope="col">Peso</th>
+                                        <th scope="col">Opciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -115,6 +116,15 @@
                                         <td scope="row">{{item.subcategoria}}</td>
                                         <td scope="row">{{item.descripcion}}</td>
                                         <td scope="row">{{item.peso}}</td>
+                                        <td>
+                                            <a
+                                                onclick="actualizar_producto('{{item.id}}')"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#staticBackdrop"
+                                                class="btn btn-warning btn-sm text-nowrap"
+                                                >Actualizar
+                                            </a>
+                                        </td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
@@ -137,12 +147,15 @@
         function cargar_formulariobod(){
         const formulario = `
             <form action="/nueva_bodega" method="POST">
+                <div class="container text-center">
+                    <h3>Nueva bodega</h3>
+                </div>
                 <div class="form-group">
                     <label for="recipient-name" class="col-form-label">Nombre:</label>
                     <input type="text" class="form-control" name="nombre"  value="">
                 </div>
                 <div class="modal-footer">
-                  <button  type="submit" class="btn btn-primary">Guardar</button>
+                  <button  type="submit" class="btn btn-primary btn-block mb-4 border-0" style="background-color: #A9BA3B;color: black;">Guardar</button>
                 </div>
             </form> 
         `;
@@ -152,6 +165,9 @@
         function cargar_formulariocat(){
             const formulario = `
                 <form action="/nueva_categoria" method="POST">
+                    <div class="container text-center">
+                        <h3>Nueva categoría</h3>
+                    </div>
                     <div class="form-group">
                         <label for="recipient-name" class="col-form-label">Bodega:</label>
                         <select class="form-control" name="bodega">
@@ -165,7 +181,7 @@
                         <input type="text" class="form-control" name="descripcion"  value="">
                     </div>
                     <div class="modal-footer">
-                        <button  type="submit" class="btn btn-primary">Guardar</button>
+                        <button  type="submit" class="btn btn-primary btn-block mb-4 border-0" style="background-color: #A9BA3B;color: black;">Guardar</button>
                     </div>
                 </form> 
             `;
@@ -175,6 +191,9 @@
         function cargar_formulariosub(){
         const formulario = `
             <form action="/nueva_subcategoria" method="POST">
+                <div class="container text-center">
+                    <h3>Nueva subcategoría</h3>
+                </div>
                 <div class="form-group">
                     <label for="recipient-name" class="col-form-label">Id categoria:</label>
                     <select class="form-control" name="categoria">
@@ -188,7 +207,7 @@
                     <input type="text" class="form-control" name="descripcion"  value="">
                 </div>
                 <div class="modal-footer">
-                    <button  type="submit" class="btn btn-primary">Guardar</button>
+                    <button  type="submit" class="btn btn-primary btn-block mb-4 border-0" style="background-color: #A9BA3B;color: black;">Guardar</button>
                 </div>
             </form> 
             `;
@@ -198,6 +217,9 @@
         function cargar_formularioprod(){
             const formulario = `
                 <form action="/nuevo_producto" method="POST">
+                    <div class="container text-center">
+                        <h3>Nuevo producto</h3>
+                    </div>
                     <div class="form-group">
                         <label for="recipient-name" class="col-form-label">Id subcategoria:</label>
                         <select class="form-control" name="subcategoria">
@@ -215,11 +237,48 @@
                         <input type="text" class="form-control" name="peso"  value="">
                     </div>
                     <div class="modal-footer">
-                        <button  type="submit" class="btn btn-primary">Guardar</button>
+                        <button  type="submit" class="btn btn-primary btn-block mb-4 border-0" style="background-color: #A9BA3B;color: black;">Guardar</button>
                     </div>
                 </form> 
             `;
             $("#fromartc").html(formulario);
+        }
+
+        function actualizar_producto(id){
+            url = '/productos';
+            var request = $.ajax({
+                contentType:"application/json",
+                dataType: "json", //Expected data format from server  
+                method: "GET",
+                data: { id},
+                url: url      
+            });
+            request.done(function( data ) {
+                const formulario = `
+                    <div class="container text-center">
+                        <h3>Actualizar producto</h3>
+                    </div>
+                    <form action="/actualizar_producto" method="POST">
+                        <input type="hidden" class="form-control" name="id"  value="${data.id}">
+                        <input type="hidden" class="form-control" name="subcategoria"  value="${data.subcategoria}">
+                      <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Descripción:</label>
+                        <input type="text" class="form-control" name="descripcion"  value="${data.descripcion}">
+                      </div>
+                      <div class="form-group">
+                        <label for="message-text" class="col-form-label">Peso:</label>
+                        <input type="text" class="form-control" name="peso"  value="${data.peso}">
+                      </div>
+                      <div class="modal-footer">
+                        <button  type="submit" class="btn btn-primary btn-block mb-4 border-0" style="background-color: #A9BA3B;color: black;">Guardar</button>
+                      </div>
+                    </form> 
+            `;
+            $("#fromartc").html(formulario);             
+            });
+            request.fail(function( jqXHR, textStatus ) {
+                alert( "Error" + textStatus );
+            });
         }
     </script>
   <script
