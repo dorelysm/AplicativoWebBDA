@@ -3,13 +3,13 @@
 {%  block content %}
 
 {% include('modal.html') %}
-    <div class="container-fluid px-4">
+    <div class="container">
         <h1 class="mt-4">Nuevas Entradas</h1>
     </div>
     <form action="/guardar_entrada" method="POST">
-    <div class="container-fluid">
+    <div class="container">
         <div class="card mb-5">
-            <div class="card-header">
+            <div class="card-header" style="background-color: #A9BA3B;color: black;">
                 <label class="">Datos generales de la entrada</label>
             </div>
             
@@ -22,7 +22,7 @@
                                 <option>{{item.nombre}}</option>  
                             {% endfor %}
                         </select>
-                        <a onclick="cargar_formulario_benefactor()" class="btn btn-primary btn-block mb-4"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                        <a onclick="cargar_formulario_benefactor()" class="btn btn-primary btn-block mb-4 border-0" style="background-color: #A9BA3B;color: black;"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                             Nuevo benefactor
                         </a>
                     </div>
@@ -53,7 +53,7 @@
                                 <option>{{item.matricula}}</option>  
                             {% endfor %}
                         </select>
-                        <a onclick="cargar_formulario_vehiculo()" class="btn btn-primary btn-block mb-4"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                        <a onclick="cargar_formulario_vehiculo()" class="btn btn-primary btn-block mb-4 border-0" style="background-color: #A9BA3B;color: black;"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                             Nuevo vehículo
                         </a>
                     </div>
@@ -88,16 +88,16 @@
                         <label for="message-text" class="col-form-label">Observaciones:</label>
                         <textarea type="text" class="form-control" name="observaciones"></textarea>
                     </div>
-                    <button  type="submit" class="btn btn-primary">Guardar entrada</button>
+                    <button  type="submit" class="btn btn-primary btn-block mb-4 border-0" style="background-color: #A9BA3B;color: black;">Guardar entrada</button>
                 </form>
             </div>
         </div>
         
     </div>
     
-    <div class="container-fluid">
+    <div class="container">
         <div class="card mb-5">
-            <div class="card-header">
+            <div class="card-header" style="background-color: #A9BA3B;color: black;">
                 <label>Datos de los productos</label>
             </div>
 
@@ -132,72 +132,75 @@
                         <label for="message-text" class="col-form-label">Fecha de vencimiento:</label>
                         <input data-date-format="yyyy-mm-dd" name="vencimiento_datepicker" id="datepicker_venc">
                     </div>
-                    <button  type="submit" class="btn btn-primary">Agregar producto</button>
+                    <button  type="submit" class="btn btn-primary btn-block mb-4 border-0" style="background-color: #A9BA3B;color: black;">Agregar producto</button>
                 </form>
             </div>
         </div>
     </div>
 
-    <div class="card mb-4">
-        <div class="card-header">
-            <i class="fas fa-table me-1"></i>
-            Listado de productos
-        </div>
-        <div class="card-body">
-            <form action="/cargar_productos_por_entrada" method="POST">
-                <div class="row align-items-start">
-                  <div class="col form-group">
-                    <label for="message-text" class="col-form-label">Entrada:</label>
-                    <select class="form-control" name="entrada_para_lista">
-                        {% for item in entradas %}
-                            <option>{{item.id}}</option>  
+    <div class="container">
+        <div class="card mb-4">
+            <div class="card-header" style="background-color: #A9BA3B;color: black;">
+                <i class="fas fa-table me-1"></i>
+                Listado de productos
+            </div>
+            <div class="card-body">
+                <form action="/cargar_productos_por_entrada" method="POST">
+                    <div class="row align-items-start">
+                      <div class="col form-group">
+                        <label for="message-text" class="col-form-label">Entrada:</label>
+                        <select class="form-control" name="entrada_para_lista">
+                            {% for item in entradas %}
+                                <option>{{item.id}}</option>  
+                            {% endfor %}
+                        </select>
+                    </div>
+                      <div class="col align-self-center">
+                        <button  type="submit" class="btn btn-primary btn-block mb-4 border-0" style="background-color: #A9BA3B;color: black;">Buscar</button>
+                      </div>
+                    </div>
+                </form>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Producto</th>
+                            <th scope="col">Cantidad</th>
+                            <th scope="col">Peso</th>
+                            <th scope="col">Fecha de vencimiento</th>
+                            <th scope="col" colspan="2">Opciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in productos_inventario %}
+                        <tr>
+                            <td scope="row">{{item.id_producto}}</td>
+                            <td scope="row">{{item.cantidad_unidades}}</td>
+                            <td scope="row">{{item.peso}}</td>
+                            <td scope="row">{{item.vencimiento}}</td>
+                            <td>
+                                <a
+                                    onclick="actualizar('{{item.id}}')"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#staticBackdrop"
+                                    class="btn btn-primary btn-sm rounded-0"
+                                    >Actualizar
+                                </a>
+                            </td>
+                            <td>
+                                <a
+                                  onclick="eliminar('{{item.id}}')"
+                                  class="btn btn-danger btn-sm rounded-0">
+                                  eliminar
+                                </a>
+                              </td>
+                        </tr>
                         {% endfor %}
-                    </select>
-                </div>
-                  <div class="col align-self-center">
-                    <button  type="submit" class="btn btn-primary">Buscar</button>
-                  </div>
-                </div>
-            </form>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th scope="col">Producto</th>
-                        <th scope="col">Cantidad</th>
-                        <th scope="col">Peso</th>
-                        <th scope="col">Fecha de vencimiento</th>
-                        <th scope="col" colspan="2">Opciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for item in productos_inventario %}
-                    <tr>
-                        <td scope="row">{{item.id_producto}}</td>
-                        <td scope="row">{{item.cantidad_unidades}}</td>
-                        <td scope="row">{{item.peso}}</td>
-                        <td scope="row">{{item.vencimiento}}</td>
-                        <td>
-                            <a
-                                onclick="actualizar('{{item.id}}')"
-                                data-bs-toggle="modal"
-                                data-bs-target="#staticBackdrop"
-                                class="btn btn-primary btn-sm rounded-0"
-                                >Actualizar
-                            </a>
-                        </td>
-                        <td>
-                            <a
-                              onclick="eliminar('{{item.id}}')"
-                              class="btn btn-danger btn-sm rounded-0">
-                              eliminar
-                            </a>
-                          </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
+    
   </form> 
 
   <script>
