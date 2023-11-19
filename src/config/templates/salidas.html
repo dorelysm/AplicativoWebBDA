@@ -42,8 +42,7 @@
                     <th scope="col">Id beneficiario</th>
                     <th scope="col">Fecha</th>
                     <th scope="col">Tipo</th>
-                    <th scope="col">Aporte solidario</th>
-                    <th scope="col">¿Ingresado a SIIGO</th>
+                    <th scope="col">¿Ingresado a SIIGO?</th>
                     <th scope="col">Número de documento SIIGO</th>
                     <th scope="col">Observaciones</th>
                     <th scope="col" colspan="3"><center>Opciones</center></th>
@@ -56,7 +55,6 @@
                     <td>{{item.id_beneficiario}}</td>
                     <td>{{item.fecha}}</td>
                     <td>{{item.tipo}}</td>
-                    <td>{{item.aporte_solidario}}</td>
                     <td>{{item.ingresado_siigo}}</td>
                     <td>{{item.num_doc_siigo}}</td>
                     <td>{{item.observaciones}}</td>
@@ -73,7 +71,7 @@
                       <a
                         onclick="eliminar('{{item.id}}')"
                         class="btn btn-danger btn-sm text-nowrap">
-                        eliminar
+                        Eliminar
                       </a>
                     </td>
                     <td>
@@ -89,46 +87,6 @@
               </table>
 
               <script>
-
-                function cargar_formulario(){
-                    const formulario = `
-                            <form action="/guardar_salida" method="POST">
-                              <div class="form-group">
-                                <label for="recipient-name" class="col-form-label">Id del beneficiario:</label>
-                                <input type="text" class="form-control" name="id_beneficiario"  value="">
-                              </div>
-                              <div class="form-group">
-                                <label for="message-text" class="col-form-label">Fecha:</label>
-                                <input type="text" class="form-control" name="fecha"  value="">
-                              </div>
-                              <div class="form-group">
-                                <label for="message-text" class="col-form-label">Tipo:</label>
-                                <input type="text" class="form-control" name="tipo"  value="">
-                              </div>
-                              <div class="form-group">
-                                <label for="message-text" class="col-form-label">Aporte solidario:</label>
-                                <input type="text" class="form-control" name="aporte_solidario"  value="">
-                              </div>
-                              <div class="form-group">
-                                <label for="message-text" class="col-form-label">¿Ingresado a SIIGO?</label>
-                                <input type="text" class="form-control" name="ingresado_siigo"  value="">
-                              </div>
-                              <div class="form-group">
-                                <label for="message-text" class="col-form-label">Número de documento en SIIGO:</label>
-                                <input type="text" class="form-control" name="num_doc_siigo"  value="">
-                              </div>       
-                              <div class="form-group">
-                                <label for="message-text" class="col-form-label">Observaciones:</label>
-                                <input type="text" class="form-control" name="observaciones"  value="">
-                              </div>
-                              <div class="modal-footer">
-                                <button  type="submit" class="btn btn-primary">Guardar</button>
-                              </div>
-                            </form> 
-                    `;
-                    $("#fromartc").html(formulario);
-                }
-
                 function eliminar(id){
                     url = '/eliminar_salida';
                     var request = $.ajax({
@@ -150,48 +108,44 @@
                 function actualizar(id){
                   url = '/salidas';
                   var request = $.ajax({
-                      contentType:"application/json",
-                      dataType: "json", //Expected data format from server  
-                      method: "GET",
-                      data: { id},
-                      url: url      
-                  });
+                    contentType:"application/json",
+                    dataType: "json", //Expected data format from server  
+                    method: "GET",
+                    data: { id},
+                    url: url      
+                });
                   request.done(function( data ) {
                       const formulario = `
-                          <form action="/actualizar_salida" method="POST">
-                              <input type="hidden" class="form-control" name="id"  value="${data.id}">
-                              <div class="form-group">
-                                <label for="recipient-name" class="col-form-label">Id del beneficiario:</label>
-                                <input type="text" class="form-control" name="id_beneficiario"  value="${data.id_beneficiario}">
-                              </div>
-                              <div class="form-group">
-                                <label for="message-text" class="col-form-label">Fecha:</label>
-                                <input type="text" class="form-control" name="fecha"  value="${data.fecha}">
-                              </div>
-                              <div class="form-group">
-                                <label for="message-text" class="col-form-label">Tipo:</label>
-                                <input type="text" class="form-control" name="tipo"  value="${data.tipo}">
-                              </div>
-                              <div class="form-group">
-                                <label for="message-text" class="col-form-label">Aporte solidario:</label>
-                                <input type="text" class="form-control" name="aporte_solidario"  value="${data.aporte_solidario}">
-                              </div>
-                              <div class="form-group">
-                                <label for="message-text" class="col-form-label">¿Ingresado en SIIGO?:</label>
-                                <input type="text" class="form-control" name="num_doc_siigo"  value="${data.ingresado_siigo}">
-                              </div>
-                              <div class="form-group">
-                                <label for="message-text" class="col-form-label">Número de documento en SIIGO:</label>
-                                <input type="text" class="form-control" name="num_doc_siigo"  value="${data.num_doc_siigo}">
-                              </div>     
-                              <div class="form-group">
-                                <label for="message-text" class="col-form-label">Observaciones:</label>
-                                <input type="text" class="form-control" name="observaciones"  value="${data.observaciones}">
-                              </div>
-                            <div class="modal-footer">
-                              <button  type="submit" class="btn btn-primary">Guardar</button>
-                            </div>
-                          </form> 
+                        <form action="/actualizar_salida" method="POST">
+                          <input type="hidden" class="form-control" name="id"  value="${data.id}">
+                          <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Id del beneficiario:</label>
+                            <input type="text" class="form-control" name="id_beneficiario"  value="${data.id_beneficiario}">
+                          </div>
+                          <div class="form-group">
+                            <label for="message-text" class="col-form-label">Fecha:</label>
+                            <input type="text" class="form-control" name="fecha"  value="${data.fecha}">
+                          </div>
+                          <div class="form-group">
+                            <label for="message-text" class="col-form-label">Tipo:</label>
+                            <input type="text" class="form-control" name="tipo"  value="${data.tipo}">
+                          </div>
+                          <div class="form-group">
+                            <label for="message-text" class="col-form-label">¿Ingresado en SIIGO?:</label>
+                            <input type="text" class="form-control" name="ingresado_siigo"  value="${data.ingresado_siigo}">
+                          </div>
+                          <div class="form-group">
+                            <label for="message-text" class="col-form-label">Número de documento en SIIGO:</label>
+                            <input type="text" class="form-control" name="num_doc_siigo"  value="${data.num_doc_siigo}">
+                          </div>     
+                          <div class="form-group">
+                            <label for="message-text" class="col-form-label">Observaciones:</label>
+                            <input type="text" class="form-control" name="observaciones"  value="${data.observaciones}">
+                          </div>
+                          <div class="modal-footer">
+                            <button  type="submit" style="background-color: #A9BA3B;color: black;" type="submit" class="btn btn-primary mb-3 border-0">Guardar</button>
+                          </div>
+                        </form> 
                   `;
                   $("#fromartc").html(formulario);             
                   });

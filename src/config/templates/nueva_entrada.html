@@ -23,79 +23,158 @@
             <div class="class-body container-fluid">
                 <form action="/guardar_entrada" method="POST">
                     <div class="form-group">
-                        <label for="recipient-name" class="col-form-label">Benefactor:</label>
-                        <select class="form-control" name="benefactor">
-                            {% for item in benefactores %}
-                                <option>{{item.nombre}}</option>  
-                            {% endfor %}
-                        </select>
-                        <a onclick="cargar_formulario_benefactor()" class="btn btn-primary btn-block mb-4 border-0" style="background-color: #A9BA3B;color: black;"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                            Nuevo benefactor
-                        </a>
+                        <div class="row p-2">
+                            <div class="col">
+                                <label for="recipient-name" class="col-form-label">Benefactor:</label>
+                            </div>
+                            <div class="col">
+                                <select class="form-control" name="benefactor">
+                                    {% for item in benefactores %}
+                                        <option>{{item.nombre}}</option>  
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col">
+                                <a onclick="cargar_formulario_benefactor()" class="btn btn-primary btn-block mb-4 border-0" style="background-color: #A9BA3B;color: black;"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                    Nuevo benefactor
+                                </a>
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="form-group">
-                        <label for="message-text" class="col-form-label">Fecha:</label>
-                        <input data-date-format="yyyy-mm-dd" name="fecha_datepicker" id="datepicker">
-                    </div>
-                    <div class="form-group">
-                        <label for="message-text" class="col-form-label">¿Procesado en inventarios?:</label>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="proceso_de_inventarios" value="n" id="n" checked>
-                            <label class="form-check-label" for="flexRadioDefault1">
-                              No
-                            </label>
-                          </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="proceso_de_inventarios" value="s" id="s">
-                            <label class="form-check-label" for="flexRadioDefault1">
-                              Si
-                            </label>
+                        <div class="row p-2">
+                            <div class="col">
+                                <label for="message-text" class="col-form-label">Fecha:</label>
+                            </div>
+                            <div class="col">
+                                <input data-date-format="yyyy-mm-dd" name="fecha_datepicker" id="datepicker">
+                            </div>
+                            <div class="col">
+                                
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="message-text" class="col-form-label">Vehículo:</label>
-                        <select class="form-control" name="vehiculo">
-                            {% for item in vehiculos %}
-                                <option>{{item.matricula}}</option>  
-                            {% endfor %}
-                        </select>
-                        <a onclick="cargar_formulario_vehiculo()" class="btn btn-primary btn-block mb-4 border-0" style="background-color: #A9BA3B;color: black;"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                            Nuevo vehículo
-                        </a>
-                    </div>
-                    <div class="form-group">
-                        <label for="message-text" class="col-form-label">Número de factura:</label>
-                        <input type="text" class="form-control" name="num_factura"  value="">
-                    </div>
-                    <div class="form-group">
-                        <label for="message-text" class="col-form-label">¿Ingresado al sistema?:</label>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="ingresado_al_sistema" value="n" id="n" checked>
-                            <label class="form-check-label" for="flexRadioDefault1">
-                              No
-                            </label>
-                          </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="ingresado_al_sistema" value="s" id="s">
-                            <label class="form-check-label" for="flexRadioDefault1">
-                              Si
-                            </label>
+                        <div class="row p-2">
+                            <div class="col">
+                                <label for="message-text" class="col-form-label">¿Procesado en inventarios?:</label>
+                            </div>
+                            <div class="col">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="proceso_de_inventarios" value="n" id="n" checked>
+                                    <label class="form-check-label" for="flexRadioDefault1">
+                                      No
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="proceso_de_inventarios" value="s" id="s">
+                                    <label class="form-check-label" for="flexRadioDefault1">
+                                      Si
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="message-text" class="col-form-label">Tipo:</label>
-                        <input type="text" class="form-control" name="tipo"  value="">
+                        <div class="row p-2">
+                            <div class="col">
+                                <label for="message-text" class="col-form-label">Vehículo:</label>
+                            </div>
+                            <div class="col">
+                                <select class="form-control" name="vehiculo">
+                                    {% for item in vehiculos %}
+                                        <option>{{item.matricula}}</option>  
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col">
+                                <a onclick="cargar_formulario_vehiculo()" class="btn btn-primary btn-block mb-4 border-0" style="background-color: #A9BA3B;color: black;"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                    Nuevo vehículo
+                                </a>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label for="message-text" class="col-form-label">Número de documento en SIIGO:</label>
-                        <input type="text" class="form-control" name="num_documento_siigo"  value="">
+                        <div class="row p-2">
+                            <div class="col">
+                                <label for="message-text" class="col-form-label">Número de factura:</label>
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control" name="num_factura"  value="">
+                            </div>
+                            <div class="col">
+                                
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label for="message-text" class="col-form-label">Observaciones:</label>
-                        <textarea type="text" class="form-control" name="observaciones"></textarea>
+                        <div class="row p-2">
+                            <div class="col">
+                                <label for="message-text" class="col-form-label">¿Ingresado al sistema?:</label>
+                            </div>
+                            <div class="col">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="ingresado_al_sistema" value="n" id="n" checked>
+                                    <label class="form-check-label" for="flexRadioDefault1">
+                                      No
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="ingresado_al_sistema" value="s" id="s">
+                                    <label class="form-check-label" for="flexRadioDefault1">
+                                      Si
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <button  type="submit" class="btn btn-primary btn-block mb-4 border-0" style="background-color: #A9BA3B;color: black;">Guardar entrada</button>
+                    <div class="form-group">
+                        <div class="row p-2">
+                            <div class="col">
+                                <label for="message-text" class="col-form-label">Tipo:</label>
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control" name="tipo"  value="">
+                            </div>
+                            <div class="col">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row p-2">
+                            <div class="col">
+                                <label for="message-text" class="col-form-label">Número de documento en SIIGO:</label>
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control" name="num_documento_siigo"  value="">
+                            </div>
+                            <div class="col">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row p-2">
+                            <div class="col">
+                                <label for="message-text" class="col-form-label">Observaciones:</label>
+                            </div>
+                            <div class="col">
+                                <textarea type="text" class="form-control" name="observaciones"></textarea>
+                            </div>
+                            <div class="col">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="py-2">
+                        <button  type="submit" class="btn btn-primary btn-block mb-4 border-0" style="background-color: #A9BA3B;color: black;">Guardar entrada</button>
+                    </div>
                 </form>
             </div>
         </div>
@@ -111,35 +190,81 @@
             <div class="card-body container-fluid">
                 <form action="/nuevo_producto_inventario" method="POST">
                     <div class="form-group">
-                        <label for="recipient-name" class="col-form-label">Entrada id:</label>
-                        <select class="form-control" name="entrada">
-                            {% for item in entradas %}
-                                <option>{{item.id}}</option>  
-                            {% endfor %}
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="recipient-name" class="col-form-label">Producto:</label>
-                        <select class="form-control" name="producto">
-                            {% for item in productos %}
-                                <option>{{item.descripcion}}</option>  
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="message-text" class="col-form-label">Cantidad:</label>
-                        <input type="text" class="form-control" name="cantidad_unidades"  value="">
+                        <div class="row p-2">
+                            <div class="col">
+                                <label for="recipient-name" class="col-form-label">Entrada id:</label>
+                            </div>
+                            <div class="col">
+                                <select class="form-control" name="entrada">
+                                    {% for item in entradas %}
+                                        <option>{{item.id}}</option>  
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col">
+                                
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label for="message-text" class="col-form-label">Peso:</label>
-                        <input type="text" class="form-control" name="peso"  value="">
+                        <div class="row p-2">
+                            <div class="col">
+                                <label for="recipient-name" class="col-form-label">Producto:</label>
+                            </div>
+                            <div class="col">
+                                <select class="form-control" name="producto">
+                                    {% for item in productos %}
+                                        <option>{{item.descripcion}}</option>  
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col">
+                                
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label for="message-text" class="col-form-label">Fecha de vencimiento:</label>
-                        <input data-date-format="yyyy-mm-dd" name="vencimiento_datepicker" id="datepicker_venc">
+                        <div class="row p-2">
+                            <div class="col">
+                                <label for="message-text" class="col-form-label">Cantidad:</label>
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control" name="cantidad_unidades"  value="">
+                            </div>
+                            <div class="col">
+                                
+                            </div>
+                        </div>
                     </div>
-                    <button  type="submit" class="btn btn-primary btn-block mb-4 border-0" style="background-color: #A9BA3B;color: black;">Agregar producto</button>
+                    <div class="form-group">
+                        <div class="row p-2">
+                            <div class="col">
+                                <label for="message-text" class="col-form-label">Peso:</label>
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control" name="peso"  value="">
+                            </div>
+                            <div class="col">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row p-2">
+                            <div class="col">
+                                <label for="message-text" class="col-form-label">Fecha de vencimiento:</label>
+                            </div>
+                            <div class="col">
+                                <input data-date-format="yyyy-mm-dd" name="vencimiento_datepicker" id="datepicker_venc">
+                            </div>
+                            <div class="col">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="py-2">
+                        <button  type="submit" class="btn btn-primary btn-block mb-4 border-0" style="background-color: #A9BA3B;color: black;">Agregar producto</button>
+                    </div>
                 </form>
             </div>
         </div>
@@ -153,18 +278,24 @@
             </div>
             <div class="card-body">
                 <form action="/cargar_productos_por_entrada" method="POST">
-                    <div class="row align-items-start">
-                      <div class="col form-group">
-                        <label for="message-text" class="col-form-label">Entrada:</label>
-                        <select class="form-control" name="entrada_para_lista">
-                            {% for item in entradas %}
-                                <option>{{item.id}}</option>  
-                            {% endfor %}
-                        </select>
-                    </div>
-                      <div class="col align-self-center">
-                        <button  type="submit" class="btn btn-primary btn-block mb-4 border-0" style="background-color: #A9BA3B;color: black;">Buscar</button>
-                      </div>
+                    <div class="align-items-start">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col">
+                                    <label for="message-text" class="col-form-label">Entrada:</label>
+                                </div>
+                                <div class="col">
+                                    <select class="form-control" name="entrada_para_lista">
+                                        {% for item in entradas %}
+                                            <option>{{item.id}}</option>  
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <button  type="submit" class="btn btn-primary btn-block mb-4 border-0" style="background-color: #A9BA3B;color: black;">Buscar</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </form>
                 <table class="table table-striped text-center">
@@ -199,7 +330,7 @@
                                   class="btn btn-danger btn-sm">
                                   eliminar
                                 </a>
-                              </td>
+                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>

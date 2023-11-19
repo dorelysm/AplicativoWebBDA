@@ -715,7 +715,7 @@ def entradas():
     restul_entradas = Entrada_schema.dump(entradas)
     return jsonify(restul_entradas)
 
-@app.route('/salidas', methods=['GET'] )
+@app.route('/salidas', methods=['GET', 'POST'] )
 def salidas():
     id = request.args.get('id')
     salidas = Salida.query.get(id)
@@ -797,7 +797,7 @@ def usuarios():
 #METODOS ACTUALIZAR
 
 @app.route('/actualizar_entrada', methods=['POST'] )
-def actualizar():
+def actualizar_entrada():
     id = request.form['id']
     id_benefactor = request.form['id_benefactor']
     fecha = request.form['fecha']
@@ -825,27 +825,19 @@ def actualizar():
 
 @app.route('/actualizar_salida', methods=['POST'] )
 def actualizar_salida():
+    id = request.form['id']
     id_beneficiario = request.form['id_beneficiario']
-    id_entrada = request.form['id_entrada']
     fecha = request.form['fecha']
-    cantidad_peso = request.form['cantidad_peso']
-    cantidad_unidades = request.form['cantidad_unidades']
-    unidad_de_medida = request.form['unidad_de_medida']
     tipo = request.form['tipo']
     num_doc_siigo = request.form['num_doc_siigo']
-    aporte_solidario = request.form['aporte_solidario']
     observaciones = request.form['observaciones']
 
     salida = Salida.query.get(id)
+    
     salida.id_beneficiario = id_beneficiario
-    salida.id_entrada = id_entrada
     salida.fecha = fecha
-    salida.cantidad_peso = cantidad_peso
-    salida.cantidad_unidades = cantidad_unidades
-    salida.unidad_de_medida = unidad_de_medida
     salida.tipo = tipo
     salida.num_doc_siigo = num_doc_siigo
-    salida.aporte_solidario = aporte_solidario
     salida.observaciones = observaciones
 
     db.session.commit()
