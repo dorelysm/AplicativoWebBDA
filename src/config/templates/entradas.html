@@ -73,7 +73,7 @@
                         data-bs-target="#staticBackdrop"
                         class="btn btn-warning btn-sm text-nowrap"
                         >Actualizar
-                        </a>
+                      </a>
                     </td>
                     <td>
                       <a
@@ -85,6 +85,8 @@
                     <td>
                       <a
                         onclick="ver_productos('{{item.id}}')"
+                        data-bs-toggle="modal"
+                        data-bs-target="#staticBackdropProductos"
                         class="btn btn-primary btn-sm text-nowrap"
                         >Ver productos
                       </a>
@@ -96,7 +98,7 @@
 
               <script>
                 function ver_productos(id) {
-                  url = "/ver_productos_entrada";
+                  url = "/entradas";
                   var request = $.ajax({
                     contentType: "application/json",
                     dataType: "json", //Expected data format from server
@@ -106,15 +108,28 @@
                   });
                   request.done(function( data ) {
                     const info = `
-                      <form action="" method="POST">
-                          <input type="hidden" class="form-control" name="id"  value="${data.id}">
-                        <div class="form-group">
-                          <label for="recipient-name" class="col-form-label">Id del benefactor:</label>
-                          <input type="text" class="form-control" name="id_benefactor"  value="${data.id_benefactor}">
-                        </div>
-                      </form> 
+                      <table table table-striped text-center">
+                        <thead>
+                          <tr>
+                              <th scope="col">Producto</th>
+                              <th scope="col">Cantidad</th>
+                              <th scope="col">Peso</th>
+                              <th scope="col">Fecha de vencimiento</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% for item in ${data} %}
+                          <tr>
+                              <td scope="row">{{item.id_producto}}</td>
+                              <td scope="row">{{item.cantidad_unidades}}</td>
+                              <td scope="row">{{item.peso}}</td>
+                              <td scope="row">{{item.vencimiento}}</td>
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
                 `;
-                $("#fromartc").html(info);             
+                $("#contenido").html(info);             
                 });
                   request.fail(function (jqXHR, textStatus) {
                     alert("Error" + textStatus);
