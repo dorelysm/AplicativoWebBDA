@@ -633,6 +633,17 @@ def nuevo_producto_salida():
 @app.route('/eliminar_entrada', methods=['GET'] )
 def eliminar():
     id = request.args.get('id')
+    
+    #all_producto_inventario = Producto_inventario.query.all()
+    all_producto_inventario = Producto_inventario.query.filter_by(id_entrada = id)
+    
+    #resultado_productos_inventario = Productos_inventario_schema.dump(all_producto_inventario)
+    print(all_producto_inventario)
+    
+    for i in all_producto_inventario:
+        if i.id_entrada == id:
+            db.session.delete(i)
+    
     entradas = Entrada.query.get(id)
     db.session.delete(entradas)
     db.session.commit()
