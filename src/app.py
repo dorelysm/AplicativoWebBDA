@@ -617,7 +617,15 @@ def nuevo_producto_salida():
     db.session.add(nuevo_producto_salida)
     db.session.commit()
     
-    #Restar a producto_inventario la cantidad y el peso
+    #Restar a producto_inventario la cantidad y el peso de la nueva donacion
+
+    producto = Producto_inventario.query.get(id_producto_inventario)
+    
+    producto.peso = producto.peso - int(peso)
+    producto.cantidad_unidades = producto.cantidad_unidades - int(cantidad)
+
+    db.session.commit()
+    
     return redirect('/pagina_nueva_salida')
     
 #METODOS ELIMINAR
