@@ -900,17 +900,17 @@ def actualizar_producto_inventario():
 @app.route('/actualizar_producto_salida', methods=['POST'] )
 def actualizar_producto_salida():
     id = request.form['id']
-    id_entrada = request.form['id_entrada']
+    id_salida = request.form['id_salida']
     id_producto_inventario = request.form['id_producto_inventario']
-    cantidad_unidades = request.form['cantidad_unidades']
+    cantidad = request.form['cantidad_unidades']
     peso = request.form['peso']
     aporte_solidario = request.form['aporte_solidario']
-
+    
     producto = Producto_salida.query.get(id)
     
-    producto.id_entrada = id_entrada
+    producto.id_salida = id_salida
     producto.id_producto_inventario = id_producto_inventario
-    producto.cantidad_unidades = cantidad_unidades
+    producto.cantidad_unidades = cantidad
     producto.peso = peso
     producto.aporte_solidario = aporte_solidario
 
