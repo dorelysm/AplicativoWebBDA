@@ -326,9 +326,9 @@
                             </td>
                             <td>
                                 <a
-                                  onclick="eliminar('{{item.id}}')"
-                                  class="btn btn-danger btn-sm">
-                                  eliminar
+                                    onclick="eliminar_producto_inventario('{{item.id}}')"
+                                    class="btn btn-danger btn-sm">
+                                    eliminar
                                 </a>
                             </td>
                         </tr>
@@ -401,7 +401,7 @@
         $("#fromartc").html(formulario);
         }
 
-        function eliminar(id){
+        function eliminar_producto_inventario(id){
             url = '/eliminar_producto_inventario';
             var request = $.ajax({
                 contentType:"application/json",

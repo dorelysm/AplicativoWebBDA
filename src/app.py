@@ -642,6 +642,22 @@ def eliminar_producto():
     db.session.commit()
     return Producto_schema.dump(productos)
 
+@app.route('/eliminar_producto_inventario', methods=['GET'] )
+def eliminar_producto_inventario():
+    id = request.args.get('id')
+    producto = Producto_inventario.query.get(id)
+    db.session.delete(producto)
+    db.session.commit()
+    return Producto_inventario_schema.dump(producto)
+
+@app.route('/eliminar_producto_salida', methods=['GET'] )
+def eliminar_producto_salida():
+    id = request.args.get('id')
+    producto = Producto_salida.query.get(id)
+    db.session.delete(producto)
+    db.session.commit()
+    return Producto_salida_schema.dump(producto)
+
 @app.route('/eliminar_bodega', methods=['GET'] )
 def eliminar_bodega():
     id = request.args.get('id')

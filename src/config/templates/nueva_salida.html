@@ -275,9 +275,9 @@
                             </td>
                             <td>
                                 <a
-                                  onclick="eliminar('{{item.id}}')"
-                                  class="btn btn-danger btn-sm">
-                                  eliminar
+                                    onclick="eliminar_producto_salida('{{item.id}}')"
+                                    class="btn btn-danger btn-sm">
+                                    eliminar
                                 </a>
                             </td>
                         </tr>
@@ -320,6 +320,25 @@
         `;
         $("#fromartc").html(formulario);
         }
+
+        function eliminar_producto_salida(id){
+            url = '/eliminar_producto_salida';
+            var request = $.ajax({
+                contentType:"application/json",
+                dataType: "json", //Expected data format from server  
+                method: "GET",
+                data: { id},
+                url: url      
+            });
+            request.done(function( data ) {
+                alert("Datos Eliminado")
+                window.location.href = "/pagina_nueva_salida";                
+            });
+            request.fail(function( jqXHR, textStatus ) {
+                alert( "Error" + textStatus );
+            });
+        }
+
   </script>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
