@@ -317,7 +317,7 @@
                             <td scope="row">{{item.vencimiento}}</td>
                             <td>
                                 <a
-                                    onclick="actualizar('{{item.id}}')"
+                                    onclick="actualizar_producto_inventario('{{item.id}}')"
                                     data-bs-toggle="modal"
                                     data-bs-target="#staticBackdrop"
                                     class="btn btn-warning btn-sm"
@@ -413,6 +413,51 @@
             request.done(function( data ) {
                 alert("Datos Eliminado")
                 window.location.href = "/pagina_nueva_entrada";                
+            });
+            request.fail(function( jqXHR, textStatus ) {
+                alert( "Error" + textStatus );
+            });
+        }
+
+        function actualizar_producto_inventario(id){
+            url = '/productos_inventario';
+            var request = $.ajax({
+                contentType:"application/json",
+                dataType: "json", //Expected data format from server  
+                method: "GET",
+                data: { id},
+                url: url      
+            });
+            request.done(function( data ) {
+                const formulario = `
+                  <form action="/actualizar_producto_inventario" method="POST">
+                    <input type="hidden" class="form-control" name="id"  value="${data.id}">
+                    <div class="form-group">
+                      <label for="recipient-name" class="col-form-label">Id entrada:</label>
+                      <input type="text" class="form-control" name="id_entrada"  value="${data.id_entrada}">
+                    </div>
+                    <div class="form-group">
+                      <label for="message-text" class="col-form-label">id_producto:</label>
+                      <input type="text" class="form-control" name="id_producto"  value="${data.id_producto}">
+                    </div>
+                    <div class="form-group">
+                      <label for="message-text" class="col-form-label">Cantidad:</label>
+                      <input type="text" class="form-control" name="cantidad_unidades"  value="${data.cantidad_unidades}">
+                    </div>
+                    <div class="form-group">
+                      <label for="message-text" class="col-form-label">Peso:</label>
+                      <input type="text" class="form-control" name="peso"  value="${data.peso}">
+                    </div>
+                    <div class="form-group">
+                      <label for="message-text" class="col-form-label">Fecha de vencimiento:</label>
+                      <input type="text" class="form-control" name="vencimiento"  value="${data.vencimiento}">
+                    </div>
+                    <div class="modal-footer">
+                      <button  type="submit" style="background-color: #A9BA3B;color: black;" type="submit" class="btn btn-primary mb-3 border-0">Guardar</button>
+                    </div>
+                  </form> 
+            `;
+            $("#fromartc").html(formulario);             
             });
             request.fail(function( jqXHR, textStatus ) {
                 alert( "Error" + textStatus );

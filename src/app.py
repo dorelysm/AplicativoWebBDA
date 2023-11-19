@@ -476,24 +476,6 @@ def guardar_salida():
     db.session.commit()
     return redirect('/pagina_nueva_salida')
 
-@app.route('/nuevo_producto_salida', methods=['POST'] )
-def nuevo_producto_salida():
-    id_salida = request.form['salida']
-    producto = request.form['producto_inventario']
-    cantidad = request.form['cantidad_unidades']
-    peso = request.form['peso']
-    aporte_solidario = request.form['aporte_solidario']
-    
-    #producto = Producto_inventario.query.filter_by(descripcion = desc_producto).first()
-
-    Nuevo_producto_salida = Producto_salida(id_salida=id_salida ,id_producto=producto, 
-                                                    cantidad_unidades=cantidad, peso=peso, 
-                                                    aporte_solidario=aporte_solidario)
-
-    db.session.add(Nuevo_producto_salida)
-    db.session.commit()
-    return redirect('/pagina_nueva_salida')
-
 @app.route('/nuevo_beneficiario', methods=['POST'] )
 def guardar_beneficiario():
     nombre = request.form['nombre']
@@ -615,6 +597,28 @@ def guardar_producto_inventario():
     db.session.add(Nuevo_producto_inventario)
     db.session.commit()
     return redirect('/pagina_nueva_entrada')
+
+@app.route('/nuevo_producto_salida', methods=['POST'] )
+def nuevo_producto_salida():
+    id_salida = request.form['salida']
+    id_producto_inventario = request.form['producto_inventario']
+    cantidad = request.form['cantidad_unidades']
+    peso = request.form['peso']
+    aporte_solidario = request.form['aporte_solidario']
+    
+    #producto_inventario = Producto_inventario.query.filter_by(id=producto).first()
+
+    nuevo_producto_salida = Producto_salida(id_salida=id_salida, 
+                                            id_producto_inventario=id_producto_inventario, 
+                                            cantidad_unidades=cantidad, 
+                                            peso=peso, 
+                                            aporte_solidario=aporte_solidario)
+
+    db.session.add(nuevo_producto_salida)
+    db.session.commit()
+    
+    #Restar a producto_inventario la cantidad y el peso
+    return redirect('/pagina_nueva_salida')
     
 #METODOS ELIMINAR
 
@@ -796,6 +800,20 @@ def productos():
     restul_producto = Producto_schema.dump(productos)
     return jsonify(restul_producto)
 
+@app.route('/productos_inventario', methods=['GET'] )
+def productos_inventario():
+    id = request.args.get('id')
+    productos = Producto_inventario.query.get(id)
+    restul_producto = Producto_inventario_schema.dump(productos)
+    return jsonify(restul_producto)
+
+@app.route('/productos_salida', methods=['GET'] )
+def productos_salida():
+    id = request.args.get('id')
+    productos = Producto_salida.query.get(id)
+    restul_producto = Producto_salida_schema.dump(productos)
+    return jsonify(restul_producto)
+
 @app.route('/informes', methods=['GET'] )
 def informes():
     id = request.args.get('id')
@@ -858,6 +876,46 @@ def actualizar_salida():
 
     db.session.commit()
     return redirect('/pagina_salidas')
+
+@app.route('/actualizar_producto_inventario', methods=['POST'] )
+def actualizar_producto_inventario():
+    id = request.form['id']
+    id_entrada = request.form['id_entrada']
+    id_producto = request.form['id_producto']
+    cantidad_unidades = request.form['cantidad_unidades']
+    peso = request.form['peso']
+    vencimiento = request.form['vencimiento']
+
+    producto = Producto_inventario.query.get(id)
+    
+    producto.id_entrada = id_entrada
+    producto.id_producto = id_producto
+    producto.cantidad_unidades = cantidad_unidades
+    producto.peso = peso
+    producto.vencimiento = vencimiento
+
+    db.session.commit()
+    return redirect('/pagina_nueva_entrada')
+
+@app.route('/actualizar_producto_salida', methods=['POST'] )
+def actualizar_producto_salida():
+    id = request.form['id']
+    id_entrada = request.form['id_entrada']
+    id_producto_inventario = request.form['id_producto_inventario']
+    cantidad_unidades = request.form['cantidad_unidades']
+    peso = request.form['peso']
+    aporte_solidario = request.form['aporte_solidario']
+
+    producto = Producto_salida.query.get(id)
+    
+    producto.id_entrada = id_entrada
+    producto.id_producto_inventario = id_producto_inventario
+    producto.cantidad_unidades = cantidad_unidades
+    producto.peso = peso
+    producto.aporte_solidario = aporte_solidario
+
+    db.session.commit()
+    return redirect('/pagina_nueva_salida')
 
 @app.route('/actualizar_bodega', methods=['POST'] )
 def actualizar_bodega():
