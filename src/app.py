@@ -405,8 +405,6 @@ def pagina_nueva_entrada():
         resultado_benefactores = Benefactores_schema.dump(all_benefactores)
         all_vehiculos = Vehiculo.query.all()
         resultado_vehiculos = Vehiculos_schema.dump(all_vehiculos)
-        all_producto_inventario = Producto_inventario.query.all()
-        resultado_productos_inventario = Productos_inventario_schema.dump(all_producto_inventario)
         all_bodegas = Bodega.query.all()
         resultado_bodegas = Bodegas_schema.dump(all_bodegas)
         all_categorias = Categoria.query.all()
@@ -414,10 +412,23 @@ def pagina_nueva_entrada():
         all_subcategorias = Subcategoria.query.all()
         resultado_subcategorias = Subcategorias_schema.dump(all_subcategorias)
         
+        productos = db.session.query(Producto_inventario.id, \
+            Producto_inventario.cantidad_unidades, Producto_inventario.peso, \
+                Producto_inventario.vencimiento, Producto.descripcion).all()
+        response = []
+        for resultado in productos:
+            response.append({
+                "id" : resultado.id,
+                "cantidad_unidades" : resultado.cantidad_unidades,
+                "peso" : resultado.peso,
+                "vencimiento" : resultado.vencimiento,
+                "descripcion" : resultado.descripcion,
+            })
+        
         return render_template('nueva_entrada.html', entradas = resultado_entradas, 
                                productos = resultado_productos, 
                                benefactores = resultado_benefactores, vehiculos = resultado_vehiculos,
-                               productos_inventario = resultado_productos_inventario, 
+                               productos_inventario = response, 
                                bodegas = resultado_bodegas,
                                categorias = resultado_categorias,
                                subcategorias = resultado_subcategorias,
@@ -460,9 +471,24 @@ def cargar_productos_por_entrada():
     if 'usuario' in session:
         entrada = request.form['entrada_para_lista']
         
+        productos = db.session.query(Producto_inventario.id, \
+            Producto_inventario.cantidad_unidades, Producto_inventario.peso, \
+                Producto_inventario.vencimiento, Producto.descripcion)\
+                    .join(Producto_inventario, Producto.id == Producto_inventario.id_producto).filter_by(id_entrada = entrada).all()
+        response = []
+        for resultado in productos:
+            response.append({
+                "id" : resultado.id,
+                "cantidad_unidades" : resultado.cantidad_unidades,
+                "peso" : resultado.peso,
+                "vencimiento" : resultado.vencimiento,
+                "descripcion" : resultado.descripcion,
+            })
+        
+        """
         carrito = Producto_inventario.query.filter_by(id_entrada = entrada)
         resultado_carrito = Productos_inventario_schema.dump(carrito)
-        
+        """
         all_entradas = Entrada.query.all()
         resultado_entradas = Entradas_schema.dump(all_entradas)
         all_productos = Producto.query.all()
@@ -471,8 +497,8 @@ def cargar_productos_por_entrada():
         resultado_benefactores = Benefactores_schema.dump(all_benefactores)
         all_vehiculos = Vehiculo.query.all()
         resultado_vehiculos = Vehiculos_schema.dump(all_vehiculos)
-
-        return render_template('nueva_entrada.html', productos_inventario = resultado_carrito,
+        
+        return render_template('nueva_entrada.html', productos_inventario = response,
                                entradas = resultado_entradas, productos = resultado_productos, 
                                benefactores = resultado_benefactores, vehiculos = resultado_vehiculos,
                                usuario = session['usuario'])
