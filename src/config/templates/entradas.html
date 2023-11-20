@@ -40,11 +40,11 @@
               <table class="table table-striped text-center">
                 <thead>
                   <tr>
-                    <th scope="col">Id entrada</th>
-                    <th scope="col">Id benefactor</th>
+                    <th scope="col"># de Entrada</th>
+                    <th scope="col">Benefactor</th>
                     <th scope="col">Fecha</th>
                     <th scope="col">Proceso de inventarios</th>
-                    <th scope="col">Id del vehículo</th>
+                    <th scope="col">Vehículo</th>
                     <th scope="col">Número de factura</th>
                     <th scope="col">Ingresado a Siigo</th>
                     <th scope="col">Tipo</th>
@@ -57,7 +57,7 @@
                   {% for item in entradas %}
                   <tr>
                     <th scope="row">{{item.id}}</th>
-                    <td>{{item.id_benefactor}}</td>
+                    <td>{{item.benefactor}}</td>
                     <td>{{item.fecha}}</td>
                     <td>{{item.proceso_de_inventarios}}</td>
                     <td>{{item.id_vehiculo}}</td>
