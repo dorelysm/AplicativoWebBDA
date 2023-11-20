@@ -286,7 +286,11 @@ def pagina_informes():
     if 'usuario' in session:
         all_informes = Informe.query.all()
         resultado_informes = Informes_schema.dump(all_informes)
-        return render_template('informes.html', informes = resultado_informes, usuario = session['usuario'])
+        
+        all_bodegas = Bodega.query.all()
+        resultado_bodegas = Bodegas_schema.dump(all_bodegas)
+        return render_template('informes.html', informes = resultado_informes, 
+                               bodegas = resultado_bodegas, usuario = session['usuario'])
     else:
         return redirect('/')
     
