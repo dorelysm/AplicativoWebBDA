@@ -14,11 +14,13 @@ class Entrada(db.Model):
     ingresado_al_sistema = db.Column(db.String(1)) #Cambiar por Boolean
     tipo = db.Column(db.String(50))
     num_documento_siigo = db.Column(db.Integer)
+    
+    peso = db.Column(db.Integer)
 
     def __init__(self, id_benefactor = None, fecha = None,
                  observaciones = None, proceso_de_inventarios = None, 
                  id_vehiculo = None, num_factura = None, ingresado_al_sistema = None, 
-                 tipo = None, num_documento_siigo = None):
+                 tipo = None, num_documento_siigo = None, peso = 0):
         #self.id = id
         self.id_benefactor = id_benefactor
         self.fecha = fecha
@@ -29,6 +31,7 @@ class Entrada(db.Model):
         self.ingresado_al_sistema = ingresado_al_sistema
         self.tipo = tipo
         self.num_documento_siigo = num_documento_siigo
+        self.peso = peso
 
 with app.app_context():
     db.create_all()
@@ -37,4 +40,4 @@ class EntradaSchema(ma.Schema):
     class Meta:
         fields = ('id', 'id_benefactor', 'fecha', 'observaciones', 
                   'proceso_de_inventarios', 'id_vehiculo', 'num_factura',
-                  'ingresado_al_sistema', 'tipo', 'num_documento_siigo')
+                  'ingresado_al_sistema', 'tipo', 'num_documento_siigo', 'peso')

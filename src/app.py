@@ -294,6 +294,28 @@ def pagina_informes():
     else:
         return redirect('/')
     
+@app.route('/informes_por_mes', methods=['GET', 'POST'])
+def informes_por_mes():
+    if 'usuario' in session:
+        all_informes = Informe.query.all()
+        resultado_informes = Informes_schema.dump(all_informes)
+        
+        all_bodegas = Bodega.query.all()
+        resultado_bodegas = Bodegas_schema.dump(all_bodegas)
+        
+        all_entradas = Entrada.query.all()
+        resultado_entradas = Entradas_schema.dump(all_entradas)
+        
+        for i in resultado_entradas:
+            donacion_entrante = 0
+            donacion_entrante = donacion_entrante + i['peso']
+                
+        return render_template('informes.html', informes = resultado_informes, 
+                               bodegas = resultado_bodegas, donacion_entrante = donacion_entrante,
+                               usuario = session['usuario'])
+    else:
+        return redirect('/')
+    
 @app.route('/pagina_inventario', methods=['GET'])
 def pagina_inventario():
     if 'usuario' in session:
@@ -597,6 +619,10 @@ def guardar_producto_inventario():
                                                     vencimiento=vencimiento)
 
     db.session.add(Nuevo_producto_inventario)
+    
+    entrada = Entrada.query.get(id_entrada)
+    entrada.peso = entrada.peso + int(peso)
+    
     db.session.commit()
     return redirect('/pagina_nueva_entrada')
 
