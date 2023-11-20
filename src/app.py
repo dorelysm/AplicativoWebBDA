@@ -108,10 +108,22 @@ def cerrar():
 @app.route('/pagina_entradas/', methods=['GET', 'POST'])
 def pagina_entradas():
     if 'usuario' in session:
-        all_entradas = Entrada.query.all()
-        resultado_entradas = Entradas_schema.dump(all_entradas)
-        
-        return render_template('entradas.html', entradas = resultado_entradas, 
+        all_entradas = db.session.query(Entrada.id, Entrada.fecha, Entrada.proceso_de_inventarios, Vehiculo.matricula, Entrada.num_factura, Entrada.num_documento_siigo, Entrada.observaciones, Entrada.tipo, Entrada.ingresado_al_sistema, Benefactor.nombre).join(Benefactor, Entrada.id_benefactor == Benefactor.id).join(Vehiculo, Entrada.id_vehiculo == Vehiculo.id).all()
+        pagina_entradas_response = []
+        for resultado_entradas in all_entradas:
+            pagina_entradas_response.append({
+                "id" : resultado_entradas.id,
+                "benefactor" : resultado_entradas.nombre,
+                "fecha" : resultado_entradas.fecha,
+                "proceso_de_inventarios" : resultado_entradas.proceso_de_inventarios,
+                "id_vehiculo" : resultado_entradas.matricula,
+                "num_factura" : resultado_entradas.num_factura,
+                "num_documento_siigo" : resultado_entradas.num_documento_siigo,
+                "observaciones" : resultado_entradas.observaciones,
+                "tipo" : resultado_entradas.tipo,
+                "ingresado_al_sistema" : resultado_entradas.ingresado_al_sistema
+            })
+        return render_template('entradas.html', entradas = pagina_entradas_response, 
                                usuario = session['usuario'])
     else:
         return redirect('/')
