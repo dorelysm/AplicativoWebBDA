@@ -46,16 +46,18 @@
                       <th scope="col">Subcategoría</th>
                       <th scope="col">Fecha de vencimiento</th>
                       <th scope="col">Existencias</th>
+                      <th scope="col">Peso</th>
                     </tr>
                   </thead>
                   <tbody>
                     {% for item in productos_inventario %}
                     <tr>
-                      <th scope="row">{{item.id_producto}}</th>
-                      <td>cat</td>
-                      <td>sub</td>
+                      <th scope="row">{{item.descripcion}}</th>
+                      <td>{{item.categoria}}</td>
+                      <td>{{item.subcategoria}}</td>
                       <td>{{item.vencimiento}}</td>
                       <td>{{item.cantidad_unidades}}</td>
+                      <td>{{item.peso}}</td>
                     </tr>
                     {% endfor %}
                   </tbody>

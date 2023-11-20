@@ -159,7 +159,10 @@ def cargar_salidas_por_fecha():
 @app.route('/pagina_salidas', methods=['GET'])
 def pagina_salidas():
     if 'usuario' in session:
-        all_salidas = db.session.query(Salida.id, Salida.fecha, Salida.observaciones, Salida.tipo, Salida.aporte_solidario, Salida.ingresado_siigo, Salida.num_doc_siigo, Beneficiario.nombre).join(Beneficiario, Salida.id_beneficiario == Beneficiario.num_beneficiario).all()
+        all_salidas = db.session.query(Salida.id, Salida.fecha, Salida.observaciones, \
+            Salida.tipo, Salida.aporte_solidario, Salida.ingresado_siigo, \
+                Salida.num_doc_siigo, Beneficiario.nombre).join(Beneficiario, \
+                    Salida.id_beneficiario == Beneficiario.num_beneficiario).all()
         pagina_salidas_response = []
         for resultado_salidas in all_salidas:
             pagina_salidas_response.append({
@@ -356,12 +359,35 @@ def pagina_inventario():
         resultado_subcategorias = Subcategorias_schema.dump(all_subcategorias)
         all_productos = Producto.query.all()
         resultado_productos = Productos_schema.dump(all_productos)
+        """
         all_producto_inventario = Producto_inventario.query.all()
         resultado_productos_inventario = Productos_inventario_schema.dump(all_producto_inventario)
+        
+        """
+        productos = db.session.query(Producto_inventario.id, \
+            Producto_inventario.cantidad_unidades, Producto_inventario.peso, \
+                Producto_inventario.vencimiento, Producto.descripcion, \
+                    Categoria.descripcion.label('cat_des'), Subcategoria.descripcion.label('sub_des'))\
+                        .join(Producto, Producto_inventario.id_producto == Producto.id)\
+                            .join(Subcategoria, Producto.subcategoria == Subcategoria.id)\
+                                .join(Categoria, Subcategoria.categoria == Categoria.id)\
+                                    .join(Bodega, Categoria.id_bodega == Bodega.id).all()
+        response = []
+        for resultado in productos:
+            response.append({
+                "id" : resultado.id,
+                "cantidad_unidades" : resultado.cantidad_unidades,
+                "peso" : resultado.peso,
+                "vencimiento" : resultado.vencimiento,
+                "descripcion" : resultado.descripcion,
+                "categoria" : resultado.cat_des,
+                "subcategoria": resultado.sub_des,
+            })
+            
         return render_template('inventario.html', usuario = session['usuario'],
                                bodegas = resultado_bodegas, categorias = resultado_categorias,
                                subcategorias = resultado_subcategorias, productos = resultado_productos,
-                               productos_inventario = resultado_productos_inventario)
+                               productos_inventario = response)
     else:
         return redirect('/')
     
@@ -370,18 +396,39 @@ def inventario_por_bodega():
     if 'usuario' in session:
         nombre_bodega = request.form['bodega']
         bodega = Bodega.query.filter_by(nombre = nombre_bodega).first()
-        
+        """
         #categorias_de_bodega = Categoria.query.filter_by(id_bodega=bodega.id).all()
         productos_inventario_en_bodega = Producto_inventario.query\
             .join(Producto).join(Subcategoria).join(Categoria).join(Bodega)\
                 .filter(Bodega.id == bodega.id).all()
+        """     
+        productos = db.session.query(Producto_inventario.id, \
+            Producto_inventario.cantidad_unidades, Producto_inventario.peso, \
+                Producto_inventario.vencimiento, Producto.descripcion, \
+                    Categoria.descripcion.label('cat_des'), Subcategoria.descripcion.label('sub_des'))\
+                        .join(Producto, Producto_inventario.id_producto == Producto.id)\
+                            .join(Subcategoria, Producto.subcategoria == Subcategoria.id)\
+                                .join(Categoria, Subcategoria.categoria == Categoria.id)\
+                                    .join(Bodega, Categoria.id_bodega == Bodega.id)\
+                                        .filter(Bodega.id == bodega.id).all()
+        response = []
+        for resultado in productos:
+            response.append({
+                "id" : resultado.id,
+                "cantidad_unidades" : resultado.cantidad_unidades,
+                "peso" : resultado.peso,
+                "vencimiento" : resultado.vencimiento,
+                "descripcion" : resultado.descripcion,
+                "categoria" : resultado.cat_des,
+                "subcategoria": resultado.sub_des,
+            })
         
         all_bodegas = Bodega.query.all()
         resultado_bodegas = Bodegas_schema.dump(all_bodegas)
         
         return render_template('inventario.html', usuario = session['usuario'],
                                bodegas = resultado_bodegas,
-                               productos_inventario = productos_inventario_en_bodega)
+                               productos_inventario = response)
     else:
         return redirect('/')
     
