@@ -39,8 +39,8 @@
               <table class="table table-striped">
                 <thead>
                   <tr>
-                    <th scope="col">Id salida</th>
-                    <th scope="col">Id beneficiario</th>
+                    <th scope="col"># de Salida</th>
+                    <th scope="col">Beneficiario</th>
                     <th scope="col">Fecha</th>
                     <th scope="col">Tipo</th>
                     <th scope="col">¿Ingresado a SIIGO?</th>
@@ -53,7 +53,7 @@
                   {% for item in salidas %}
                   <tr>
                     <th scope="row">{{item.id}}</th>
-                    <td>{{item.id_beneficiario}}</td>
+                    <td>{{item.benefactor}}</td>
                     <td>{{item.fecha}}</td>
                     <td>{{item.tipo}}</td>
                     <td>{{item.ingresado_siigo}}</td>
