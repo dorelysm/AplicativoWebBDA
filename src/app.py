@@ -159,9 +159,20 @@ def cargar_salidas_por_fecha():
 @app.route('/pagina_salidas', methods=['GET'])
 def pagina_salidas():
     if 'usuario' in session:
-        all_salidas = Salida.query.all()
-        resultado_salidas = Salidas_schema.dump(all_salidas)
-        return render_template('salidas.html', salidas = resultado_salidas, usuario = session['usuario'])
+        all_salidas = db.session.query(Salida.id, Salida.fecha, Salida.observaciones, Salida.tipo, Salida.aporte_solidario, Salida.ingresado_siigo, Salida.num_doc_siigo, Beneficiario.nombre).join(Beneficiario, Salida.id_beneficiario == Beneficiario.num_beneficiario).all()
+        pagina_salidas_response = []
+        for resultado_salidas in all_salidas:
+            pagina_salidas_response.append({
+                "id" : resultado_salidas.id,
+                "fecha" : resultado_salidas.fecha,
+                "observaciones" : resultado_salidas.observaciones,
+                "tipo" : resultado_salidas.tipo,
+                "aporte_solidario" : resultado_salidas.aporte_solidario,
+                "ingresado_siigo" : resultado_salidas.ingresado_siigo,
+                "num_doc_siigo" : resultado_salidas.num_doc_siigo,
+                "benefactor" : resultado_salidas.nombre,
+            })
+        return render_template('salidas.html', salidas = pagina_salidas_response, usuario = session['usuario'])
     else:
         return redirect('/')
     
