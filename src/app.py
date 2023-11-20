@@ -310,25 +310,23 @@ def pagina_inventario():
     else:
         return redirect('/')
     
-@app.route('/inventario_por_bodega', methods=['GET'])
+@app.route('/inventario_por_bodega', methods=['GET', 'POST'])
 def inventario_por_bodega():
     if 'usuario' in session:
-        bodega_sel = request.form['bodega']
+        nombre_bodega = request.form['bodega']
+        bodega = Bodega.query.filter_by(nombre = nombre_bodega).first()
+        
+        #categorias_de_bodega = Categoria.query.filter_by(id_bodega=bodega.id).all()
+        productos_inventario_en_bodega = Producto_inventario.query\
+            .join(Producto).join(Subcategoria).join(Categoria).join(Bodega)\
+                .filter(Bodega.id == bodega.id).all()
         
         all_bodegas = Bodega.query.all()
         resultado_bodegas = Bodegas_schema.dump(all_bodegas)
-        all_categorias = Categoria.query.all()
-        resultado_categorias = Categorias_schema.dump(all_categorias)
-        all_subcategorias = Subcategoria.query.all()
-        resultado_subcategorias = Subcategorias_schema.dump(all_subcategorias)
-        all_productos = Producto.query.all()
-        resultado_productos = Productos_schema.dump(all_productos)
-        all_producto_inventario = Producto_inventario.query.all()
-        resultado_productos_inventario = Productos_inventario_schema.dump(all_producto_inventario)
+        
         return render_template('inventario.html', usuario = session['usuario'],
-                               bodegas = resultado_bodegas, categorias = resultado_categorias,
-                               subcategorias = resultado_subcategorias, productos = resultado_productos,
-                               productos_inventario = resultado_productos_inventario)
+                               bodegas = resultado_bodegas,
+                               productos_inventario = productos_inventario_en_bodega)
     else:
         return redirect('/')
     
