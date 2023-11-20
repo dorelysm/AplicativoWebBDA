@@ -309,13 +309,19 @@ def pagina_informes():
 @app.route('/informes_por_mes', methods=['GET', 'POST'])
 def informes_por_mes():
     if 'usuario' in session:
-        all_informes = Informe.query.all()
+        mes = request.form['mes']
+        año = request.form['año']
+        
+        all_informes = Informe.query.filter_by(mes = mes, año = año).all()
         resultado_informes = Informes_schema.dump(all_informes)
         
         all_bodegas = Bodega.query.all()
         resultado_bodegas = Bodegas_schema.dump(all_bodegas)
         
-        all_entradas = Entrada.query.all()
+        #suma_num_kgm = db.session.query(db.func.sum(Producto_inventario.peso)).scalar()
+
+        all_entradas = Entrada.query(Entrada.peso, Bodega.nombre, Categoria.descripcion, \
+            Subcategoria.descripcion).join(Producto_inventario, )
         resultado_entradas = Entradas_schema.dump(all_entradas)
         
         for i in resultado_entradas:
