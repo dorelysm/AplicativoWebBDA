@@ -506,31 +506,40 @@ def descargar_informe_mensual_pdf():
     p = canvas.Canvas(buffer, pagesize=letter)
 
     # Agrega contenido al PDF
-    p.setFontSize(20)
+    p.setFont("Helvetica-Bold", 20)
     p.drawCentredString(300, 750, "Informe mensual de donaciones")
     p.drawCentredString(300, 725, "Banco de Alimentos de Barranquilla")
     #p.drawImage("/assets/img/logo3.jpg", 350, 750, width=50, height=50)
-    p.setFontSize(12)
+    p.setFont("Helvetica", 12)
     p.drawString(100, 700, "Mes: " + mes.capitalize())
     p.drawString(100, 680, "Año: " + año)
     p.line(100, 660, 100+412, 660)
     
-    p.setFontSize(10)
+    p.setFont("Helvetica-Bold", 10)
+    
     y_position = 630
+    
+    p.drawString(100, y_position, "Categoría")
+    p.drawString(250, y_position, "Donaciones entrantes (Kg)")
+    p.drawString(400, y_position, "Donaciones salientes (Kg)")
+    
+    y_position -= 30
+    p.setFont("Helvetica", 10)
     for resultado in response:
         categoria = resultado['categoria']
         peso_entrada = resultado['peso_entrada']
         peso_salida = resultado['peso_salida']
 
         p.drawString(100, y_position, categoria)
-        p.drawString(200, y_position, str(peso_entrada))
-        p.drawString(300, y_position, str(peso_salida))
+        p.drawString(250, y_position, str(peso_entrada))
+        p.drawString(400, y_position, str(peso_salida))
 
         y_position -= 30  # Ajusta la posición para la siguiente entrada
         
+    p.setFont("Helvetica-Bold", 10)
     p.drawString(100, y_position, "TOTAL")
-    p.drawString(200, y_position, str(response2['total_peso_entradas']))
-    p.drawString(300, y_position, str(response2['total_peso_salidas']))
+    p.drawString(250, y_position, str(response2['total_peso_entradas']))
+    p.drawString(400, y_position, str(response2['total_peso_salidas']))
 
 
     # Cierra el documento
