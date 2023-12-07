@@ -1,8 +1,10 @@
 from flask import Flask, redirect, request, jsonify, json, session, render_template, make_response
 
 from config.bd import app, db
-from sqlalchemy import select
+from sqlalchemy import select, func
 from flask_bcrypt import check_password_hash
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
 
 from modelos.Benefactores import Benefactor, BenefactorSchema
 from modelos.Usuario import Usuario, UsuarioSchema
@@ -310,43 +312,240 @@ def cargar_productos_por_subcategoria():
 @app.route('/pagina_informes', methods=['GET'])
 def pagina_informes():
     if 'usuario' in session:
-        all_informes = Informe.query.all()
-        resultado_informes = Informes_schema.dump(all_informes)
-        
-        all_bodegas = Bodega.query.all()
-        resultado_bodegas = Bodegas_schema.dump(all_bodegas)
-        return render_template('informes.html', informes = resultado_informes, 
-                               bodegas = resultado_bodegas, usuario = session['usuario'])
+        todas_las_categorias = db.session.query(Categoria.descripcion.label('categoria')).all()
+
+        consulta = db.session.query(Categoria.descripcion.label('categoria'),\
+            func.coalesce(func.sum(Producto_inventario.peso), 0).label('peso_ent'),\
+                func.coalesce(func.sum(Producto_salida.peso), 0).label('peso_sal'))\
+                    .outerjoin(Producto_inventario, Producto_salida.id_producto_inventario == Producto_inventario.id)\
+                        .outerjoin(Producto, Producto_inventario.id_producto == Producto.id)\
+                            .outerjoin(Subcategoria, Producto.subcategoria == Subcategoria.id)\
+                                .outerjoin(Categoria, Subcategoria.categoria == Categoria.id)\
+                                        .group_by(Categoria.descripcion).all()
+                                        
+        resultado_dict = {res.categoria: {'peso_ent': res.peso_ent, 'peso_sal': res.peso_sal} for res in consulta}
+
+        response = []                        
+        for categoria in todas_las_categorias:
+            categoria_nombre = categoria.categoria
+            peso_ent = resultado_dict.get(categoria_nombre, {'peso_ent': 0})['peso_ent']
+            peso_sal = resultado_dict.get(categoria_nombre, {'peso_sal': 0})['peso_sal']
+
+            response.append({
+                "categoria": categoria_nombre,
+                "peso_entrada": peso_ent,
+                "peso_salida": peso_sal,
+            })
+            
+        # Consulta para obtener el total de peso de entradas
+        total_peso_entradas = db.session.query(func.sum(Producto_inventario.peso)).scalar()
+
+        # Consulta para obtener el total de peso de salidas
+        total_peso_salidas = db.session.query(func.sum(Producto_salida.peso)).scalar()
+
+        # Combinar los resultados
+        response2 = {
+            "total_peso_entradas": total_peso_entradas or 0,
+            "total_peso_salidas": total_peso_salidas or 0,
+        }
+
+        return render_template('informes.html', informes = response, totales = response2,\
+            usuario = session['usuario'])
     else:
         return redirect('/')
     
 @app.route('/informes_por_mes', methods=['GET', 'POST'])
 def informes_por_mes():
     if 'usuario' in session:
-        mes = request.form['mes']
+        mes = request.form['mes'].lower() 
         año = request.form['año']
         
-        all_informes = Informe.query.filter_by(mes = mes, año = año).all()
-        resultado_informes = Informes_schema.dump(all_informes)
+        meses_a_numeros = {
+            'enero': '01',
+            'febrero': '02',
+            'marzo': '03',
+            'abril': '04',
+            'mayo': '05',
+            'junio': '06',
+            'julio': '07',
+            'agosto': '08',
+            'septiembre': '09',
+            'octubre': '10',
+            'noviembre': '11',
+            'diciembre': '12',
+        }
+        mes_num = meses_a_numeros.get(mes)
         
-        all_bodegas = Bodega.query.all()
-        resultado_bodegas = Bodegas_schema.dump(all_bodegas)
+        mes_deseado = año + '-' + mes_num
         
-        #suma_num_kgm = db.session.query(db.func.sum(Producto_inventario.peso)).scalar()
+        print(mes_deseado)
+        todas_las_categorias = db.session.query(Categoria.descripcion.label('categoria')).all()
+        
+        consulta = db.session.query(Categoria.descripcion.label('categoria'),\
+            func.coalesce(func.sum(Producto_inventario.peso), 0).label('peso_ent'),\
+                func.coalesce(func.sum(Producto_salida.peso), 0).label('peso_sal'))\
+                    .outerjoin(Producto_inventario, Producto_salida.id_producto_inventario == Producto_inventario.id)\
+                        .outerjoin(Producto, Producto_inventario.id_producto == Producto.id)\
+                            .outerjoin(Subcategoria, Producto.subcategoria == Subcategoria.id)\
+                                .outerjoin(Categoria, Subcategoria.categoria == Categoria.id)\
+                                    .filter(db.or_(
+                                        Entrada.fecha.startswith(mes_deseado),
+                                        Salida.fecha.startswith(mes_deseado)
+                                        )).\
+                                        group_by(Categoria.descripcion).all()
+                                        
+        resultado_dict = {res.categoria: {'peso_ent': res.peso_ent, 'peso_sal': res.peso_sal} for res in consulta}
 
-        all_entradas = Entrada.query(Entrada.peso, Bodega.nombre, Categoria.descripcion, \
-            Subcategoria.descripcion).join(Producto_inventario, )
-        resultado_entradas = Entradas_schema.dump(all_entradas)
-        
-        for i in resultado_entradas:
-            donacion_entrante = 0
-            donacion_entrante = donacion_entrante + i['peso']
-                
-        return render_template('informes.html', informes = resultado_informes, 
-                               bodegas = resultado_bodegas, donacion_entrante = donacion_entrante,
+        response = []                        
+        for categoria in todas_las_categorias:
+            categoria_nombre = categoria.categoria
+            peso_ent = resultado_dict.get(categoria_nombre, {'peso_ent': 0})['peso_ent']
+            peso_sal = resultado_dict.get(categoria_nombre, {'peso_sal': 0})['peso_sal']
+
+            response.append({
+                "categoria": categoria_nombre,
+                "peso_entrada": peso_ent,
+                "peso_salida": peso_sal,
+            })
+            
+        # Consulta para obtener el total de peso de entradas
+        total_peso_entradas = db.session.query(func.coalesce(func.sum(Producto_inventario.peso), 0))\
+            .join(Entrada, Producto_inventario.id_entrada == Entrada.id)\
+            .filter(Entrada.fecha.like(f'{mes_deseado}%')).scalar()
+
+        # Consulta para obtener el total de peso de salidas
+        total_peso_salidas = db.session.query(func.coalesce(func.sum(Producto_salida.peso), 0))\
+            .join(Salida, Producto_salida.id_salida == Salida.id)\
+            .filter(Salida.fecha.like(f'{mes_deseado}%')).scalar()
+
+        # Combinar los resultados
+        response2 = {
+            "total_peso_entradas": total_peso_entradas or 0,
+            "total_peso_salidas": total_peso_salidas or 0,
+        }     
+
+        return render_template('informes.html', informes = response, totales = response2,
                                usuario = session['usuario'])
     else:
         return redirect('/')
+
+@app.route('/descargar_informe_mensual_pdf', methods=['POST'])
+def descargar_informe_mensual_pdf():
+    mes = request.form['mes'].lower() 
+    año = request.form['año']
+    
+    meses_a_numeros = {
+        'enero': '01',
+        'febrero': '02',
+        'marzo': '03',
+        'abril': '04',
+        'mayo': '05',
+        'junio': '06',
+        'julio': '07',
+        'agosto': '08',
+        'septiembre': '09',
+        'octubre': '10',
+        'noviembre': '11',
+        'diciembre': '12',
+    }
+    mes_num = meses_a_numeros.get(mes)
+    
+    mes_deseado = año + '-' + mes_num
+    
+    print(mes_deseado)
+    todas_las_categorias = db.session.query(Categoria.descripcion.label('categoria')).all()
+    
+    consulta = db.session.query(Categoria.descripcion.label('categoria'),\
+        func.coalesce(func.sum(Producto_inventario.peso), 0).label('peso_ent'),\
+            func.coalesce(func.sum(Producto_salida.peso), 0).label('peso_sal'))\
+                .outerjoin(Producto_inventario, Producto_salida.id_producto_inventario == Producto_inventario.id)\
+                    .outerjoin(Producto, Producto_inventario.id_producto == Producto.id)\
+                        .outerjoin(Subcategoria, Producto.subcategoria == Subcategoria.id)\
+                            .outerjoin(Categoria, Subcategoria.categoria == Categoria.id)\
+                                .filter(db.or_(
+                                    Entrada.fecha.startswith(mes_deseado),
+                                    Salida.fecha.startswith(mes_deseado)
+                                    )).\
+                                    group_by(Categoria.descripcion).all()
+                                    
+    resultado_dict = {res.categoria: {'peso_ent': res.peso_ent, 'peso_sal': res.peso_sal} for res in consulta}
+
+    response = []                        
+    for categoria in todas_las_categorias:
+        categoria_nombre = categoria.categoria
+        peso_ent = resultado_dict.get(categoria_nombre, {'peso_ent': 0})['peso_ent']
+        peso_sal = resultado_dict.get(categoria_nombre, {'peso_sal': 0})['peso_sal']
+
+        response.append({
+            "categoria": categoria_nombre,
+            "peso_entrada": peso_ent,
+            "peso_salida": peso_sal,
+        })
+            
+        # Consulta para obtener el total de peso de entradas
+        total_peso_entradas = db.session.query(func.coalesce(func.sum(Producto_inventario.peso), 0))\
+            .join(Entrada, Producto_inventario.id_entrada == Entrada.id)\
+            .filter(Entrada.fecha.like(f'{mes_deseado}%')).scalar()
+
+        # Consulta para obtener el total de peso de salidas
+        total_peso_salidas = db.session.query(func.coalesce(func.sum(Producto_salida.peso), 0))\
+            .join(Salida, Producto_salida.id_salida == Salida.id)\
+            .filter(Salida.fecha.like(f'{mes_deseado}%')).scalar()
+
+        # Combinar los resultados
+        response2 = {
+            "total_peso_entradas": total_peso_entradas or 0,
+            "total_peso_salidas": total_peso_salidas or 0,
+        }
+        
+     # Crea un objeto BytesIO para almacenar el PDF
+    from io import BytesIO
+    buffer = BytesIO()
+
+    # Crea el documento PDF
+    p = canvas.Canvas(buffer, pagesize=letter)
+
+    # Agrega contenido al PDF
+    p.setFontSize(20)
+    p.drawCentredString(300, 750, "Informe mensual de donaciones")
+    p.drawCentredString(300, 725, "Banco de Alimentos de Barranquilla")
+    #p.drawImage("/assets/img/logo3.jpg", 350, 750, width=50, height=50)
+    p.setFontSize(12)
+    p.drawString(100, 700, "Mes: " + mes.capitalize())
+    p.drawString(100, 680, "Año: " + año)
+    p.line(100, 660, 100+412, 660)
+    
+    p.setFontSize(10)
+    y_position = 630
+    for resultado in response:
+        categoria = resultado['categoria']
+        peso_entrada = resultado['peso_entrada']
+        peso_salida = resultado['peso_salida']
+
+        p.drawString(100, y_position, categoria)
+        p.drawString(200, y_position, str(peso_entrada))
+        p.drawString(300, y_position, str(peso_salida))
+
+        y_position -= 30  # Ajusta la posición para la siguiente entrada
+        
+    p.drawString(100, y_position, "TOTAL")
+    p.drawString(200, y_position, str(response2['total_peso_entradas']))
+    p.drawString(300, y_position, str(response2['total_peso_salidas']))
+
+
+    # Cierra el documento
+    p.showPage()
+    p.save()
+
+    # Establece la posición del puntero en 0 para que BytesIO pueda leerlo desde el principio
+    buffer.seek(0)
+
+    # Crea una respuesta de Flask con el PDF como archivo adjunto
+    response = make_response(buffer.getvalue())
+    response.mimetype = 'application/pdf'
+    response.headers['Content-Disposition'] = 'attachment; filename=informe.pdf'
+
+    return response
     
 @app.route('/pagina_inventario', methods=['GET'])
 def pagina_inventario():
@@ -426,7 +625,7 @@ def inventario_por_bodega():
         all_bodegas = Bodega.query.all()
         resultado_bodegas = Bodegas_schema.dump(all_bodegas)
         
-        return render_template('inventario.html', usuario = session['usuario'],
+        return render_template('inventario.html',  usuario = session['usuario'],
                                bodegas = resultado_bodegas,
                                productos_inventario = response)
     else:
@@ -1180,12 +1379,7 @@ def actualizar_usuario():
     usuario.password = password
 
     db.session.commit()
-    return redirect('/pagina_entradas')
-
-
-    
-
+    return redirect('/pagina_entradas') 
 
 if __name__ == "__main__":
     app.run(debug=True)
-
