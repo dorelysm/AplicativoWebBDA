@@ -91,7 +91,7 @@
 
               <script>
                 function ver_productos(id) {
-                  url = "/entradas";
+                  url = "/productos_inventario";
                   var request = $.ajax({
                     contentType: "application/json",
                     dataType: "json", //Expected data format from server
@@ -100,28 +100,36 @@
                     url: url,
                   });
                   request.done(function( data ) {
-                    const info = `
-                      <table table table-striped text-center">
+                    const productos = data;
+                    
+                  let info = `
+                    <table table table-striped table-bordered text-center">
                         <thead>
-                          <tr>
-                              <th scope="col">Producto</th>
-                              <th scope="col">Cantidad</th>
-                              <th scope="col">Peso</th>
-                              <th scope="col">Fecha de vencimiento</th>
-                          </tr>
+                            <tr>
+                                <th scope="col">Producto</th>
+                                <th scope="col">Cantidad</th>
+                                <th scope="col">Peso</th>
+                                <th scope="col">Fecha de vencimiento</th>
+                            </tr>
                         </thead>
                         <tbody>
-                          {% for item in productos_inventario %}
-                          <tr>
-                              <td scope="row">{{item.id_producto}}</td>
-                              <td scope="row">{{item.cantidad_unidades}}</td>
-                              <td scope="row">{{item.peso}}</td>
-                              <td scope="row">{{item.vencimiento}}</td>
-                          </tr>
-                          {% endfor %}
-                        </tbody>
+                  `;
+
+                  for (const item of productos) {
+                    info += `
+                        <tr>
+                            <td scope="row">${item.nombre_producto}</td>
+                            <td scope="row">${item.cantidad_unidades}</td>
+                            <td scope="row">${item.peso}</td>
+                            <td scope="row">${item.vencimiento}</td>
+                        </tr>
+                    `;
+                  }
+
+                  info += `
+                          </tbody>
                       </table>
-                `;
+                  `;
                 $("#contenido").html(info);             
                 });
                   request.fail(function (jqXHR, textStatus) {

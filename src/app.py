@@ -1161,15 +1161,38 @@ def productos():
 def productos_inventario():
     id = request.args.get('id')
     productos = Producto_inventario.query.get(id)
-    restul_producto = Producto_inventario_schema.dump(productos)
-    return jsonify(restul_producto)
+    productos = db.session.query(Producto.descripcion.label('nombre_producto'), Producto_inventario.cantidad_unidades, 
+                                 Producto_inventario.peso, Producto_inventario.vencimiento.label('vencimiento'))\
+        .join(Producto, Producto_inventario.id_producto == Producto.id)\
+        .filter(Producto_inventario.id_entrada == id).all()
+    response = []
+    for resultado in productos:
+        response.append({
+            "nombre_producto" : resultado.nombre_producto,
+            "cantidad_unidades" : resultado.cantidad_unidades,
+            "peso" : resultado.peso,
+            "vencimiento" : resultado.vencimiento,
+        })
+    return jsonify(response)
 
-@app.route('/productos_salida', methods=['GET'] )
+@app.route('/productos_salida', methods=['GET'])
 def productos_salida():
     id = request.args.get('id')
-    productos = Producto_salida.query.get(id)
-    restul_producto = Producto_salida_schema.dump(productos)
-    return jsonify(restul_producto)
+    productos = db.session.query(Producto.descripcion.label('nombre_producto'), Producto_salida.cantidad_unidades, 
+                                 Producto_salida.peso, Producto_inventario.vencimiento.label('vencimiento'))\
+        .join(Producto_inventario, Producto_salida.id_producto_inventario == Producto_inventario.id)\
+        .join(Producto, Producto_inventario.id_producto == Producto.id)\
+        .filter(Producto_salida.id_salida == id).all()
+        
+    response = []
+    for resultado in productos:
+        response.append({
+            "nombre_producto" : resultado.nombre_producto,
+            "cantidad_unidades" : resultado.cantidad_unidades,
+            "peso" : resultado.peso,
+            "vencimiento" : resultado.vencimiento,
+        })
+    return jsonify(response)
 
 @app.route('/informes', methods=['GET'] )
 def informes():

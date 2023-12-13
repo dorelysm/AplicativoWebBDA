@@ -74,8 +74,8 @@
                         data-bs-toggle="modal"
                         data-bs-target="#staticBackdropProductos"
                         class="btn btn-primary btn-sm text-nowrap"
-                        >Ver productos</a
-                      >
+                        >Ver productos
+                      </a>
                     </td>
                   </tr>
                   {% endfor %}
@@ -84,7 +84,7 @@
 
               <script>
                 function ver_productos(id) {
-                  url = "/salidas";
+                  url = `/productos_salida`;
                   var request = $.ajax({
                     contentType: "application/json",
                     dataType: "json", //Expected data format from server
@@ -93,28 +93,36 @@
                     url: url,
                   });
                   request.done(function( data ) {
-                    const info = `
-                      <table table table-striped text-center">
-                        <thead>
+                    const productos = data;  // data ya contiene la información que necesitas
+
+                  let info = `
+                      <table table table-striped table-bordered text-center">
+                          <thead>
+                              <tr>
+                                  <th scope="col">Producto</th>
+                                  <th scope="col">Cantidad</th>
+                                  <th scope="col">Peso</th>
+                                  <th scope="col">Fecha de vencimiento</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                  `;
+
+                  for (const item of productos) {
+                      info += `
                           <tr>
-                              <th scope="col">Producto</th>
-                              <th scope="col">Cantidad</th>
-                              <th scope="col">Peso</th>
-                              <th scope="col">Fecha de vencimiento</th>
+                              <td scope="row">${item.nombre_producto}</td>
+                              <td scope="row">${item.cantidad_unidades}</td>
+                              <td scope="row">${item.peso}</td>
+                              <td scope="row">${item.vencimiento}</td>
                           </tr>
-                        </thead>
-                        <tbody>
-                          {% for item in producto_salida %}
-                          <tr>
-                              <td scope="row">{{item.id_producto}}</td>
-                              <td scope="row">{{item.cantidad_unidades}}</td>
-                              <td scope="row">{{item.peso}}</td>
-                              <td scope="row">{{item.vencimiento}}</td>
-                          </tr>
-                          {% endfor %}
-                        </tbody>
+                      `;
+                  }
+
+                  info += `
+                          </tbody>
                       </table>
-                `;
+                  `;
                 $("#contenido").html(info);             
                 });
                   request.fail(function (jqXHR, textStatus) {
